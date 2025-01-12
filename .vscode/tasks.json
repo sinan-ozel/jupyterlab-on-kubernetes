@@ -1,0 +1,80 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "build-kubyterlab-llm",
+        "type": "shell",
+        "command": [
+          "docker build --tag kubyterlab-llm:${config:kubyterlab-llm.version} --file ./kubyterlab-llm/Dockerfile .;",
+        ],
+        "group": "test",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        },
+      },
+      {
+        "label": "push-kubyterlab-llm-to-aws",
+        "dependsOn": "build",
+        "type": "shell",
+        "command": [
+          "AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text);",
+          "aws ecr get-login-password --region ${config:aws.region} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${config:aws.region}.amazonaws.com",
+        ],
+        "windows": {
+          "command": [
+            "$AWS_ACCOUNT_ID = $(aws sts get-caller-identity --query Account --output text); ",
+            "$HOSTNAME = \\\"${AWS_ACCOUNT_ID}.dkr.ecr.${config:aws.region}.amazonaws.com\\\";",
+            "aws ecr get-login-password --region ${config:aws.region} | docker login --username AWS --password-stdin $HOSTNAME;",
+            "docker tag kubyterlab-llm:${config:kubyterlab-llm.version} $HOSTNAME/kubyterlab-llm:${config:kubyterlab-llm.version};",
+            "docker push $HOSTNAME/kubyterlab-llm:${config:kubyterlab-llm.version};",
+          ]
+        },
+        "group": "test",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        }
+      },
+      {
+        "label": "freeze-kubyterlab-llm",
+        "dependsOn": "build",
+        "type": "shell",
+        "command": [
+          "docker run -d --rm --volume ./kubyterlab-llm:/jupyterlab --name kubyterlab-llm kubyterlab-llm:${config:kubyterlab-llm.version};",
+          "docker exec -it kubyterlab-llm bash -c 'mkdir -p /tmp; pip freeze > /tmp/freeze.txt';",
+          "docker cp kubyterlab-llm:/tmp/freeze.txt ./kubyterlab-llm/freeze/${config:kubyterlab-llm.version}.txt;",
+          "docker stop kubyterlab-llm",
+        ],
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        },
+        "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
+        },
+        "problemMatcher": []
+      },
+      {
+      "label": "get-key-for-jupyterlab-aic",
+      "type": "shell",
+      "command": "docker exec -it kubyterlab-llm bash -c 'jupyter server list | grep token | sed -n \\\"s/.*token=//p\\\" | sed -n \\\"s/::.*//p\\\"'",
+      "group": {
+          "kind": "build",
+          "isDefault": true
+      },
+      "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
