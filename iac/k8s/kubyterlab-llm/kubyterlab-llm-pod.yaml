@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: kubyterlab-llm
-        image: 275678099358.dkr.ecr.ca-central-1.amazonaws.com/kubyterlab-llm:25.01
+        image: <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/kubyterlab-llm:25.01
         ports:
         - containerPort: 8888
         resources:
