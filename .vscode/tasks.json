@@ -17,7 +17,7 @@
       },
       {
         "label": "push-kubyterlab-llm-to-aws",
-        "dependsOn": "build",
+        "dependsOn": ["build", "freeze"],
         "type": "shell",
         "command": [
           "AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text);",
@@ -63,7 +63,7 @@
       {
       "label": "get-key-for-jupyterlab-aic",
       "type": "shell",
-      "command": "docker exec -it kubyterlab-llm bash -c 'jupyter server list | grep token | sed -n \\\"s/.*token=//p\\\" | sed -n \\\"s/::.*//p\\\"'",
+      "command": "docker exec -it jupyterlab-iac bash -c 'jupyter server list | grep token | sed -n \\\"s/.*token=//p\\\" | sed -n \\\"s/::.*//p\\\"'",
       "group": {
           "kind": "build",
           "isDefault": true
