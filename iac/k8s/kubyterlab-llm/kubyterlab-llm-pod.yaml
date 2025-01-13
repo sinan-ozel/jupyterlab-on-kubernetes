@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubyterlab-llm-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubyterlab-llm
+  template:
+    metadata:
+      labels:
+        app: kubyterlab-llm
+    spec:
+      containers:
+      - name: kubyterlab-llm
+        image: 275678099358.dkr.ecr.ca-central-1.amazonaws.com/kubyterlab-llm:25.01
+        ports:
+        - containerPort: 8888
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "1"
+            nvidia.com/gpu: 1
+          limits:
+            memory: "8Gi"
+            cpu: "2"
+            nvidia.com/gpu: 1
+        env:
+        - name: JUPYTERLAB_SETTINGS_DIR
+          value: /jupyterlab/config
+        - name: MISTRAL_MODEL
+          value: /jupyterlab/models/mistral
+        - name: HF_HOME
+          value: /jupyterlab/models/hf
+        - name: ARTEFACT_ROOT_FOLDER
+          value: /jupyterlab/artefacts
+        - name: TOKENIZERS_PARALLELISM
+          value: "true"
+        volumeMounts:
+        - mountPath: "/jupyterlab"
+          name: pvc-llm
+      volumes:
+      - name: pvc-llm
+        persistentVolumeClaim:
+          claimName: pvc-llm
+      tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
+      initContainers:
+        - name: init-container
+          image: busybox
+          volumeMounts:
+            - mountPath: "/jupyterlab"
+              name: pvc-llm
+          command:
+            - /bin/sh
+            - -c
+            - |
+              mkdir -p /jupyterlab/notebooks /jupyterlab/models/mistral /jupyterlab/models/hf

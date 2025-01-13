@@ -1,0 +1,22 @@
+services:
+  devops:
+    image: jupyterlab-iac
+    build:
+      context: ./
+      dockerfile: jupyterlab-iac/Dockerfile
+    ports:
+      - "127.0.0.1:8890:8888"
+    container_name: jupyterlab-iac
+    networks:
+      - jupyterlab-iac
+    environment:
+      - JUPYTERLAB_SETTINGS_DIR=/jupyterlab/config
+      - PYTHONPATH=/jupyterlab/notebooks:$PYTHONPATH
+    volumes:
+      - './jupyterlab-iac/notebooks:/jupyterlab/notebooks'
+      - './jupyterlab-iac/config:/jupyterlab/config'
+      - '../.aws:/root/.aws'
+      - './k8s:/k8s'
+networks:
+  jupyterlab-iac:
+    driver: bridge

@@ -1,3 +1,5 @@
-**/.ipynb_checkpoints/*
-.aws*
+**/.ipynb_checkpoints
+.aws
 **/@jupyterlab*
+**/__pycache__
+**/.Trash-0
