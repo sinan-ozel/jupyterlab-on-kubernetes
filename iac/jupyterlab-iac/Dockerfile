@@ -70,6 +70,7 @@ RUN pip install fabric==3.2.2
 RUN pip install bcrypt==4.1.1
 RUN pip install paramiko==3.4.0
 RUN pip install psycopg2-binary==2.9.9
+RUN pip install python-hcl2==6.0.0
 
 RUN touch /.env
 RUN printenv > /.env

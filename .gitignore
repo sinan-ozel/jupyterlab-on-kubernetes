@@ -3,3 +3,7 @@
 **/@jupyterlab*
 **/__pycache__
 **/.Trash-0
+**/.terraform
+**/.terraform.lock.hcl
+**/*.tfstate
+**/*.tfstate.backup
