@@ -1,0 +1,7 @@
+storageClassName: manual
+pvName: pv-llm
+pvcName: pvc-llm
+storageSize: 500Gi
+volumeID: <your-ebs-volume-id>  # Replace with the actual EBS volume ID
+volumeCapacity: 500Gi
+fsType: ext4

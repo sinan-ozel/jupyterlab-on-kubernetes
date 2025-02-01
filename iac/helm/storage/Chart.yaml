@@ -1,0 +1,4 @@
+apiVersion: v2
+name: storage
+description: A Helm chart for deploying PersistentVolume and PersistentVolumeClaim
+version: 0.1.0

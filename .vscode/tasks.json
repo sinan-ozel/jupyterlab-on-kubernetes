@@ -4,6 +4,41 @@
     "version": "2.0.0",
     "tasks": [
       {
+        "label": "build-fastapi",
+        "type": "shell",
+        "command": [
+          "docker build --tag fastapi:latest --file ./fastapi/Dockerfile .;",
+        ],
+        "group": "test",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        },
+      },
+      {
+        "label": "push-fastapi-to-aws",
+        "dependsOn": ["build", "freeze"],
+        "type": "shell",
+        "command": [
+          "AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text);",
+          "aws ecr get-login-password --region ${config:aws.region} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${config:aws.region}.amazonaws.com",
+        ],
+        "windows": {
+          "command": [
+            "$AWS_ACCOUNT_ID = $(aws sts get-caller-identity --query Account --output text); ",
+            "$HOSTNAME = \\\"${AWS_ACCOUNT_ID}.dkr.ecr.${config:aws.region}.amazonaws.com\\\";",
+            "aws ecr get-login-password --region ${config:aws.region} | docker login --username AWS --password-stdin $HOSTNAME;",
+            "docker tag fastapi:latest $HOSTNAME/test/fastapi:latest;",
+            "docker push $HOSTNAME/test/fastapi:latest;",
+          ]
+        },
+        "group": "test",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        }
+      },
+      {
         "label": "build-kubyterlab-llm",
         "type": "shell",
         "command": [

@@ -1,0 +1,9 @@
+replicaCount: 2
+
+image:
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 80
