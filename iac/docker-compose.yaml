@@ -17,6 +17,7 @@ services:
       - './jupyterlab-iac/config:/jupyterlab/config'
       - '../.aws:/root/.aws'
       - './k8s:/k8s'
+      - './terraform:/terraform'
 networks:
   jupyterlab-iac:
     driver: bridge
