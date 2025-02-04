@@ -3,6 +3,6 @@
         "region": "ca-central-1"
     },
     "kubyterlab-llm":{
-        "version": "25.01"
+        "version": "25.02"
     }
 }
