@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-ENV K8S_VERSION="1.30.0"
+ENV K8S_VERSION="1.31.0"
 
 RUN apt update --fix-missing
 RUN apt install -y curl
@@ -43,7 +43,7 @@ RUN ./aws/install
 RUN pip install boto3==1.35.24
 
 # Kubernetes
-RUN curl -LO https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl
+RUN curl -LO https://dl.k8s.io/release/v${K8S_VERSION}/bin/linux/amd64/kubectl
 RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 RUN pip install kubernetes==31.0.0
 RUN pip install kustomize==0.6.0
