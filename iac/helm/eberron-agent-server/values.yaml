@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  pullPolicy: IfNotPresent
+  version: 25.02
+
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+environment:
+  ARTEFACT_VERSION: "04"
+  MODEL_NAME: "Mistral-7B-Instruct-v0.3"
+  MODEL_ORG: "mistralai"
+  COMMIT_HASH: "e0bc86c23ce5aae1db576c8cca6f06f1f73af2db"

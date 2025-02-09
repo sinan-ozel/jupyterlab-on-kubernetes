@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: fastapi
+  template:
+    metadata:
+      labels:
+        app: fastapi
+    spec:
+      containers:
+        - name: fastapi
+          image: "{{ .Values.awsAccountId }}.dkr.ecr.{{ .Values.region }}.amazonaws.com/multi-agent/eberron-agent-server:{{ .Values.image.version }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ARTEFACT_VERSION
+              value: "{{ .Values.environment.ARTEFACT_VERSION }}"
+            - name: ARTEFACT_ROOT_FOLDER
+              value: "/jupyterlab/artefacts"
+            - name: HF_HOME
+              value: "/jupyterlab/models/hf"
+            - name: MODEL_NAME
+              value: "{{ .Values.environment.MODEL_NAME }}"
+            - name: MODEL_ORG
+              value: "{{ .Values.environment.MODEL_ORG }}"
+            - name: COMMIT_HASH
+              value: "{{ .Values.environment.COMMIT_HASH }}"
+            - name: TOKENIZERS_PARALLELISM
+              value: "true"
+            - name: TRANSFORMERS_OFFLINE
+              value: "1"
+            - name: HF_DATASETS_OFFLINE
+              value: "1"
+          volumeMounts:
+            - mountPath: "/jupyterlab"
+              name: pvc-llm
+      volumes:
+        - name: pvc-llm
+          persistentVolumeClaim:
+            claimName: pvc-llm
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
