@@ -1,0 +1,11 @@
+replicaCount: 1
+
+image:
+  pullPolicy: IfNotPresent
+  version: 25.02
+
+service:
+  type: ClusterIP
+  port: 4200
+  targetPort: 4200
+
