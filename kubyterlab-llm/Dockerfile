@@ -51,9 +51,9 @@ RUN rm -rf /var/cache/apk/*
 RUN apt-get autoremove -y
 RUN apt-get clean
 
-RUN pip install jupyterlab==4.2.5
-RUN pip install ipywidgets==8.1.5
-RUN pip install jupyter_contrib_nbextensions==0.7.0
+RUN pip3 install jupyterlab==4.2.5
+RUN pip3 install ipywidgets==8.1.5
+RUN pip3 install jupyter_contrib_nbextensions==0.7.0
 RUN jupyter labextension enable @jupyterlab/toc
 
 RUN pip3 install torch==2.4.1
@@ -86,6 +86,8 @@ RUN pip3 install langchain==0.3.15
 RUN pip3 install langchain-community==0.3.15
 RUN pip3 install langchain-experimental==0.3.4
 RUN pip3 install langchain-huggingface==0.1.2
+RUN pip3 install agents_on_langchain==0.1.1
+
 
 RUN pip3 install pylance==0.22.0
 RUN pip3 install lancedb==0.18.0

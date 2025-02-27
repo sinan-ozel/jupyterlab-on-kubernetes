@@ -17,4 +17,4 @@ spec:
           image: "{{ .Values.awsAccountId }}.dkr.ecr.{{ .Values.region }}.amazonaws.com/multi-agent/eberron-agent-frontend:{{ .Values.image.version }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 4200
+            - containerPort: {{ .Values.service.port }}
