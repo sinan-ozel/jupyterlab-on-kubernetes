@@ -18,6 +18,7 @@ jobs:
     env:
       CLUSTER_NAME: hello-k8s
       NAMESPACE: default
+      REPO: sinan-ozel/iac-private
 
     steps:
     - uses: actions/checkout@v4
@@ -26,7 +27,7 @@ jobs:
     - name: Authenticate to GitHub
       run: |
         gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
-        gh run list --repo other-owner/other-repo --limit 5
+        gh run list --repo ${{ env.REPO }} --limit 5
 
     # - name: Download pulumi-stack-outputs
     #   run: |
