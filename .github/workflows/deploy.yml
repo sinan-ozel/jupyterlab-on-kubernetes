@@ -29,19 +29,20 @@ jobs:
         gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
         gh run list --repo ${{ env.REPO }} --limit 5
 
-    # - name: Download pulumi-stack-outputs
-    #   run: |
-    #     # Download pulumi-stack-outputs from another repo
-    #     curl -L -o pulumi-stack-outputs.json https://raw.githubusercontent.com/USERNAME/REPO/main/pulumi-stack-outputs.json
+    - name: Download latest pulumi stack outputs artifact
+      run: |
+        gh run list --repo ${{ env.REPO }} --limit 1 --json databaseId > run.json
+        RUN_ID=$(jq -r '.[0].databaseId' run.json)
+        gh run download $RUN_ID --repo ${{ env.REPO }} -n pulumi/${{ inputs.provider }}/${{ env.CLUSTER_NAME}}.json
 
-    # - name: Connect to Kubernetes
-    #   run: |
-    #     # Use pulumi-stack-outputs to configure kubectl
-    #     kubectl config set-cluster cluster --server=$(cat pulumi-stack-outputs.json | jq -r '.kubeconfig.server')
-    #     kubectl config set-credentials user --token=$(cat pulumi-stack-outputs.json | jq -r '.kubeconfig.token')
-    #     kubectl config set-context context --cluster=cluster --user=user
-    #     kubectl config use-context context
+    - name: Connect to Kubernetes
+      run: |
+        # Use pulumi-stack-outputs to configure kubectl
+        kubectl config set-cluster cluster --server=$(cat pulumi/${{ inputs.provider }}/${{ env.CLUSTER_NAME}}.json | jq -r '.kubeconfig.server')
+        kubectl config set-credentials user --token=$(cat pulumi/${{ inputs.provider }}/${{ env.CLUSTER_NAME}}.json | jq -r '.kubeconfig.token')
+        kubectl config set-context context --cluster=cluster --user=user
+        kubectl config use-context context
 
-    # - name: List Kubernetes nodes for debugging
-    #   run: |
-    #     kubectl get nodes -o wide
+    - name: List Kubernetes nodes for debugging
+      run: |
+        kubectl get nodes -o wide
