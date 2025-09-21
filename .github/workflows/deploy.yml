@@ -1,0 +1,46 @@
+name: Deploy Basic Server for Testing
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: "Select the cloud provider"
+        required: true
+        type: choice
+        options:
+          - aws
+          - exoscale
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      CLUSTER_NAME: hello-k8s
+      NAMESPACE: default
+
+    steps:
+    - uses: actions/checkout@v4
+
+
+    - name: Authenticate to GitHub
+      run: |
+        gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
+        gh run list --repo other-owner/other-repo --limit 5
+
+    # - name: Download pulumi-stack-outputs
+    #   run: |
+    #     # Download pulumi-stack-outputs from another repo
+    #     curl -L -o pulumi-stack-outputs.json https://raw.githubusercontent.com/USERNAME/REPO/main/pulumi-stack-outputs.json
+
+    # - name: Connect to Kubernetes
+    #   run: |
+    #     # Use pulumi-stack-outputs to configure kubectl
+    #     kubectl config set-cluster cluster --server=$(cat pulumi-stack-outputs.json | jq -r '.kubeconfig.server')
+    #     kubectl config set-credentials user --token=$(cat pulumi-stack-outputs.json | jq -r '.kubeconfig.token')
+    #     kubectl config set-context context --cluster=cluster --user=user
+    #     kubectl config use-context context
+
+    # - name: List Kubernetes nodes for debugging
+    #   run: |
+    #     kubectl get nodes -o wide
