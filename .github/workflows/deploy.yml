@@ -28,11 +28,13 @@ jobs:
       run: |
         gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
         gh run list --repo ${{ env.REPO }} --limit 5
+        gh run list --repo ${{ env.REPO }} --limit 1 --json databaseId > run.json
 
     - name: Download latest pulumi stack outputs artifact
       run: |
         gh run list --repo ${{ env.REPO }} --limit 1 --json databaseId > run.json
         RUN_ID=$(jq -r '.[0].databaseId' run.json)
+        echo "Latest run ID: $RUN_ID"
         gh run download $RUN_ID --repo ${{ env.REPO }} -n pulumi/${{ inputs.provider }}/${{ env.CLUSTER_NAME}}.json
 
     - name: Connect to Kubernetes
