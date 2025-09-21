@@ -35,6 +35,8 @@ jobs:
         gh run list --repo ${{ env.REPO }} --workflow "02. Cluster (Pulumi)" --limit 1 --json databaseId > run.json
         RUN_ID=$(jq -r '.[0].databaseId' run.json)
         echo "Latest run ID: $RUN_ID"
+        gh run view $RUN_ID --repo sinan-ozel/iac-private --log
+        gh run download $RUN_ID --repo sinan-ozel/iac-private
         gh run download $RUN_ID --repo ${{ env.REPO }} -n pulumi/${{ inputs.provider }}/${{ env.CLUSTER_NAME}}.json
 
     - name: Connect to Kubernetes
