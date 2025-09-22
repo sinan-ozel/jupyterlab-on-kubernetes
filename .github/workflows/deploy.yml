@@ -27,6 +27,9 @@ jobs:
     - name: Authenticate to GitHub
       run: |
         gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
+        # List all artifacts in the repo (latest 100)
+        gh api repos/sinan-ozel/iac-private/actions/artifacts --paginate --jq '.artifacts[].name'
+
 
     - name: Download latest pulumi stack outputs artifact
       run: |
