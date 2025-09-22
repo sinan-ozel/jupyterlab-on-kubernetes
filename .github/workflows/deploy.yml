@@ -29,7 +29,7 @@ jobs:
         gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
         gh run list --help
         gh run list --repo ${{ env.REPO }} --limit 5
-        gh run list --repo ${{ env.REPO }} --limit 1 --json databaseId
+        gh run list --repo ${{ env.REPO }} --limit 1 --json databaseId,createdAt
 
     - name: Download latest pulumi stack outputs artifact
       run: |
