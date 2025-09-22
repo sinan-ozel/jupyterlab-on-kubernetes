@@ -30,6 +30,11 @@ jobs:
 
     - name: Download latest pulumi stack outputs artifact
       run: |
+        gh run list --repo ${{ env.REPO }} --workflow "02. Cluster (Pulumi)" --json databaseId,createdAt,url,name,number,workflowName > run.json
+        cat run.json
+        RUN_ID=$(jq -r '.[0].databaseId' run.json)
+        echo "Latest run ID: $RUN_ID"
+        gh run view "$RUN_ID" --repo sinan-ozel/iac-private --json artifacts
         gh run download $RUN_ID --repo ${{ env.REPO }} -n pulumi-${{ inputs.provider }}-${{ env.CLUSTER_NAME}}
         ls -al
 
