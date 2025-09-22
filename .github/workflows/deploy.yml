@@ -21,32 +21,32 @@ jobs:
       REPO: sinan-ozel/iac-private
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Create working directories
+      run: |
+        mkdir -p repo
+        mkdir -p iac
 
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        path: repo
 
     - name: Authenticate to GitHub
       run: |
         gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
-        # List all artifacts in the repo (latest 100)
-        gh api repos/sinan-ozel/iac-private/actions/artifacts --paginate --jq '.artifacts[].name'
 
 
     - name: Download latest pulumi stack outputs artifact
+      working-directory: iac
       run: |
-        # gh run list --repo ${{ env.REPO }} --workflow "02. Cluster (Pulumi)" --json databaseId,createdAt,url,name,number,workflowName > run.json
-        # cat run.json
-        # RUN_ID=$(jq -r '.[0].databaseId' run.json)
-        # echo "Latest run ID: $RUN_ID"
-        # gh run view "$RUN_ID" --repo sinan-ozel/iac-private --json artifacts
-        # gh run download $RUN_ID --repo ${{ env.REPO }} -n pulumi-${{ inputs.provider }}-${{ env.CLUSTER_NAME}}
         gh run download --repo ${{ env.REPO }} --name pulumi-${{ inputs.provider }}-${{ env.CLUSTER_NAME}}
         ls -al
 
     - name: Connect to Kubernetes
       run: |
         # Use pulumi-stack-outputs to configure kubectl
-        kubectl config set-cluster cluster --server=$(cat pulumi/${{ inputs.provider }}/${{ env.CLUSTER_NAME}}.json | jq -r '.kubeconfig.server')
-        kubectl config set-credentials user --token=$(cat pulumi/${{ inputs.provider }}/${{ env.CLUSTER_NAME}}.json | jq -r '.kubeconfig.token')
+        kubectl config set-cluster cluster --server=iac/${{ env.CLUSTER_NAME}}.json | jq -r '.kubeconfig.server')
+        kubectl config set-credentials user --token=iac/${{ env.CLUSTER_NAME}}.json | jq -r '.kubeconfig.token')
         kubectl config set-context context --cluster=cluster --user=user
         kubectl config use-context context
 
