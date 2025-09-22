@@ -27,6 +27,7 @@ jobs:
     - name: Authenticate to GitHub
       run: |
         gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
+        gh run list --help
         gh run list --repo ${{ env.REPO }} --limit 5 --order created
         gh run list --repo ${{ env.REPO }} --limit 1 --order created --json databaseId
 
