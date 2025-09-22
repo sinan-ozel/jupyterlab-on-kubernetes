@@ -30,7 +30,8 @@ jobs:
 
     - name: Download latest pulumi stack outputs artifact
       run: |
-        gh run download $RUN_ID --repo ${{ env.REPO }} -n pulumi-${{ inputs.provider }}-${{ env.CLUSTER_NAME}}.json
+        gh run download $RUN_ID --repo ${{ env.REPO }} -n pulumi-${{ inputs.provider }}-${{ env.CLUSTER_NAME}}
+        ls -al
 
     - name: Connect to Kubernetes
       run: |
