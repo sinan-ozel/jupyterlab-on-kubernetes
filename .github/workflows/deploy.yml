@@ -28,12 +28,12 @@ jobs:
       run: |
         gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
         gh run list --help
-        gh run list --repo ${{ env.REPO }} --limit 5 --order created
-        gh run list --repo ${{ env.REPO }} --limit 1 --order created --json databaseId
+        gh run list --repo ${{ env.REPO }} --limit 5
+        gh run list --repo ${{ env.REPO }} --limit 1 --json databaseId
 
     - name: Download latest pulumi stack outputs artifact
       run: |
-        gh run list --repo ${{ env.REPO }} --workflow "02. Cluster (Pulumi)" --limit 1 --order created --json databaseId > run.json
+        gh run list --repo ${{ env.REPO }} --workflow "02. Cluster (Pulumi)" --limit 1 --json databaseId > run.json
         cat run.json
         RUN_ID=$(jq -r '.[0].databaseId' run.json)
         echo "Latest run ID: $RUN_ID"
