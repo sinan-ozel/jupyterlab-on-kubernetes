@@ -27,20 +27,10 @@ jobs:
     - name: Authenticate to GitHub
       run: |
         gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
-        gh run list --help
-        gh run list --repo ${{ env.REPO }} --limit 5
-        gh run list --repo ${{ env.REPO }} --limit 1 --json databaseId,createdAt
-        # https://github.com/sinan-ozel/iac-private/actions/runs/17920613814/artifacts/4074037753
 
     - name: Download latest pulumi stack outputs artifact
       run: |
-        gh run list --repo ${{ env.REPO }} --workflow "02. Cluster (Pulumi)" --limit 1 --json databaseId,createdAt,url,name,number,workflowName > run.json
-        cat run.json
-        RUN_ID=$(jq -r '.[0].databaseId' run.json)
-        echo "Latest run ID: $RUN_ID"
-        gh run view $RUN_ID --repo sinan-ozel/iac-private --log
-        gh run download $RUN_ID --repo sinan-ozel/iac-private
-        gh run download $RUN_ID --repo ${{ env.REPO }} -n pulumi/${{ inputs.provider }}/${{ env.CLUSTER_NAME}}.json
+        gh run download $RUN_ID --repo ${{ env.REPO }} -n pulumi-${{ inputs.provider }}-${{ env.CLUSTER_NAME}}.json
 
     - name: Connect to Kubernetes
       run: |
