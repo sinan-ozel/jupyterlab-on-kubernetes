@@ -43,11 +43,14 @@ jobs:
         ls -al
         cat ${{ env.CLUSTER_NAME}}.json
 
+    - name: Extract kubeconfig from JSON
+      run: |
+        jq -r '.kubeconfig' iac/${{ env.CLUSTER_NAME}}.json > iac/kubeconfig.yaml
+
     - name: Connect to Kubernetes
       run: |
-        # Use pulumi-stack-outputs as kubeconfig
-        kubectl --kubeconfig=iac/${{ env.CLUSTER_NAME}}.json config view
+        kubectl --kubeconfig=iac/kubeconfig.yaml config view
 
     - name: List Kubernetes nodes for debugging
       run: |
-        kubectl --kubeconfig=iac/${{ env.CLUSTER_NAME}}.json get nodes -o wide
+        kubectl --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
