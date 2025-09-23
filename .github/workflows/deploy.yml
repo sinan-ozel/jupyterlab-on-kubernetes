@@ -41,6 +41,7 @@ jobs:
       run: |
         gh run download --repo ${{ env.REPO }} --name pulumi-${{ inputs.provider }}-${{ env.CLUSTER_NAME}}
         ls -al
+        cat ${{ env.CLUSTER_NAME}}.json
 
     - name: Connect to Kubernetes
       run: |
