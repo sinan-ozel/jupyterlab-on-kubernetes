@@ -45,12 +45,9 @@ jobs:
 
     - name: Connect to Kubernetes
       run: |
-        # Use pulumi-stack-outputs to configure kubectl
-        kubectl config set-cluster cluster --server=iac/${{ env.CLUSTER_NAME}}.json | jq -r '.kubeconfig.server'
-        kubectl config set-credentials user --token=iac/${{ env.CLUSTER_NAME}}.json | jq -r '.kubeconfig.token'
-        kubectl config set-context context --cluster=cluster --user=user
-        kubectl config use-context context
+        # Use pulumi-stack-outputs as kubeconfig
+        kubectl --kubeconfig=iac/${{ env.CLUSTER_NAME}}.json config view
 
     - name: List Kubernetes nodes for debugging
       run: |
-        kubectl get nodes -o wide
+        kubectl --kubeconfig=iac/${{ env.CLUSTER_NAME}}.json get nodes -o wide
