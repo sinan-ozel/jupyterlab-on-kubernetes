@@ -47,18 +47,18 @@ jobs:
       run: |
         jq -r '.kubeconfig' iac/${{ env.CLUSTER_NAME}}.json > iac/kubeconfig.yaml
 
-      - name: Create AWS credentials secret
-        if: github.event.inputs.provider == 'aws'
-        run: |
-          mkdir -p tmp
-          printf "[default]\naws_access_key_id=%s\naws_secret_access_key=%s\nregion=%s\n" \
-            "${{ secrets.AWS_ACCESS_KEY_ID }}" \
-            "${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
-            "${{ env.REGION }}" > tmp/credentials
+    - name: Create AWS credentials secret
+      if: github.event.inputs.provider == 'aws'
+      run: |
+        mkdir -p tmp
+        printf "[default]\naws_access_key_id=%s\naws_secret_access_key=%s\nregion=%s\n" \
+          "${{ secrets.AWS_ACCESS_KEY_ID }}" \
+          "${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+          "${{ env.REGION }}" > tmp/credentials
 
-          AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity
-          ACCOUNT_ID=$(AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity --query Account --output text)
-          echo "AWS_ACCOUNT_ID=$ACCOUNT_ID" >> $GITHUB_ENV
+        AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity
+        ACCOUNT_ID=$(AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity --query Account --output text)
+        echo "AWS_ACCOUNT_ID=$ACCOUNT_ID" >> $GITHUB_ENV
 
     - name: Connect to Kubernetes
       run: |
