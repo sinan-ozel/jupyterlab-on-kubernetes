@@ -59,8 +59,13 @@ jobs:
           "${{ env.REGION }}" > tmp/credentials
 
         AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity
-        ACCOUNT_ID=$(AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity --query Account --output text)
-        echo "AWS_ACCOUNT_ID=$ACCOUNT_ID" >> $GITHUB_ENV
+        AWS_ACCOUNT_ID=$(AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity --query Account --output text)
+        echo "AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID" >> $GITHUB_ENV
+
+        if [ -z "$AWS_ACCOUNT_ID" ] || [ "$AWS_ACCOUNT_ID" = "None" ]; then
+          echo "Error: AWS_ACCOUNT_ID was not set"
+          exit 1
+        fi
 
     - name: Connect to Kubernetes
       run: |
