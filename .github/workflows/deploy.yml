@@ -62,6 +62,9 @@ jobs:
         AWS_ACCOUNT_ID=$(AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity --query Account --output text)
         echo "AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID" >> $GITHUB_ENV
 
+        export AWS_SHARED_CREDENTIALS_FILE=$PWD/tmp/credentials
+        echo "AWS_SHARED_CREDENTIALS_FILE=$PWD/tmp/credentials" >> $GITHUB_ENV
+
         if [ -z "$AWS_ACCOUNT_ID" ] || [ "$AWS_ACCOUNT_ID" = "None" ]; then
           echo "Error: AWS_ACCOUNT_ID was not set"
           exit 1
