@@ -46,6 +46,8 @@ jobs:
     - name: Extract kubeconfig from JSON
       run: |
         jq -r '.kubeconfig' iac/${{ env.CLUSTER_NAME}}.json > iac/kubeconfig.yaml
+        REGION=$(jq -r '.region' iac/${{ env.CLUSTER_NAME}}.json)
+        echo "REGION=$REGION" >> $GITHUB_ENV
 
     - name: Create AWS credentials secret
       if: github.event.inputs.provider == 'aws'
