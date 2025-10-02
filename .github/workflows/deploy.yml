@@ -74,8 +74,10 @@ jobs:
       if: github.event.inputs.provider == 'aws'
       run: |
         export AWS_SHARED_CREDENTIALS_FILE=$PWD/tmp/credentials
-        TOKEN_JSON=$(aws eks get-token --region $REGION --cluster-name $CLUSTER_NAME --output json)
+        TOKEN_JSON=$(aws eks get-token --region ${{ env.REGION }} --cluster-name ${{ env.CLUSTER_NAME }} --output json)
+        echo $TOKEN_JSON
         TOKEN=$(echo $TOKEN_JSON | jq -r '.status.token')
+        echo $TOKEN
 
         cat iac/kubeconfig.yaml
 
