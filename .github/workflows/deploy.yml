@@ -77,4 +77,9 @@ jobs:
 
     - name: List Kubernetes nodes for debugging
       run: |
+        echo ${{ env.AWS_SHARED_CREDENTIALS_FILE}}
+        AWS_SHARED_CREDENTIALS_FILE=$PWD/tmp/credentials aws eks get-token \
+          --region ${{ env.REGION }} \
+          --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
+
         kubectl --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
