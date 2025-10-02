@@ -77,11 +77,15 @@ jobs:
         TOKEN_JSON=$(aws eks get-token --region $REGION --cluster-name $CLUSTER_NAME --output json)
         TOKEN=$(echo $TOKEN_JSON | jq -r '.status.token')
 
+        cat iac/kubeconfig.yaml
+
         # Patch kubeconfig with the token
         yq -i '
           .users[0].user.token = strenv(TOKEN)
           | .users[0].user.exec = null
         ' iac/kubeconfig.yaml
+
+        cat iac/kubeconfig.yaml
 
     - name: Connect to Kubernetes
       run: |
