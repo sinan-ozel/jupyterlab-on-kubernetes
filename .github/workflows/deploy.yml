@@ -70,6 +70,19 @@ jobs:
           exit 1
         fi
 
+    - name: Generate AWS EKS token
+      if: github.event.inputs.provider == 'aws'
+      run: |
+        export AWS_SHARED_CREDENTIALS_FILE=$PWD/tmp/credentials
+        TOKEN_JSON=$(aws eks get-token --region $REGION --cluster-name $CLUSTER_NAME --output json)
+        TOKEN=$(echo $TOKEN_JSON | jq -r '.status.token')
+
+        # Patch kubeconfig with the token
+        yq -i '
+          .users[0].user.token = strenv(TOKEN)
+          | .users[0].user.exec = null
+        ' iac/kubeconfig.yaml
+
     - name: Connect to Kubernetes
       run: |
         kubectl --kubeconfig=iac/kubeconfig.yaml config view
