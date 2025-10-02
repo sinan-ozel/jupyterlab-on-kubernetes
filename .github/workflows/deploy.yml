@@ -46,8 +46,12 @@ jobs:
     - name: Extract kubeconfig from JSON
       run: |
         jq -r '.kubeconfig' iac/${{ env.CLUSTER_NAME}}.json > iac/kubeconfig.yaml
+
         REGION=$(jq -r '.region' iac/${{ env.CLUSTER_NAME}}.json)
         echo "REGION=$REGION" >> $GITHUB_ENV
+
+        CLUSTER_FULL_NAME=$(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
+        echo "CLUSTER_FULL_NAME=$CLUSTER_FULL_NAME" >> $GITHUB_ENV
 
     - name: Create AWS credentials secret
       if: github.event.inputs.provider == 'aws'
@@ -74,7 +78,7 @@ jobs:
       if: github.event.inputs.provider == 'aws'
       run: |
         export AWS_SHARED_CREDENTIALS_FILE=$PWD/tmp/credentials
-        TOKEN_JSON=$(aws eks get-token --region ${{ env.REGION }} --cluster-name ${{ env.CLUSTER_NAME }} --output json)
+        TOKEN_JSON=$(aws eks get-token --region ${{ env.REGION }} --cluster-name ${{ env.CLUSTER_FULL_NAME }} --output json)
         echo $TOKEN_JSON
         TOKEN=$(echo $TOKEN_JSON | jq -r '.status.token')
         echo $TOKEN
