@@ -71,6 +71,13 @@ jobs:
           exit 1
         fi
 
+    - name: Configure AWS credentials
+      if: github.event.inputs.provider == 'aws'
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.CLUSTER_NAME}}-${{ github.repository_owner }}-${{ github.event.repository.name }}-admin-role
+        aws-region: ${{ env.REGION }}
+
     - name: Connect to Kubernetes
       run: |
         kubectl --kubeconfig=iac/kubeconfig.yaml config view
