@@ -15,6 +15,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write
+      contents: read
+
     env:
       CLUSTER_NAME: hello-k8s
       NAMESPACE: default
@@ -84,8 +88,8 @@ jobs:
 
     - name: List Kubernetes nodes for debugging
       run: |
-        echo ${{ env.AWS_SHARED_CREDENTIALS_FILE}}
-        AWS_SHARED_CREDENTIALS_FILE=$PWD/tmp/credentials aws eks get-token \
+        echo ${{ env.AWS_SHARED_CREDENTIALS_FILE }}
+        AWS_SHARED_CREDENTIALS_FILE=${{ env.AWS_SHARED_CREDENTIALS_FILE }} aws eks get-token \
           --region ${{ env.REGION }} \
           --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
 
