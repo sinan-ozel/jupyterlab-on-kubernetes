@@ -97,6 +97,16 @@ jobs:
 
         # aws --region ${{ env.REGION }} eks get-token --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --output json
 
+        ROLE_ARN="arn:aws:iam::275678099358:role/hello-k8s-sinan-ozel-jupyterlab-on-kubernetes-admin-role"
+
+        # backup existing configmap
+        kubectl -n kube-system get configmap aws-auth -o yaml > aws-auth-backup.yaml
+
+        # patch in admin role if not present
+        kubectl get configmap aws-auth -n kube-system -o yaml \
+          | yq -y ".data.mapRoles |= (. + \"\n- rolearn: ${ROLE_ARN}\n  username: admin\n  groups:\n    - system:masters\n\")" \
+          | kubectl apply -f -
+
         kubectl -n kube-system get configmap aws-auth -o yaml
 
         env | grep AWS_
