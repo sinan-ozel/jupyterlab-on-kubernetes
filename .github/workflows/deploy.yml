@@ -100,6 +100,7 @@ jobs:
         TOKEN=$(AWS_SHARED_CREDENTIALS_FILE=$AWS_SHARED_CREDENTIALS_FILE aws eks get-token \
           --region ca-central-1 \
           --cluster-name hello-k8s-eksCluster-8e9ddae --query 'status.token' --output text)
+        echo $TOKEN
         kubectl --kubeconfig=iac/kubeconfig.yaml --token "$TOKEN" get nodes
 
         kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
