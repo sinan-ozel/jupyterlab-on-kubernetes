@@ -84,7 +84,7 @@ jobs:
 
     - name: Connect to Kubernetes
       run: |
-        kubectl --kubeconfig=iac/kubeconfig.yaml config view
+        kubectl --kubeconfig=iac/kubeconfig.yaml config view --raw
 
     - name: List Kubernetes nodes for debugging
       run: |
