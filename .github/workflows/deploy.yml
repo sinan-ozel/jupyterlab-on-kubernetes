@@ -97,25 +97,22 @@ jobs:
 
         # aws --region ${{ env.REGION }} eks get-token --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --output json
 
-        ROLE_ARN="arn:aws:iam::275678099358:role/hello-k8s-sinan-ozel-jupyterlab-on-kubernetes-admin-role"
+        KUBECONFIG=iac/kubeconfig.yaml
 
-        # backup existing configmap
-        kubectl -n kube-system get configmap aws-auth -o yaml > aws-auth-backup.yaml
+        yq -i '
+        .users[0].user = {
+          "exec": {
+            "apiVersion": "client.authentication.k8s.io/v1beta1",
+            "command": "aws",
+            "args": ["eks", "get-token", "--cluster-name", strenv(CLUSTER_NAME)],
+            "env": [{"name": "AWS_REGION", "value": strenv(REGION)}]
+          }
+        }
+       ' "$KUBECONFIG"
 
-        # patch in admin role if not present
-        kubectl get configmap aws-auth -n kube-system -o yaml \
-          | yq -y ".data.mapRoles |= (. + \"\n- rolearn: ${ROLE_ARN}\n  username: admin\n  groups:\n    - system:masters\n\")" \
-          | kubectl apply -f -
-
-        kubectl -n kube-system get configmap aws-auth -o yaml
+       `yq '.users[0].user' "$KUBECONFIG"
 
         env | grep AWS_
         aws sts get-caller-identity
-
-        TOKEN=$(AWS_SHARED_CREDENTIALS_FILE=$AWS_SHARED_CREDENTIALS_FILE aws eks get-token \
-          --region ca-central-1 \
-          --cluster-name hello-k8s-eksCluster-8e9ddae --query 'status.token' --output text)
-        echo $TOKEN
-        kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml --token "$TOKEN" get nodes
 
         kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
