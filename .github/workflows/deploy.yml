@@ -99,16 +99,7 @@ jobs:
 
         KUBECONFIG=iac/kubeconfig.yaml
 
-        yq -i '
-        .users[0].user = {
-          "exec": {
-            "apiVersion": "client.authentication.k8s.io/v1beta1",
-            "command": "aws",
-            "args": ["eks", "get-token", "--cluster-name", strenv(CLUSTER_NAME)],
-            "env": [{"name": "AWS_REGION", "value": strenv(REGION)}]
-          }
-        }
-       ' "$KUBECONFIG"
+        yq -i '.users[0].user = {"exec": {"apiVersion": "client.authentication.k8s.io/v1beta1", "command": "aws", "args": ["eks", "get-token", "--cluster-name", strenv(CLUSTER_NAME)], "env": [{"name": "AWS_REGION", "value": strenv(REGION)}]}}' "$KUBECONFIG"
 
        `yq '.users[0].user' "$KUBECONFIG"
 
