@@ -99,11 +99,14 @@ jobs:
 
         KUBECONFIG=iac/kubeconfig.yaml
 
-        yq -i '.users[0].user = {"exec": {"apiVersion": "client.authentication.k8s.io/v1beta1", "command": "aws", "args": ["eks", "get-token", "--cluster-name", strenv(CLUSTER_NAME)], "env": [{"name": "AWS_REGION", "value": strenv(REGION)}]}}' "$KUBECONFIG"
-
-        yq '.users[0].user' "$KUBECONFIG"
-
         env | grep AWS_
         aws sts get-caller-identity
+
+        TOKEN=$(AWS_SHARED_CREDENTIALS_FILE=$AWS_SHARED_CREDENTIALS_FILE aws eks get-token \
+          --region ca-central-1 \
+          --cluster-name hello-k8s-eksCluster-8e9ddae --query 'status.token' --output text) \
+          --role-arn arn:aws:iam::275678099358:role/hello-k8s-sinan-ozel-jupyterlab-on-kubernetes-admin-role
+        echo $TOKEN
+        kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml --token "$TOKEN" get nodes
 
         kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
