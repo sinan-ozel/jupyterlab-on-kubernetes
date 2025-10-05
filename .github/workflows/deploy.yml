@@ -97,6 +97,8 @@ jobs:
 
         # aws --region ${{ env.REGION }} eks get-token --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --output json
 
+        kubectl -n kube-system get configmap aws-auth -o yaml
+
         env | grep AWS_
         aws sts get-caller-identity
 
