@@ -89,12 +89,17 @@ jobs:
     - name: List Kubernetes nodes for debugging
       run: |
         export AWS_SHARED_CREDENTIALS_FILE=${{ env.AWS_SHARED_CREDENTIALS_FILE }}
-        aws eks get-token \
-          --region ${{ env.REGION }} \
-          --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
+        # aws eks get-token \
+        #   --region ${{ env.REGION }} \
+        #   --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
 
-        cat iac/kubeconfig.yaml
+        # cat iac/kubeconfig.yaml
 
-        aws --region ${{ env.REGION }} eks get-token --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --output json
+        # aws --region ${{ env.REGION }} eks get-token --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --output json
+
+        TOKEN=$(AWS_SHARED_CREDENTIALS_FILE=$AWS_SHARED_CREDENTIALS_FILE aws eks get-token \
+          --region ca-central-1 \
+          --cluster-name hello-k8s-eksCluster-8e9ddae --query 'status.token' --output text)
+        kubectl --kubeconfig=iac/kubeconfig.yaml --token "$TOKEN" get nodes
 
         kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
