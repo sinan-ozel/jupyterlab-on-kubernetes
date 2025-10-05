@@ -97,4 +97,4 @@ jobs:
 
         aws --region ${{ env.REGION }} eks get-token --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --output json
 
-        kubectl --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
+        kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
