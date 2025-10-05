@@ -106,7 +106,7 @@ jobs:
           --region ca-central-1 \
           --cluster-name hello-k8s-eksCluster-8e9ddae --query 'status.token' --output text)
         echo $TOKEN
-        TOKEN=aws eks get-token \
+        TOKEN=$(aws eks get-token \
           --region ca-central-1 \
           --cluster-name hello-k8s-eksCluster-8e9ddae --query 'status.token' --output text)
         echo $TOKEN
