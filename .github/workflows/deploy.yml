@@ -107,8 +107,11 @@ jobs:
           --region ca-central-1 \
           --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --query 'status.token' --output text)
         echo $TOKEN
-        TOKEN=$(aws eks get-token \
+
+        aws eks update-kubeconfig \
           --region ca-central-1 \
-          --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --query 'status.token' --output text)
-        echo $TOKEN
+          --name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) \
+          --role-arn arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.CLUSTER_NAME}}-${{ github.repository_owner }}-${{ github.event.repository.name }}-admin-role \
+          --kubeconfig iac/kubeconfig.yaml
+
         kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
