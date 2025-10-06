@@ -115,11 +115,11 @@ jobs:
           --region ca-central-1 \
           --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --query 'status.token' --output text)
         echo $TOKEN
-        TOKEN=$(AWS_SHARED_CREDENTIALS_FILE=$AWS_SHARED_CREDENTIALS_FILE aws eks get-token \
-          --region ca-central-1 \
-          --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --query 'status.token' --output text \
-          --role-arn arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.CLUSTER_NAME}}-sinan-ozel-jupyterlab-on-kubernetes-admin-role)
-        echo $TOKEN
+        # TOKEN=$(AWS_SHARED_CREDENTIALS_FILE=$AWS_SHARED_CREDENTIALS_FILE aws eks get-token \
+        #   --region ca-central-1 \
+        #   --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --query 'status.token' --output text \
+        #   --role-arn arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.CLUSTER_NAME}}-sinan-ozel-jupyterlab-on-kubernetes-admin-role)
+        # echo $TOKEN
         kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml --token "$TOKEN" get nodes
 
         kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
