@@ -89,18 +89,14 @@ jobs:
     - name: List Kubernetes nodes for debugging
       run: |
         export AWS_SHARED_CREDENTIALS_FILE=${{ env.AWS_SHARED_CREDENTIALS_FILE }}
-        # aws eks get-token \
-        #   --region ${{ env.REGION }} \
-        #   --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
-
-        # cat iac/kubeconfig.yaml
-
-        # aws --region ${{ env.REGION }} eks get-token --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --output json
 
         env | grep AWS_
         aws sts get-caller-identity
 
         echo $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
+
+        aws eks --region ca-central-1 update-kubeconfig \
+          --name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
 
         aws eks --region ca-central-1 update-kubeconfig \
           --name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) \
