@@ -84,37 +84,40 @@ jobs:
 
     - name: Connect to Kubernetes
       run: |
+        # Use the generated kubeconfig file
+        export KUBECONFIG=iac/kubeconfig.yaml
+
         kubectl --kubeconfig=iac/kubeconfig.yaml config view --raw
 
     - name: List Kubernetes nodes for debugging
       run: |
-        export AWS_SHARED_CREDENTIALS_FILE=${{ env.AWS_SHARED_CREDENTIALS_FILE }}
+        # export AWS_SHARED_CREDENTIALS_FILE=${{ env.AWS_SHARED_CREDENTIALS_FILE }}
 
-        env | grep AWS_
-        aws sts get-caller-identity
+        # env | grep AWS_
+        # aws sts get-caller-identity
 
-        echo $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
+        # echo $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
 
-        aws eks --region ca-central-1 update-kubeconfig \
-          --name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
+        # aws eks --region ca-central-1 update-kubeconfig \
+        #   --name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json)
 
-        aws eks --region ca-central-1 update-kubeconfig \
-          --name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) \
-          --role-arn arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.CLUSTER_NAME}}-${{ github.repository_owner }}-${{ github.event.repository.name }}-admin-role
+        # aws eks --region ca-central-1 update-kubeconfig \
+        #   --name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) \
+        #   --role-arn arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.CLUSTER_NAME}}-${{ github.repository_owner }}-${{ github.event.repository.name }}-admin-role
 
 
-        TOKEN=$(AWS_SHARED_CREDENTIALS_FILE=$AWS_SHARED_CREDENTIALS_FILE aws eks get-token \
-          --region ca-central-1 \
-          --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --query 'status.token' --output text)
-        echo $TOKEN
+        # TOKEN=$(AWS_SHARED_CREDENTIALS_FILE=$AWS_SHARED_CREDENTIALS_FILE aws eks get-token \
+        #   --region ca-central-1 \
+        #   --cluster-name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) --query 'status.token' --output text)
+        # echo $TOKEN
 
-        aws eks update-kubeconfig \
-          --region ca-central-1 \
-          --name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) \
-          --role-arn arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.CLUSTER_NAME}}-${{ github.repository_owner }}-${{ github.event.repository.name }}-admin-role \
-          --kubeconfig iac/kubeconfig.yaml
+        # aws eks update-kubeconfig \
+        #   --region ca-central-1 \
+        #   --name $(jq -r '.cluster_name' iac/${{ env.CLUSTER_NAME}}.json) \
+        #   --role-arn arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.CLUSTER_NAME}}-${{ github.repository_owner }}-${{ github.event.repository.name }}-admin-role \
+        #   --kubeconfig iac/kubeconfig.yaml
 
         # Use the generated kubeconfig file
-        export KUBECONFIG=kubeconfig.yaml
+        export KUBECONFIG=iac/kubeconfig.yaml
 
         kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
