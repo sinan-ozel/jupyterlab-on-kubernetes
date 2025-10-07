@@ -114,4 +114,7 @@ jobs:
           --role-arn arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.CLUSTER_NAME}}-${{ github.repository_owner }}-${{ github.event.repository.name }}-admin-role \
           --kubeconfig iac/kubeconfig.yaml
 
+        # Use the generated kubeconfig file
+        export KUBECONFIG=kubeconfig.yaml
+
         kubectl --v=8 --kubeconfig=iac/kubeconfig.yaml get nodes -o wide
