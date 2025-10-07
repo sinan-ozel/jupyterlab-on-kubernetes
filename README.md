@@ -11,6 +11,9 @@ So this project achieves three goals:
 1. Running this on Kubernetes
 1. Creating the Infrastructure-as-Code to create and tear down the infrastructure on AWS to run this system
 
+UPDATE: I moved the IaC to another repo, called `sinan-ozel/iac`. I am in the process of migrating that to Pulumi
+UPDATE 2: I am going to focus on the docker image and documenting its compabilities with AWS nodes and Nvidia drivers in general.
+
 This is what your environment looks like in the end.
 ![1_SfmiSe5NHwsgVJgbDgg_Kw](https://github.com/user-attachments/assets/3566e9a5-30e6-4871-80b3-e527cd72a1c4)
 
@@ -23,7 +26,7 @@ This is what your environment looks like in the end.
 
 ## Usage
 
-Locally, use the VS Code tasks `build-kubyterlab-llm` and `push-kubyterlab-llm-to-aws` to build and upload the image. 
+Locally, use the VS Code tasks `build-kubyterlab-llm` and `push-kubyterlab-llm-to-aws` to build and upload the image.
 You will need a repository called `kubyterlab-llm` on ECR on AWS. Set the region in the settings.
 Once the image is up, enter the `iac` folder and run `docker compose up --build`.
 This will deploy a local Jupyterlab server which contains the script to create and destroy the environment on AWS.
@@ -37,6 +40,10 @@ This is how you access your environment. It is not over a secure channel, so do 
 
 As you go through the notebook, check against the main copy on github and see if everything is going as in the example.
 If not, you may need to troubleshoot and debug.
-Please note that this has been used only once by me, and there may be errors and incompatibilities. 
+Please note that this has been used only once by me, and there may be errors and incompatibilities.
 It is intended more as a learning tool than a solution.
 A working knowledge of AWS infrastructure and Kubernetes is required to get this to work.
+
+## Version Compatibility
+
+TODO
