@@ -1,48 +1,117 @@
 # IaC For Generative AI: LLM Jupyterlab on Kubernetes on AWS
 
-This repo contains the Infrastructure-as-Code to create a Jupyterlab on Kubernetes on AWS.
-The Jupyterlab image is completely custom, it contains libraries geared towards LLM work.
-The code is on another, local Jupyterlab instance, deployed through docker compose.
-The local notebook contains the IaC code required to create a complete Kubernetes environment that support GPU usage.
+I am using this repo for my JupyterLab use cases. I achieve three goals:
 
-So this project achieves three goals:
+1. I can deploy this server on a Kubernetes cluster, meaning that I achieve a level of cloud-independence. Instead of being locked-in to AWS using SageMaker, I create my own container, and I can deploy it in multiple cloud providers, since they all support Kubernetes.
+2. I freeze my versions, meaning that I can replicate the environment in another container with relative ease when I want to package something I created.
+3. I want to ensure compability with CUDA drivers and tensorflow
 
-1. Running a custom Jupyter container with GPU support
-1. Running this on Kubernetes
-1. Creating the Infrastructure-as-Code to create and tear down the infrastructure on AWS to run this system
+When things got to the point where almost all of the newer technology is on the cloud, I had to create this solution so that I can experiment easily, professionally and on a budget.
 
-UPDATE: I moved the IaC to another repo, called `sinan-ozel/iac`. I am in the process of migrating that to Pulumi
-UPDATE 2: I am going to focus on the docker image and documenting its compabilities with AWS nodes and Nvidia drivers in general.
-
-This is what your environment looks like in the end.
+This is what the environment looks like in the end.
 ![1_SfmiSe5NHwsgVJgbDgg_Kw](https://github.com/user-attachments/assets/3566e9a5-30e6-4871-80b3-e527cd72a1c4)
+
+## ⚙️ Features
+
+### 🧱 Base Image
+- **nvidia/cuda:12.9.1-cudnn-devel-ubuntu24.04** — CUDA 12.9.1 with cuDNN on Ubuntu 24.04 for GPU acceleration.
+
+---
+
+### 💻 Core Languages & Tools
+- 🐍 **Python 3.12** + `pip`
+- 🟩 **Node.js** + `npm`
+- 🧰 **Build essentials:** `gcc`, `make`, `pkg-config`, `libtool`, `apt-utils`
+
+---
+
+### 👁️ OCR Engine
+- 🔤 **Tesseract OCR** built from the latest `main` branch source
+- 🧩 Includes **Leptonica** and related dependencies
+- 🌐 Installs **language data** via bundled `get-languages.sh` script
+
+---
+
+### 📓 Jupyter Environment
+- 🧪 **JupyterLab 4.4.9** with:
+  - `ipywidgets 8.1.7`
+  - `jupyter_contrib_nbextensions 0.7.0`
+  - TOC extension pre-enabled
+- 📡 Runs on **port 8888** (`--ip=0.0.0.0`, root allowed)
+
+---
+
+### 🧠 Deep Learning Frameworks
+- 🔥 **PyTorch 2.8.0**
+- 🧬 **TensorFlow 2.20.0** (CUDA-enabled)
+- ⚙️ **tf-keras 2.20.1**
+
+---
+
+### 🗣️ NLP & LLM Toolkits
+- 🤖 **Transformers 4.56.2**, **Diffusers 0.35.1**, **Accelerate 1.10.1**
+- ⚡ **BitsAndBytes**, **FlashAttention**, **PEFT**
+- 🧩 **LangChain (core + community + experimental + huggingface)**
+- 🧠 **Sentence-Transformers**, **FastEmbed**, **FlashRank**, **ReRankers**, **GLiNER**, **Rank-BM25**, **IR-Measures**
+
+---
+
+### 📄 Document & Data Handling
+- 📚 **PyPDF 6.1.1**, **OpenParse 0.7.0**
+- 🧮 **LanceDB 0.25.1** for vector storage and retrieval
+
+---
+
+### 🧪 Evaluation & Utility Packages
+- 🧭 **DeepEval 3.6.4** — LLM evaluation
+- 📝 **MarkItDown 0.1.3** — Markdown conversion and processing
+- 🔡 **mangoCR 0.1.4** — Character recognition
+- 🧩 **ollm 0.5.0**, **ollmcp 0.18.2** — Model orchestration
+
+---
+
+### 🧰 Additional Utilities
+- 🌐 `curl`, `wget`, `rsync`, `zip`, `unzip`, `ca-certificates`
+- 🧹 Cleans up apt caches and temporary files to reduce image size
+
+---
+
+### 🚀 Runtime Command
+```bash
+jupyter lab --ip=0.0.0.0 --port=8888 \
+  --no-browser \
+  --ServerApp.root_dir='/jupyterlab/notebooks' \
+  --allow-root
+
 
 
 ## Requirements
 
 * Docker: You need to have this locally. If you have a Windows machine, you will also need WSL 2 running to be able to run the Linux containers.
-* An AWS account and AWS CLI installed: You will need the account id and the account secret to login, push an image, and finally to deploy on Kubernetes on AWS.
+* An AWS account and AWS CLI installed: You will need the account id and the account secret to login, push an image, and finally to deploy on Kubernetes on AWS. Alternatively, use Google, Azure, or Exoscale, basically any provider that has Kubernetes support. Alternatively, if you run it locally, you can use this with NVIDIA Graphics adapters.
 * (Optional) VS Code - the steps are automated, making it easy to build and push the required image.
 
-## Usage
+## Examples
 
-Locally, use the VS Code tasks `build-kubyterlab-llm` and `push-kubyterlab-llm-to-aws` to build and upload the image.
-You will need a repository called `kubyterlab-llm` on ECR on AWS. Set the region in the settings.
-Once the image is up, enter the `iac` folder and run `docker compose up --build`.
-This will deploy a local Jupyterlab server which contains the script to create and destroy the environment on AWS.
-The notebook called Deploy, creates the system from scratch and the notebook call Teardown deletes everything and backs up the persistent volume into a snapshot.
-[https://github.com/sinan-ozel/jupyterlab-on-kubernetes/blob/main/iac/jupyterlab-iac/notebooks/kubyterlab-llm-on-aws/Deploy.ipynb]
+TODO: docker-compose examples will follow.
 
-On the notebook Deploy, you want to run all cells in order until you reach the point marked "== End of Procedure ==".
-There is a URL under the section "Get URL", looking like the following:
-![image](https://github.com/user-attachments/assets/e23c2743-2747-42b6-8975-e9f9ee040de0)
-This is how you access your environment. It is not over a secure channel, so do not use it to transmit sensitive data or information.
+## Version Support
 
-As you go through the notebook, check against the main copy on github and see if everything is going as in the example.
-If not, you may need to troubleshoot and debug.
-Please note that this has been used only once by me, and there may be errors and incompatibilities.
-It is intended more as a learning tool than a solution.
-A working knowledge of AWS infrastructure and Kubernetes is required to get this to work.
+### 25.09
+
+TODO
+
+Tested with:
+1. WSL on Windows, Ubuntu 24.04, nvidia-smi 560.35.02
+
+### 25.02
+
+CUDA 12.5
+[pip freeze](kubyterlab-llm/freeze/25.02.txt)
+
+## Usage (Only needed if you want to customize)
+
+Build, freeze the versions
 
 ## Version Compatibility
 
