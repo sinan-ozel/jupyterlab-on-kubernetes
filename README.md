@@ -106,7 +106,10 @@ Tested with:
 
 ### 25.02
 
-CUDA 12.5
+Tested with:
+1. Locally: CUDA 12.6 on WSL on Windows, Ubuntu 22.04, nvidia-smi 560.35.02
+2. AWS: AMI `AL2_x86_64_GPU` on EC2 type `g4dn.2xlarge`
+
 [pip freeze](kubyterlab-llm/freeze/25.02.txt)
 
 ## Usage (Only needed if you want to customize)
