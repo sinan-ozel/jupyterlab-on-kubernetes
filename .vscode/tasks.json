@@ -1,3 +1,4 @@
+
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
@@ -72,6 +73,30 @@
           "reveal": "always",
           "panel": "new"
         }
+      },
+      {
+        "label": "test-kubyterlab-llm",
+        "dependsOn": "build",
+        "type": "shell",
+        "command": [
+          "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-llm/notebooks:/jupyterlab/notebooks --gpus=all --name kubyterlab-llm kubyterlab-llm:${config:kubyterlab-llm.version};",
+          "docker exec -it kubyterlab-llm bash -c 'nvcc --version';",
+          "docker exec -it kubyterlab-llm bash -c 'nvidia-smi --version';",
+          "docker exec -it kubyterlab-llm bash -c 'nvidia-smi';",
+          "docker exec -it kubyterlab-llm python3 -c 'import torch; assert torch.cuda.is_available()';",
+          "docker stop kubyterlab-llm",
+        ],
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        },
+        "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
+        },
+        "problemMatcher": []
       },
       {
         "label": "freeze-kubyterlab-llm",
