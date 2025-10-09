@@ -103,7 +103,7 @@
         "dependsOn": "build",
         "type": "shell",
         "command": [
-          "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-llm/notebooks:/jupyterlab/notebooks --name kubyterlab-llm kubyterlab-llm;",
+          "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-llm/notebooks:/jupyterlab/notebooks --name kubyterlab-llm kubyterlab-llm:${config:kubyterlab-llm.version};",
           "docker exec -it kubyterlab-llm bash -c 'mkdir -p /tmp; pip freeze > /tmp/freeze.txt';",
           "docker cp kubyterlab-llm:/tmp/freeze.txt ./kubyterlab-llm/freeze/${config:kubyterlab-llm.version}.txt;",
           "docker stop kubyterlab-llm",
