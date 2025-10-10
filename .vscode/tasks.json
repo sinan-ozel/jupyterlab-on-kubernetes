@@ -52,6 +52,27 @@
         },
       },
       {
+        "label": "push-kubyterlab-llm-to-docker",
+        "dependsOn": "test",
+        "type": "shell",
+        "command": [
+          "docker login;",
+          "docker tag kubyterlab-llm:${config:kubyterlab-llm.version} ${config:docker.author-name}/kubyterlab-llm:${config:kubyterlab-llm.version};",
+          "docker push ${config:docker.author-name}/kubyterlab-llm:${config:kubyterlab-llm.version};",
+        ],
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        },
+        "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
+        },
+        "problemMatcher": []
+      },
+      {
         "label": "push-kubyterlab-llm-to-aws",
         "dependsOn": ["build", "freeze"],
         "type": "shell",
