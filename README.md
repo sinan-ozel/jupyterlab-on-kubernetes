@@ -1,10 +1,11 @@
 # IaC For Generative AI: LLM Jupyterlab on Kubernetes on AWS
 
-I am using this repo for my JupyterLab use cases. I achieve three goals:
+I am using this repo for my JupyterLab use cases. I achieve four goals:
 
 1. I can deploy this server on a Kubernetes cluster, meaning that I achieve a level of cloud-independence. Instead of being locked-in to AWS using SageMaker, I create my own container, and I can deploy it in multiple cloud providers, since they all support Kubernetes.
 2. I freeze my versions, meaning that I can replicate the environment in another container with relative ease when I want to package something I created.
 3. I want to ensure compability with CUDA drivers and tensorflow
+4. Combined with the IaC repo, I can deploy and completely clean-up my environment within minutes, meaning that I can keep my data sci
 
 When things got to the point where almost all of the newer technology is on the cloud, I had to create this solution so that I can experiment easily, professionally and on a budget.
 
