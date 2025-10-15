@@ -99,12 +99,14 @@ jobs:
     - name: Apply Hello World deployment
       run: |
         export KUBECONFIG=iac/kubeconfig.yaml
-        kubectl apply -f iac/k8s/hello-k8s/hello-world-deployment.yaml
+        pwd
+        ls -al
+        kubectl apply -f ${{ github.workspace }}/iac/k8s/hello-k8s/hello-world-deployment.yaml
 
     - name: Apply Hello World service
       run: |
         export KUBECONFIG=iac/kubeconfig.yaml
-        kubectl apply -f iac/k8s/hello-k8s/hello-world-service.yaml
+        kubectl apply -f ${{ github.workspace }}/iac/k8s/hello-k8s/hello-world-service.yaml
 
     - name: Wait for service external IP
       run: |
