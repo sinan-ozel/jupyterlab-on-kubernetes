@@ -1,4 +1,4 @@
-name: Deploy Basic Server for Testing
+name: Deploy Hello World Server for Testing
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
           - exoscale
 
 jobs:
-  deploy:
+  deploy-test:
     runs-on: ubuntu-latest
 
     permissions:
@@ -137,12 +137,15 @@ jobs:
         export KUBECONFIG=iac/kubeconfig.yaml
         echo "Waiting for external IP..."
         for i in {1..30}; do
-          IP=$(kubectl get svc hello-world-service -n default -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-          if [ -n "$IP" ]; then
-            echo "Hello World service available at http://$IP"
+          ADDR=$(kubectl get svc hello-world-service -n default -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          if [ -z "$ADDR" ]; then
+            ADDR=$(kubectl get svc hello-world-service -n default -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          fi
+          if [ -n "$ADDR" ]; then
+            echo "Hello World service available at http://$ADDR"
             exit 0
           fi
-          sleep 10
+          sleep 1
         done
         echo "Timeout waiting for service external IP"
         exit 1
