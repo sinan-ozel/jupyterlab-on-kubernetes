@@ -145,7 +145,7 @@ jobs:
             echo "Hello World service available at http://$ADDR"
             exit 0
           fi
-          sleep 1
+          sleep 5
         done
         echo "Timeout waiting for service external IP"
         exit 1
