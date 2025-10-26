@@ -5,6 +5,26 @@
     "version": "2.0.0",
     "tasks": [
       {
+        "label": "download-hello-world-kubeconfig",
+        "type": "shell",
+        "command": [
+          "[ -f ${workspaceFolder}/iac/hello-k8s.json ] && rm ${workspaceFolder}/iac/hello-k8s.json;",
+          "gh run download --repo ${config:iac.repo} --name pulumi-${input:provider}-hello-k8s --dir ${workspaceFolder}/iac;",
+          "cat iac/hello-k8s.json | jq -r '.kubeconfig' > ${workspaceFolder}/iac/kubeconfig.yaml;",
+        ],
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        },
+        "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
+        },
+        "problemMatcher": [],
+      },
+      {
         "label": "build-fastapi",
         "type": "shell",
         "command": [
@@ -157,5 +177,13 @@
       },
       "problemMatcher": []
     }
-  ]
+  ],
+  "inputs": [
+		{
+			"id": "provider",
+			"type": "pickString",
+			"description": "Choose a provider to pull kubeconfig data for",
+			"options": ["exoscale", "aws"]
+		}
+	]
 }
