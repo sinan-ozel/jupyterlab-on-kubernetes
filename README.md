@@ -98,17 +98,19 @@ TODO: docker-compose examples will follow.
 
 ## Version Support
 
+### 25.10
+
 ### 25.09
 
 TODO
 
-Tested with:
+Tested on:
 1. WSL on Windows, Ubuntu 24.04, nvidia-smi 560.35.02
 
 ### 25.02
 
-Tested with:
-1. Locally: CUDA 12.6 on WSL on Windows, Ubuntu 22.04, nvidia-smi 560.35.02
+Tested on:
+1. Locally: CUDA 12.6 on WSL on Windows, Ubuntu 22.04, nvidia-smi 560.35.02, GeForce RTX 3060 with 12GB GPU RAM
 2. AWS: AMI `AL2_x86_64_GPU` on EC2 type `g4dn.2xlarge`
 
 [pip freeze](kubyterlab-llm/freeze/25.02.txt)
