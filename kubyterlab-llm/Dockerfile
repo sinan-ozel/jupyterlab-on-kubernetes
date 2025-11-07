@@ -3,21 +3,22 @@ FROM nvidia/cuda:12.8.0-cudnn-devel-ubuntu24.04
 ARG TESSERACT_VERSION="5.5.1"
 ARG TESSERACT_URL="https://api.github.com/repos/tesseract-ocr/tesseract/tarball/${TESSERACT_VERSION}"
 
-RUN apt update
-RUN apt install -y curl
-RUN apt install -y nodejs
-RUN apt install -y npm
-RUN apt install -y python3.12
-RUN apt install -y python3-pip
-
-RUN apt install -y wget
-RUN apt install -y ca-certificates
-RUN apt install -y apt-transport-https
-RUN apt install -y g++
-RUN apt install -y make
-RUN apt install -y libleptonica-dev
-RUN apt install -y libtool
-RUN apt install -y pkg-config
+RUN apt-get update && apt-get install -y \
+    curl \
+    nodejs \
+    npm \
+    python3.12 \
+    python3-pip \
+    wget \
+    ca-certificates \
+    apt-transport-https \
+    g++ \
+    make \
+    libleptonica-dev \
+    libtool \
+    pkg-config \
+    ffmpeg && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
 RUN wget -qO tesseract.tar.gz $TESSERACT_URL
@@ -43,13 +44,14 @@ RUN ./get-languages.sh
 RUN rm ./get-languages.sh
 RUN rm ./languages.txt
 
-RUN apt install unzip zip -y
-RUN apt install rsync -y
+RUN apt-get update && apt-get install -y \
+    unzip \
+    zip \
+    rsync && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
-# Clean up apt
-RUN rm -rf /var/cache/apk/*
-RUN apt-get autoremove -y
-RUN apt-get clean
 
 RUN pip3 install jupyterlab==4.4.9 --break-system-packages
 RUN pip3 install ipywidgets==8.1.7 --break-system-packages
@@ -105,6 +107,14 @@ RUN pip3 install ollm==0.5.0 --break-system-packages
 RUN pip3 install ollmcp==0.18.2 --break-system-packages
 RUN pip3 install deepeval==3.6.4 --break-system-packages
 RUN pip3 install markitdown[all]==0.1.3 --break-system-packages
+RUN pip3 install olmocr==0.4.4 --break-system-packages
+RUN pip3 install easyocr==1.7.2 --break-system-packages
+RUN pip3 install nougat==0.3.3 --break-system-packages
+RUN pip3 install layoutparser==0.3.4 --break-system-packages
+RUN pip3 install paddleocr==3.3.1 --break-system-packages
+RUN pip3 install pdf2image==1.16.3 --break-system-packages
+RUN pip3 install paddlepaddle-gpu==2.6.2 --break-system-packages
+
 
 EXPOSE 8888
 WORKDIR /jupyterlab

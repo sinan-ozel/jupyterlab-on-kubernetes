@@ -100,12 +100,16 @@ TODO: docker-compose examples will follow.
 
 ### 25.10
 
+Tested on:
+1. CUDA 13.0 on WSL on Windows, Ubuntu 24.04, nvidia-smi NVML 580.82, driver 581.29, GeForce RTX 3060 with 12GB GPU RAM
+2. CUDA 13.0 on WSL on Ubuntu 24.04, nvidia-smi NVML 580.95, driver 580.95, GeForce GTX 1660 Ti with 6GB GPU RAM
+
+
 ### 25.09
 
-TODO
 
 Tested on:
-1. WSL on Windows, Ubuntu 24.04, nvidia-smi 560.35.02
+1. CUDA 13.0 on WSL on Windows, Ubuntu 24.04, nvidia-smi NVML 580.82, driver 581.29, GeForce RTX 3060 with 12GB GPU RAM
 
 ### 25.02
 

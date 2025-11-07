@@ -73,12 +73,15 @@
       },
       {
         "label": "push-kubyterlab-llm-to-docker",
-        "dependsOn": "test",
+        "dependsOn": [
+          "build-kubyterlab-llm",
+          "freeze-kubyterlab-llm",
+        ],
         "type": "shell",
         "command": [
           "docker login;",
-          "docker tag kubyterlab-llm:${config:kubyterlab-llm.version} ${config:docker.author-name}/kubyterlab-llm:${config:kubyterlab-llm.version};",
-          "docker push ${config:docker.author-name}/kubyterlab-llm:${config:kubyterlab-llm.version};",
+          "docker tag kubyterlab-llm:${config:kubyterlab-llm.version} ${config:docker.hub.namespace}/kubyterlab-llm:${config:kubyterlab-llm.version};",
+          "docker push ${config:docker.hub.namespace}/kubyterlab-llm:${config:kubyterlab-llm.version};",
         ],
         "group": {
             "kind": "build",
@@ -94,7 +97,10 @@
       },
       {
         "label": "push-kubyterlab-llm-to-aws",
-        "dependsOn": ["build", "freeze"],
+        "dependsOn": [
+          "build-kubyterlab-llm",
+          "freeze-kubyterlab-llm",
+        ],
         "type": "shell",
         "command": [
           "AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text);",
