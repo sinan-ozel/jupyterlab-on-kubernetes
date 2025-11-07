@@ -118,19 +118,19 @@ jobs:
         export KUBECONFIG=iac/kubeconfig.yaml
 
         kubectl rollout status deployment/ingress-nginx-controller -n ingress-nginx
-        kubectl apply -f repo/iac/k8s/hello-k8s/hello-world-ingress.yaml
+        kubectl apply -f repo/k8s/hello-k8s/hello-world-ingress.yaml
         kubectl get ingress -n default
 
 
     - name: Apply Hello World deployment
       run: |
         export KUBECONFIG=iac/kubeconfig.yaml
-        kubectl apply -f repo/iac/k8s/hello-k8s/hello-world-deployment.yaml
+        kubectl apply -f repo/k8s/hello-k8s/hello-world-deployment.yaml
 
     - name: Apply Hello World service
       run: |
         export KUBECONFIG=iac/kubeconfig.yaml
-        kubectl apply -f repo/iac/k8s/hello-k8s/hello-world-service.yaml
+        kubectl apply -f repo/k8s/hello-k8s/hello-world-service.yaml
 
     - name: Wait for service external IP
       run: |
