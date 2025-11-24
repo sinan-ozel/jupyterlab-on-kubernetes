@@ -3,7 +3,7 @@
         "region": "ca-central-1"
     },
     "kubyterlab-llm":{
-        "version": "25.10"
+        "version": "25.11"
     },
     "docker": {
         "hub": {
