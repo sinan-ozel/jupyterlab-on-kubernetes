@@ -109,7 +109,6 @@ RUN pip3 install deepeval==3.6.4 --break-system-packages
 RUN pip3 install markitdown[all]==0.1.3 --break-system-packages
 RUN pip3 install olmocr==0.4.4 --break-system-packages
 RUN pip3 install easyocr==1.7.2 --break-system-packages
-RUN pip3 install nougat==0.3.3 --break-system-packages
 RUN pip3 install layoutparser==0.3.4 --break-system-packages
 RUN pip3 install paddleocr==3.3.1 --break-system-packages
 RUN pip3 install pdf2image==1.16.3 --break-system-packages
