@@ -8,9 +8,11 @@
         "label": "download-hello-world-kubeconfig",
         "type": "shell",
         "command": [
-          "[ -f ${workspaceFolder}/iac/hello-k8s.json ] && rm ${workspaceFolder}/iac/hello-k8s.json;",
-          "gh run download --repo ${config:iac.repo} --name pulumi-${input:provider}-hello-k8s --dir ${workspaceFolder}/iac;",
-          "cat iac/hello-k8s.json | jq -r '.kubeconfig' > ${workspaceFolder}/iac/kubeconfig.yaml;",
+          "gh auth status >/dev/null 2>&1 || gh auth login;",
+          "mkdir -p .iac;",
+          "[ -f ${workspaceFolder}/.iac/hello-k8s.json ] && rm ${workspaceFolder}/.iac/hello-k8s.json;",
+          "gh run download --repo ${config:iac.repo} --name pulumi-${input:provider}-hello-k8s --dir ${workspaceFolder}/.iac;",
+          "cat .iac/hello-k8s.json | jq -r '.kubeconfig' > ${workspaceFolder}/.iac/kubeconfig.yaml;",
         ],
         "group": {
             "kind": "build",
