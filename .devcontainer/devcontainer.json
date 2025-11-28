@@ -1,0 +1,30 @@
+{
+	"name": "k8s-deployer",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+	"mounts": [
+		"source=${localEnv:HOME}/secrets/.aws,target=/root/.aws,type=bind",
+		"source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind"
+	],
+	"features": {
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+
+		},
+		"ghcr.io/devcontainers/features/aws-cli:1": {
+
+		},
+		"ghcr.io/devcontainers/features/github-cli:1": {
+
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"clemenspeters.format-json",
+				"euskadi31.json-pretty-printer",
+				"github.vscode-github-actions",
+			],
+		}
+	},
+  	"postCreateCommand": "kubectl version --client=true",
+	"remoteUser": "root"
+}
