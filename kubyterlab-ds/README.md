@@ -1,8 +1,20 @@
-# 🧪 Kubyterlab-DS - Data Science JupyterLab Environment
+# 🧪 KubyterLab-DS - Data Science JupyterLab Environment
 
-> 🚀 A complete data science environment with JupyterLab, Redis, Qdrant vector database, and embedded LLM services.
+> 🚀 A production-ready data science environment with JupyterLab, Redis, Qdrant vector database, and embedded LLM services.
+
+## 🎯 Purpose
+
+**KubyterLab-DS** bridges the gap between local development and production deployment:
+
+1. **💻 Local Development** - Run the complete stack locally using `docker-compose` for rapid prototyping and experimentation
+2. **☸️ Kubernetes Deployment** - Deploy seamlessly to Kubernetes clusters with minimal configuration changes
+3. **🔒 Production Ready** - Use frozen dependency versions for reproducible, stable production environments
+
+This approach follows the "develop locally, deploy globally" philosophy, ensuring your notebooks work consistently from laptop to cloud.
 
 [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-sinanozel%2Fkubyterlab--ds-blue?logo=docker)](https://hub.docker.com/r/sinanozel/kubyterlab-ds)
+[![Docker Pulls](https://img.shields.io/docker/pulls/sinanozel/kubyterlab-ds)](https://hub.docker.com/r/sinanozel/kubyterlab-ds)
+[![Docker Image Size](https://img.shields.io/docker/image-size/sinanozel/kubyterlab-ds/25.11)](https://hub.docker.com/r/sinanozel/kubyterlab-ds)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ## 📋 Table of Contents
