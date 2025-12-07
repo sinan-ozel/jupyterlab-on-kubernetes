@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   jupyter:
-    build: .
+    image: kubyterlab-ds:${KUBYTERLAB_DS_VERSION:-latest}
     container_name: jupyter-notebook
     ports:
       - "8888:8888"
@@ -21,7 +21,7 @@ services:
     cpus: 2
 
   redis:
-    image: redis:7.4.1-alpine
+    image: redis:7.4.2-alpine
     container_name: redis
     ports:
       - "6379:6379"
@@ -43,7 +43,7 @@ services:
       - jupyter-network
 
   embedding:
-    image: sinanozel/ollama.0.12.2:all-minilm-33m
+    image: sinanozel/ollama.0.12.11:all-minilm-33m
     container_name: embedding
     ports:
       - "11434:11434"
@@ -51,7 +51,7 @@ services:
       - jupyter-network
 
   llm:
-    image: sinanozel/ollama.0.12.2:gemma3-270m
+    image: sinanozel/ollama.0.12.11:gemma3-270m
     container_name: llm
     ports:
       - "11435:11434"

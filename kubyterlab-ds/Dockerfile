@@ -23,10 +23,27 @@ RUN pip install --no-cache-dir \
     seaborn==0.13.2 \
     scikit-learn==1.5.2 \
     nbdime==4.0.2 \
-    redis==5.2.0 \
+    redis==6.1.0 \
+    redis-memory==0.3.2 \
+    qdrant-client==1.12.1 \
+    chromadb==0.5.23 \
+    lancedb==0.17.0 \
     lxml==5.3.0 \
     openpyxl==3.1.5 \
-    tqdm==4.67.1
+    tqdm==4.67.1 \
+    beautifulsoup4==4.12.3 \
+    requests==2.32.3 \
+    urllib3==2.3.0 \
+    charset-normalizer==3.4.0 \
+    jsonschema==4.23.0 \
+    jsonschema-specifications==2024.10.1 \
+    json5==0.10.0 \
+    PyYAML==6.0.2 \
+    pytz==2024.2 \
+    fqdn==1.5.1 \
+    webcolors==24.11.1 \
+    pandocfilters==1.5.1 \
+    defusedxml==0.7.1
 
 # Configure git and nbdime for Jupyter
 RUN nbdime config-git --enable --global
