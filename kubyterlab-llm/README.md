@@ -162,6 +162,10 @@ docker exec jupyterlab-llm jupyter server list
 # Access at http://localhost:8888
 ```
 
+This is what the environment looks like if you are successful.
+![1_SfmiSe5NHwsgVJgbDgg_Kw](https://github.com/user-attachments/assets/3566e9a5-30e6-4871-80b3-e527cd72a1c4)
+
+
 ### Runtime Command
 
 The container starts JupyterLab with the following command:
