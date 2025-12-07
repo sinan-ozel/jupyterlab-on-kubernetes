@@ -1,128 +1,234 @@
-# IaC For Generative AI: LLM Jupyterlab on Kubernetes on AWS
+# 🚀 JupyterLab on Kubernetes
 
-I am using this repo for my JupyterLab use cases. I achieve four goals:
+> Production-ready JupyterLab environments for data science and LLM development. Deploy locally with Docker Compose or scale to Kubernetes clusters across any cloud provider.
 
-1. I can deploy this server on a Kubernetes cluster, meaning that I achieve a level of cloud-independence. Instead of being locked-in to AWS using SageMaker, I create my own container, and I can deploy it in multiple cloud providers, since they all support Kubernetes.
-2. I freeze my versions, meaning that I can replicate the environment in another container with relative ease when I want to package something I created.
-3. I want to ensure compability with CUDA drivers and tensorflow
-4. Combined with the IaC repo, I can deploy and completely clean-up my environment within minutes, meaning that I can keep my data sci
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Docker](https://img.shields.io/badge/Docker-Required-2496ED?logo=docker)](https://www.docker.com/)
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-Ready-326CE5?logo=kubernetes)](https://kubernetes.io/)
 
-When things got to the point where almost all of the newer technology is on the cloud, I had to create this solution so that I can experiment easily, professionally and on a budget.
+## 🎯 Overview
 
-This is what the environment looks like in the end.
-![1_SfmiSe5NHwsgVJgbDgg_Kw](https://github.com/user-attachments/assets/3566e9a5-30e6-4871-80b3-e527cd72a1c4)
+This repository provides two production-ready JupyterLab environments designed for the modern ML workflow:
 
-## ⚙️ Features
+1. **[Kubyterlab-DS](kubyterlab-ds/README.md)** - Data Science & RAG Development
+2. **[Kubyterlab-LLM](kubyterlab-llm/README.md)** - GPU-Accelerated LLM Development
 
-### 🧱 Base Image
-- **nvidia/cuda:12.9.1-cudnn-devel-ubuntu24.04** — CUDA 12.9.1 with cuDNN on Ubuntu 24.04 for GPU acceleration.
+Both environments follow the **"develop locally, deploy globally"** philosophy:
+- 💻 **Local Development**: Run complete stacks with `docker-compose` for rapid prototyping
+- ☸️ **Kubernetes Deployment**: Deploy to any K8s cluster (AWS EKS, GCP GKE, Azure AKS, on-premises)
+- 🔒 **Production Ready**: Pinned dependency versions with freeze files for reproducibility
+- 🌐 **Cloud Independent**: Not locked into AWS SageMaker or any single cloud provider
 
----
+![JupyterLab Environment](https://github.com/user-attachments/assets/3566e9a5-30e6-4871-80b3-e527cd72a1c4)
 
-### 💻 Core Languages & Tools
-- 🐍 **Python 3.12** + `pip`
-- 🟩 **Node.js** + `npm`
-- 🧰 **Build essentials:** `gcc`, `make`, `pkg-config`, `libtool`, `apt-utils`
+## 📦 Environments
 
----
+### 🧪 [Kubyterlab-DS](kubyterlab-ds/README.md) - Data Science Environment
 
-### 👁️ OCR Engine
-- 🔤 **Tesseract OCR** built from the latest `main` branch source
-- 🧩 Includes **Leptonica** and related dependencies
-- 🌐 Installs **language data** via bundled `get-languages.sh` script
+**Perfect for**: Data analysis, RAG pipelines, web scraping, document processing, and vector database experimentation.
 
----
+**Key Features**:
+- 📊 Core data science stack: NumPy, Pandas, Matplotlib, Seaborn, Scikit-learn
+- 🔴 Redis for caching and queues
+- 🎯 Qdrant vector database
+- 🧠 ChromaDB & LanceDB embedded vector stores
+- 🤖 Ollama embedding & LLM services
+- 🌐 Web scraping tools: BeautifulSoup4, Requests, LXML
+- 📄 Document processing: PyPDF, OpenPyXL, PyYAML
 
-### 📓 Jupyter Environment
-- 🧪 **JupyterLab 4.4.9** with:
-  - `ipywidgets 8.1.7`
-  - `jupyter_contrib_nbextensions 0.7.0`
-  - TOC extension pre-enabled
-- 📡 Runs on **port 8888** (`--ip=0.0.0.0`, root allowed)
-
----
-
-### 🧠 Deep Learning Frameworks
-- 🔥 **PyTorch 2.8.0**
-- 🧬 **TensorFlow 2.20.0** (CUDA-enabled)
-- ⚙️ **tf-keras 2.20.1**
-
----
-
-### 🗣️ NLP & LLM Toolkits
-- 🤖 **Transformers 4.56.2**, **Diffusers 0.35.1**, **Accelerate 1.10.1**
-- ⚡ **BitsAndBytes**, **FlashAttention**, **PEFT**
-- 🧩 **LangChain (core + community + experimental + huggingface)**
-- 🧠 **Sentence-Transformers**, **FastEmbed**, **FlashRank**, **ReRankers**, **GLiNER**, **Rank-BM25**, **IR-Measures**
-
----
-
-### 📄 Document & Data Handling
-- 📚 **PyPDF 6.1.1**, **OpenParse 0.7.0**
-- 🧮 **LanceDB 0.25.1** for vector storage and retrieval
-
----
-
-### 🧪 Evaluation & Utility Packages
-- 🧭 **DeepEval 3.6.4** — LLM evaluation
-- 📝 **MarkItDown 0.1.3** — Markdown conversion and processing
-- 🔡 **mangoCR 0.1.4** — Character recognition
-- 🧩 **ollm 0.5.0**, **ollmcp 0.18.2** — Model orchestration
-
----
-
-### 🧰 Additional Utilities
-- 🌐 `curl`, `wget`, `rsync`, `zip`, `unzip`, `ca-certificates`
-- 🧹 Cleans up apt caches and temporary files to reduce image size
-
----
-
-### 🚀 Runtime Command
+**Quick Start**:
 ```bash
-jupyter lab --ip=0.0.0.0 --port=8888 \
-  --no-browser \
-  --ServerApp.root_dir='/jupyterlab/notebooks' \
-  --allow-root
+docker pull sinanozel/kubyterlab-ds:25.11
+```
 
+[📖 Full Documentation](kubyterlab-ds/README.md) | [🐳 Docker Hub](https://hub.docker.com/r/sinanozel/kubyterlab-ds)
 
+---
 
-## Requirements
+### 🤖 [Kubyterlab-LLM](kubyterlab-llm/README.md) - GPU-Accelerated LLM Environment
 
-* Docker: You need to have this locally. If you have a Windows machine, you will also need WSL 2 running to be able to run the Linux containers.
-* An AWS account and AWS CLI installed: You will need the account id and the account secret to login, push an image, and finally to deploy on Kubernetes on AWS. Alternatively, use Google, Azure, or Exoscale, basically any provider that has Kubernetes support. Alternatively, if you run it locally, you can use this with NVIDIA Graphics adapters.
-* (Optional) VS Code - the steps are automated, making it easy to build and push the required image.
+**Perfect for**: Transformer model fine-tuning, LLM training, image generation, OCR at scale, and multi-modal AI applications.
 
-## Examples
+**Key Features**:
+- 🎮 **CUDA 12.8** with cuDNN for GPU acceleration
+- 🔥 **PyTorch 2.8.0** & **TensorFlow 2.20.0**
+- 🤗 Complete Hugging Face ecosystem: Transformers, Diffusers, PEFT, BitsAndBytes
+- ⚡ Flash Attention 2.8.3 & xFormers for efficient transformers
+- 🦜 LangChain & DSPy for LLM application development
+- 👁️ Comprehensive OCR: Tesseract 5.5.1, PaddleOCR, EasyOCR, OLMOCR (100+ languages)
+- 📊 Evaluation frameworks: DeepEval, IR-Measures
+- 🗄️ LanceDB for vector storage
 
-TODO: docker-compose examples will follow.
+**Quick Start**:
+```bash
+docker pull sinanozel/kubyterlab-llm:25.11
+docker run -d --gpus all -p 8888:8888 sinanozel/kubyterlab-llm:25.11
+```
 
-## Version Support
+[📖 Full Documentation](kubyterlab-llm/README.md) | [🐳 Docker Hub](https://hub.docker.com/r/sinanozel/kubyterlab-llm)
 
-### 25.10
+---
 
-Tested on:
-1. CUDA 13.0 on WSL on Windows, Ubuntu 24.04, nvidia-smi NVML 580.82, driver 581.29, GeForce RTX 3060 with 12GB GPU RAM
-2. CUDA 13.0 on Ubuntu 24.04, nvidia-smi NVML 580.95, driver 580.95, GeForce GTX 1660 Ti with 6GB GPU RAM
+## 🎯 Use Cases
 
+### Kubyterlab-DS Use Cases
 
-### 25.09
+✅ **Data Analysis & Visualization**
+- Exploratory data analysis with pandas and matplotlib
+- Statistical analysis and hypothesis testing
+- Interactive dashboards and reports
 
+✅ **RAG Application Development**
+- Build retrieval-augmented generation pipelines
+- Test different vector databases (Qdrant, ChromaDB, LanceDB)
+- Experiment with embedding models and rerankers
 
-Tested on:
-1. CUDA 13.0 on WSL on Windows, Ubuntu 24.04, nvidia-smi NVML 580.82, driver 581.29, GeForce RTX 3060 with 12GB GPU RAM
+✅ **Web Scraping & Data Collection**
+- Scrape data from websites with BeautifulSoup4
+- Process Excel, PDF, and YAML files
+- Store and cache data in Redis
 
-### 25.02
+✅ **Prototype → Production Workflow**
+- Develop locally with docker-compose
+- Test with embedded LLM services (Ollama)
+- Deploy to Kubernetes with minimal changes
 
-Tested on:
-1. Locally: CUDA 12.6 on WSL on Windows, Ubuntu 22.04, nvidia-smi 560.35.02, GeForce RTX 3060 with 12GB GPU RAM
-2. AWS: AMI `AL2_x86_64_GPU` on EC2 type `g4dn.2xlarge`
+### Kubyterlab-LLM Use Cases
 
-[pip freeze](kubyterlab-llm/freeze/25.02.txt)
+✅ **LLM Fine-Tuning & Training**
+- Fine-tune models with LoRA/QLoRA using PEFT
+- 8-bit and 4-bit quantization with BitsAndBytes
+- Multi-GPU training with Accelerate
 
-## Usage (Only needed if you want to customize)
+✅ **Image Generation & Multi-Modal AI**
+- Stable Diffusion image generation
+- Text-to-image and image-to-image pipelines
+- Vision-language model experiments
 
-Build, freeze the versions
+✅ **Document Understanding at Scale**
+- OCR in 100+ languages with Tesseract
+- Layout analysis with LayoutParser
+- PDF processing and information extraction
 
-## Version Compatibility
+✅ **Production LLM Applications**
+- Develop with LangChain and DSPy
+- Evaluate with DeepEval
+- Deploy to GPU-enabled Kubernetes clusters
 
-TODO
+---
+
+## 🚀 Deployment Options
+
+### Local Development (Docker Compose)
+
+Both environments include `docker-compose.yaml` configurations for local development with all supporting services.
+
+**Kubyterlab-DS** includes:
+- JupyterLab
+- Redis
+- Qdrant vector database
+- Ollama embedding service
+- Ollama LLM service
+
+**Kubyterlab-LLM** runs standalone:
+- JupyterLab with GPU access
+- Volume mounts for notebooks and Hugging Face models
+
+### Kubernetes Deployment
+
+Deploy to any Kubernetes cluster with GPU support:
+
+**Tested Environments**:
+- ✅ AWS EKS with `g4dn` instances
+- ✅ Custom Kubernetes clusters
+- ✅ On-premises with NVIDIA GPUs
+
+See individual READMEs for Kubernetes manifests and Helm charts.
+
+---
+
+## 📋 Requirements
+
+### For Kubyterlab-DS
+- Docker Engine 20.10+
+- Docker Compose 2.0+
+- 8GB RAM minimum
+
+### For Kubyterlab-LLM
+- Docker Engine 20.10+
+- NVIDIA GPU with CUDA 12.x support
+- NVIDIA Docker Runtime (nvidia-docker2)
+- 16GB+ GPU memory recommended
+- 32GB+ system RAM recommended
+
+### For Kubernetes Deployment
+- Kubernetes 1.24+
+- kubectl configured
+- For LLM: GPU nodes with NVIDIA device plugin
+
+---
+
+## 🔄 Version Management
+
+Each version includes frozen dependency lists for reproducibility:
+
+**Kubyterlab-DS**:
+- [25.11 freeze file](kubyterlab-ds/freeze/25.11.txt)
+
+**Kubyterlab-LLM**:
+- [25.11 freeze file](kubyterlab-llm/freeze/25.11.txt)
+- [25.10 freeze file](kubyterlab-llm/freeze/25.10.txt)
+- [25.09 freeze file](kubyterlab-llm/freeze/25.09.txt)
+- [25.02 freeze file](kubyterlab-llm/freeze/25.02.txt)
+
+---
+
+## 🛠️ Development Tools
+
+This repository includes VS Code development container configuration and tasks for:
+
+- Building Docker images with OCI-compliant labels
+- Running automated tests
+- Freezing dependency versions
+- Pushing to Docker Hub
+- Pushing to AWS ECR
+- Deploying to Kubernetes
+
+See [.vscode/tasks.json](.vscode/tasks.json) for available automation tasks.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Areas of interest:
+
+- Additional ML frameworks and libraries
+- Performance optimizations
+- Documentation improvements
+- Kubernetes deployment examples
+- CI/CD pipeline enhancements
+
+Please submit Pull Requests with detailed descriptions.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 🙏 Acknowledgments
+
+Built on top of:
+- [Jupyter Docker Stacks](https://github.com/jupyter/docker-stacks)
+- [NVIDIA CUDA](https://developer.nvidia.com/cuda-toolkit)
+- [PyTorch](https://pytorch.org/)
+- [Hugging Face](https://huggingface.co/)
+- [Redis](https://redis.io/)
+- [Qdrant](https://qdrant.tech/)
+- [Ollama](https://ollama.ai/)
+
+---
+
+Made with ❤️ for data scientists and ML engineers working with modern AI infrastructure
