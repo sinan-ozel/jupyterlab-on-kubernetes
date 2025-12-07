@@ -1,4 +1,3 @@
-
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
@@ -60,6 +59,66 @@
           "reveal": "always",
           "panel": "new"
         }
+      },
+      {
+        "label": "build-kubyterlab-ds",
+        "type": "shell",
+        "command": [
+          "docker build --tag kubyterlab-ds:${config:kubyterlab-ds.version} --file ./kubyterlab-ds/Dockerfile .;",
+        ],
+        "group": "test",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        },
+      },
+      {
+        "label": "test-kubyterlab-ds",
+        "dependsOn": "build-kubyterlab-ds",
+        "type": "shell",
+        "command": [
+          "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-ds/notebooks:/jupyterlab/notebooks --name kubyterlab-ds kubyterlab-ds:${config:kubyterlab-ds.version};",
+          "docker exec -it kubyterlab-ds bash -c 'jupyter server list';",
+          "docker exec -it kubyterlab-ds bash -c 'pip list';",
+          "docker stop kubyterlab-ds",
+        ],
+        "group": {
+            "kind": "test",
+            "isDefault": false
+        },
+        "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "freeze-kubyterlab-ds",
+        "dependsOn": [
+          "build-kubyterlab-ds",
+          "test-kubyterlab-ds"
+        ],
+        "type": "shell",
+        "command": [
+          "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-ds/notebooks:/jupyterlab/notebooks --name kubyterlab-ds kubyterlab-ds:${config:kubyterlab-ds.version};",
+          "docker exec -it kubyterlab-ds bash -c 'mkdir -p /tmp; pip freeze > /tmp/freeze.txt';",
+          "mkdir -p ./kubyterlab-ds/freeze;",
+          "docker cp kubyterlab-ds:/tmp/freeze.txt ./kubyterlab-ds/freeze/${config:kubyterlab-ds.version}.txt;",
+          "docker stop kubyterlab-ds",
+        ],
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        },
+        "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
+        },
+        "problemMatcher": []
       },
       {
         "label": "build-kubyterlab-llm",
@@ -168,52 +227,6 @@
           "reveal": "always",
           "panel": "new"
         }
-      },
-      {
-        "label": "test-kubyterlab-llm",
-        "dependsOn": "build",
-        "type": "shell",
-        "command": [
-          "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-llm/notebooks:/jupyterlab/notebooks --gpus=all --name kubyterlab-llm kubyterlab-llm:${config:kubyterlab-llm.version};",
-          "docker exec -it kubyterlab-llm bash -c 'nvcc --version';",
-          "docker exec -it kubyterlab-llm bash -c 'nvidia-smi --version';",
-          "docker exec -it kubyterlab-llm bash -c 'nvidia-smi';",
-          "docker exec -it kubyterlab-llm python3 -c 'import torch; assert torch.cuda.is_available()';",
-          "docker stop kubyterlab-llm",
-        ],
-        "group": {
-            "kind": "build",
-            "isDefault": true
-        },
-        "presentation": {
-            "echo": true,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared"
-        },
-        "problemMatcher": []
-      },
-      {
-        "label": "freeze-kubyterlab-llm",
-        "dependsOn": "build",
-        "type": "shell",
-        "command": [
-          "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-llm/notebooks:/jupyterlab/notebooks --name kubyterlab-llm kubyterlab-llm:${config:kubyterlab-llm.version};",
-          "docker exec -it kubyterlab-llm bash -c 'mkdir -p /tmp; pip freeze > /tmp/freeze.txt';",
-          "docker cp kubyterlab-llm:/tmp/freeze.txt ./kubyterlab-llm/freeze/${config:kubyterlab-llm.version}.txt;",
-          "docker stop kubyterlab-llm",
-        ],
-        "group": {
-            "kind": "build",
-            "isDefault": true
-        },
-        "presentation": {
-            "echo": true,
-            "reveal": "always",
-            "focus": false,
-            "panel": "shared"
-        },
-        "problemMatcher": []
       },
       {
       "label": "get-key-for-jupyterlab-aic",
