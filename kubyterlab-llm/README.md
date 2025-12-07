@@ -28,7 +28,6 @@ This approach follows the "develop locally, deploy globally" philosophy, ensurin
 [![Docker Image Size](https://img.shields.io/docker/image-size/sinanozel/kubyterlab-llm/25.11)](https://hub.docker.com/r/sinanozel/kubyterlab-llm)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![CUDA](https://img.shields.io/badge/CUDA-12.8-76B900?logo=nvidia)](https://developer.nvidia.com/cuda-toolkit)
-[![Docker Pulls 25.11](https://img.shields.io/docker/pulls/sinanozel/kubyterlab-llm?label=docker%20pulls%2025.11)](https://hub.docker.com/r/sinanozel/kubyterlab-llm)
 
 ## 📋 Table of Contents
 
