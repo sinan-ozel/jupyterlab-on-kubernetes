@@ -64,7 +64,18 @@
         "label": "build-kubyterlab-ds",
         "type": "shell",
         "command": [
-          "docker build --tag kubyterlab-ds:${config:kubyterlab-ds.version} --file ./kubyterlab-ds/Dockerfile .;",
+          "docker build --tag kubyterlab-ds:${config:kubyterlab-ds.version} ",
+          "--label org.opencontainers.image.title=kubyterlab-ds ",
+          "--label org.opencontainers.image.description='JupyterLab environment for data science with Redis, Qdrant, ChromaDB, and LanceDB' ",
+          "--label org.opencontainers.image.version=${config:kubyterlab-ds.version} ",
+          "--label org.opencontainers.image.created=$(date -u +%Y-%m-%dT%H:%M:%SZ) ",
+          "--label org.opencontainers.image.authors='Sinan Ozel' ",
+          "--label org.opencontainers.image.url=https://github.com/sinanozel/jupyterlab-on-kubernetes ",
+          "--label org.opencontainers.image.source=https://github.com/sinanozel/jupyterlab-on-kubernetes ",
+          "--label org.opencontainers.image.vendor='Sinan Ozel' ",
+          "--label org.opencontainers.image.licenses=MIT ",
+          "--label org.opencontainers.image.base.name=jupyter/base-notebook:latest ",
+          "--file ./kubyterlab-ds/Dockerfile .;",
         ],
         "group": "test",
         "presentation": {
@@ -77,10 +88,18 @@
         "dependsOn": "build-kubyterlab-ds",
         "type": "shell",
         "command": [
-          "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-ds/notebooks:/jupyterlab/notebooks --name kubyterlab-ds kubyterlab-ds:${config:kubyterlab-ds.version};",
-          "docker exec -it kubyterlab-ds bash -c 'jupyter server list';",
-          "docker exec -it kubyterlab-ds bash -c 'pip list';",
-          "docker stop kubyterlab-ds",
+          "cd ${workspaceFolder}/kubyterlab-ds;",
+          "KUBYTERLAB_DS_VERSION=${config:kubyterlab-ds.version} docker-compose up -d;",
+          "sleep 10;",
+          "docker exec jupyter-notebook bash -c 'pip list';",
+          "docker exec jupyter-notebook bash -c 'jupyter server list';",
+          "docker exec jupyter-notebook python3 -c 'import redis; r = redis.Redis(host=\"redis\", port=6379); r.ping(); print(\"Redis connection: OK\")';",
+          "docker exec jupyter-notebook python3 -c 'from qdrant_client import QdrantClient; client = QdrantClient(host=\"qdrant\", port=6333); print(f\"Qdrant connection: OK, collections={client.get_collections()}\")';",
+          "docker exec jupyter-notebook python3 -c 'import chromadb; client = chromadb.Client(); print(f\"ChromaDB: OK, version={chromadb.__version__}\")';",
+          "docker exec jupyter-notebook python3 -c 'import lancedb; print(f\"LanceDB: OK, version={lancedb.__version__}\")';",
+          "docker exec jupyter-notebook python3 -c 'import requests; r = requests.get(\"http://embedding:11434/api/tags\"); print(f\"Embedding service: {r.status_code}\")';",
+          "docker exec jupyter-notebook python3 -c 'import requests; r = requests.get(\"http://llm:11434/api/tags\"); print(f\"LLM service: {r.status_code}\")';",
+          "KUBYTERLAB_DS_VERSION=${config:kubyterlab-ds.version} docker-compose down",
         ],
         "group": {
             "kind": "test",
@@ -121,10 +140,44 @@
         "problemMatcher": []
       },
       {
+        "label": "push-kubyterlab-ds-to-docker",
+        "dependsOn": [
+          "build-kubyterlab-ds",
+          "freeze-kubyterlab-ds",
+        ],
+        "type": "shell",
+        "command": [
+          "docker login;",
+          "docker tag kubyterlab-ds:${config:kubyterlab-ds.version} ${config:docker.hub.namespace}/kubyterlab-ds:${config:kubyterlab-ds.version};",
+          "docker push ${config:docker.hub.namespace}/kubyterlab-ds:${config:kubyterlab-ds.version};",
+        ],
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        },
+        "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
+        },
+        "problemMatcher": []
+      },
+      {
         "label": "build-kubyterlab-llm",
         "type": "shell",
         "command": [
-          "docker build --tag kubyterlab-llm:${config:kubyterlab-llm.version} --file ./kubyterlab-llm/Dockerfile .;",
+          "docker build --tag kubyterlab-llm:${config:kubyterlab-llm.version} ",
+          "--label org.opencontainers.image.title=kubyterlab-llm ",
+          "--label org.opencontainers.image.description='JupyterLab environment for LLM development with CUDA support' ",
+          "--label org.opencontainers.image.version=${config:kubyterlab-llm.version} ",
+          "--label org.opencontainers.image.created=$(date -u +%Y-%m-%dT%H:%M:%SZ) ",
+          "--label org.opencontainers.image.authors='Sinan Ozel' ",
+          "--label org.opencontainers.image.url=https://github.com/sinanozel/jupyterlab-on-kubernetes ",
+          "--label org.opencontainers.image.source=https://github.com/sinanozel/jupyterlab-on-kubernetes ",
+          "--label org.opencontainers.image.vendor='Sinan Ozel' ",
+          "--label org.opencontainers.image.licenses=MIT ",
+          "--file ./kubyterlab-llm/Dockerfile .;",
         ],
         "group": "test",
         "presentation": {
