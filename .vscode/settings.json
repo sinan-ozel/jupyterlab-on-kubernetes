@@ -2,8 +2,11 @@
     "aws": {
         "region": "ca-central-1"
     },
+    "kubyterlab-ds":{
+        "version": "25.12"
+    },
     "kubyterlab-llm":{
-        "version": "25.11"
+        "version": "25.12"
     },
     "docker": {
         "hub": {
