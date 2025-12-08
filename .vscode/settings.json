@@ -9,5 +9,8 @@
         "hub": {
             "namespace": "sinanozel",
         }
+    },
+    "iac": {
+        "repo": "https://github.com/sinan-ozel/iac-private"
     }
 }
