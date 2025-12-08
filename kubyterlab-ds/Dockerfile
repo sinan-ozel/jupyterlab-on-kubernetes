@@ -43,7 +43,9 @@ RUN pip install --no-cache-dir \
     fqdn==1.5.1 \
     webcolors==24.11.1 \
     pandocfilters==1.5.1 \
-    defusedxml==0.7.1
+    defusedxml==0.7.1 \
+    pillow-heif==1.1.1 \
+    litellm==1.79.1
 
 # Configure git and nbdime for Jupyter
 RUN nbdime config-git --enable --global
