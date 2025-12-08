@@ -296,6 +296,100 @@
           "panel": "shared"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "build-kubyterlab-img",
+      "type": "shell",
+      "command": [
+        "docker build --tag kubyterlab-img:${config:kubyterlab-img.version} ",
+        "--label org.opencontainers.image.title=kubyterlab-img ",
+        "--label org.opencontainers.image.description='JupyterLab base image for general purpose development' ",
+        "--label org.opencontainers.image.version=${config:kubyterlab-img.version} ",
+        "--label org.opencontainers.image.created=$(date -u +%Y-%m-%dT%H:%M:%SZ) ",
+        "--label org.opencontainers.image.authors='Sinan Ozel' ",
+        "--label org.opencontainers.image.url=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img ",
+        "--label org.opencontainers.image.source=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img ",
+        "--label org.opencontainers.image.vendor='Sinan Ozel' ",
+        "--label org.opencontainers.image.licenses=MIT ",
+        "--label org.opencontainers.image.base.name=jupyter/base-notebook:latest ",
+        "--file ./kubyterlab-img/kubyterlab-img/Dockerfile .;"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "test-kubyterlab-img",
+      "dependsOn": "build-kubyterlab-img",
+      "type": "shell",
+      "command": [
+        "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-img/notebooks:/jupyterlab/notebooks --gpus=all --name kubyterlab-img kubyterlab-img:${config:kubyterlab-img.version};",
+        "docker exec -it kubyterlab-img bash -c 'nvcc --version';",
+        "docker exec -it kubyterlab-img bash -c 'nvidia-smi --version';",
+        "docker exec -it kubyterlab-img bash -c 'nvidia-smi';",
+        "docker exec -it kubyterlab-img python3 -c 'import torch; assert torch.cuda.is_available(); print(\"CUDA is available and working!\")';",
+        "docker stop kubyterlab-img"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "freeze-kubyterlab-img",
+      "dependsOn": ["build-kubyterlab-img", "test-kubyterlab-img"],
+      "type": "shell",
+      "command": [
+        "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-img/notebooks:/jupyterlab/notebooks --name kubyterlab-img kubyterlab-img:${config:kubyterlab-img.version};",
+        "docker exec -it kubyterlab-img bash -c 'mkdir -p /tmp; pip freeze > /tmp/freeze.txt';",
+        "mkdir -p ./kubyterlab-img/kubyterlablab-img/freeze;",
+        "docker cp kubyterlab-img:/tmp/freeze.txt ./kubyterlab-img/kubyterlab-img/freeze/${config:kubyterlab-img.version}.txt;",
+        "docker stop kubyterlab-img"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "push-kubyterlab-img-to-docker",
+      "dependsOn": [
+        "build-kubyterlab-img",
+        "freeze-kubyterlab-img"
+      ],
+      "type": "shell",
+      "command": [
+        "docker login;",
+        "docker tag kubyterlab-img:${config:kubyterlab-img.version} ${config:docker.hub.namespace}/kubyterlab-img:${config:kubyterlab-img.version};",
+        "docker push ${config:docker.hub.namespace}/kubyterlab-img:${config:kubyterlab-img.version};"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
     }
   ],
   "inputs": [
