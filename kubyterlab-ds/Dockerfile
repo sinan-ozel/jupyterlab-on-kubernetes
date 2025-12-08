@@ -44,6 +44,7 @@ RUN pip install --no-cache-dir \
     webcolors==24.11.1 \
     pandocfilters==1.5.1 \
     defusedxml==0.7.1 \
+    pillow==12.0.0 \
     pillow-heif==1.1.1 \
     litellm==1.79.1
 

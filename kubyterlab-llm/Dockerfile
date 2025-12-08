@@ -115,8 +115,8 @@ RUN pip3 install pdf2image==1.16.3 --break-system-packages
 RUN pip3 install paddlepaddle-gpu==2.6.2 --break-system-packages
 
 RUN pip3 install litellm==1.79.1 --break-system-packages
+RUN pip3 install pillow==12.0.0 --break-system-packages
 RUN pip3 install pillow-heif==1.1.1 --break-system-packages
-
 
 EXPOSE 8888
 WORKDIR /jupyterlab
