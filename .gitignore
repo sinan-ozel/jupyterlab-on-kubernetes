@@ -9,6 +9,5 @@
 **/*.tfstate.backup
 **/plan.out
 **/.DS_Store
-.vscode/settings.json
 **/notebooks/.ipynb_checkpoints
 **/data
