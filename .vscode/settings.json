@@ -11,6 +11,9 @@
     "kubyterlab-img":{
         "version": "25.11"
     },
+    "kubyterlab-img-12g":{
+        "version": "25.11"
+    },
     "docker": {
         "hub": {
             "namespace": "sinanozel",

@@ -1,0 +1,26 @@
+HuggingFace Hub Model Structure:
+/jupyterlab/hf/hub
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/blobs
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/refs
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/snapshots
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/snapshots/133a221b8aa7292a167afc5127cb63fb5005638b
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/.no_exist
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/.no_exist/9983a35adbd27ba2a56b392e46b237535af176a8
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/blobs
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/refs
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/snapshots
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/snapshots/9983a35adbd27ba2a56b392e46b237535af176a8
+
+Model Snapshots:
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/snapshots
+total 24
+drwxr-xr-x 1 jovyan users 4096 Nov 10 01:25 .
+drwxr-xr-x 1 jovyan users 4096 Nov 10 02:37 ..
+drwxr-xr-x 1 jovyan users 4096 Nov 10 02:26 133a221b8aa7292a167afc5127cb63fb5005638b
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/snapshots
+total 24
+drwxr-xr-x 1 jovyan users 4096 Oct 15 22:58 .
+drwxr-xr-x 1 jovyan users 4096 Oct 15 23:21 ..
+drwxr-xr-x 1 jovyan users 4096 Oct 15 22:58 9983a35adbd27ba2a56b392e46b237535af176a8

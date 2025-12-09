@@ -390,6 +390,105 @@
         "panel": "shared"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "build-kubyterlab-img-12g",
+      "type": "shell",
+      "command": [
+        "docker build --tag kubyterlab-img-12g:${config:kubyterlab-img-12g.version} ",
+        "--label org.opencontainers.image.title=kubyterlab-img-12g ",
+        "--label org.opencontainers.image.description='JupyterLab image with pre-installed Stable Diffusion models (12GB variant)' ",
+        "--label org.opencontainers.image.version=${config:kubyterlab-img-12g.version} ",
+        "--label org.opencontainers.image.created=$(date -u +%Y-%m-%dT%H:%M:%SZ) ",
+        "--label org.opencontainers.image.authors='Sinan Ozel' ",
+        "--label org.opencontainers.image.url=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img/kubyterlab-img-12g ",
+        "--label org.opencontainers.image.source=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img/kubyterlab-img-12g ",
+        "--label org.opencontainers.image.vendor='Sinan Ozel' ",
+        "--label org.opencontainers.image.licenses=MIT ",
+        "--label org.opencontainers.image.base.name=sinanozel/kubyterlab-img:25.11 ",
+        "--file ${workspaceFolder}/kubyterlab-img/kubyterlab-img-12g/Dockerfile /"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "test-kubyterlab-img-12g",
+      "dependsOn": "build-kubyterlab-img-12g",
+      "type": "shell",
+      "command": [
+        "docker run -d --rm --gpus=all --name kubyterlab-img-12g kubyterlab-img-12g:${config:kubyterlab-img-12g.version} && sleep 5;",
+        "echo '=== Testing CUDA availability ===';",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; print('CUDA available:', torch.cuda.is_available()); print('GPU count:', torch.cuda.device_count())\";",
+        "echo '=== Testing CompVis Stable Diffusion v1.4 ===';",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import StableDiffusionPipeline; print('Loading CompVis Stable Diffusion v1.4...'); model_path = '/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/snapshots/133a221b8aa7292a167afc5127cb63fb5005638b'; pipe = StableDiffusionPipeline.from_pretrained(model_path, torch_dtype=torch.float16, safety_checker=None); pipe = pipe.to('cuda'); print('✅ CompVis model loaded successfully!'); image = pipe('three cute cats playing', width=512, height=512, num_inference_steps=5).images[0]; image.save('/tmp/test_cats.png'); print('✅ Image generated and saved!')\";",
+        "echo '=== Testing Fluently v3 inpainting ===';",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import StableDiffusionInpaintPipeline; print('Loading Fluently v3 inpainting model...'); model_path = '/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/snapshots/9983a35adbd27ba2a56b392e46b237535af176a8'; pipe = StableDiffusionInpaintPipeline.from_pretrained(model_path, torch_dtype=torch.float16, safety_checker=None); pipe = pipe.to('cuda'); print('✅ Fluently v3 inpainting model loaded successfully!'); print('Model device:', pipe.device)\";",
+        "docker stop kubyterlab-img-12g"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "freeze-kubyterlab-img-12g",
+      "dependsOn": "build-kubyterlab-img-12g",
+      "type": "shell",
+      "command": [
+        "docker run -d --rm --name kubyterlab-img-12g kubyterlab-img-12g:${config:kubyterlab-img-12g.version};",
+        "docker exec kubyterlab-img-12g bash -c 'mkdir -p /tmp; pip freeze > /tmp/freeze.txt';",
+        "docker exec kubyterlab-img-12g bash -c 'echo \"HuggingFace Hub Model Structure:\" > /tmp/model_snapshots.txt && find /jupyterlab/hf/hub -maxdepth 3 -type d | sort >> /tmp/model_snapshots.txt && echo \"\" >> /tmp/model_snapshots.txt && echo \"Model Snapshots:\" >> /tmp/model_snapshots.txt && find /jupyterlab/hf/hub -name \"snapshots\" -type d -exec sh -c \"echo {} && ls -la {}\" \\; >> /tmp/model_snapshots.txt';",
+        "mkdir -p ./kubyterlab-img/kubyterlab-img-12g/freeze;",
+        "mkdir -p ./kubyterlab-img/kubyterlab-img-12g/model-snapshots;",
+        "docker cp kubyterlab-img-12g:/tmp/freeze.txt ./kubyterlab-img/kubyterlab-img-12g/freeze/${config:kubyterlab-img-12g.version}.txt;",
+        "docker cp kubyterlab-img-12g:/tmp/model_snapshots.txt ./kubyterlab-img/kubyterlab-img-12g/model-snapshots/${config:kubyterlab-img-12g.version}.txt;",
+        "docker stop kubyterlab-img-12g"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "push-kubyterlab-img-12g-to-docker",
+      "dependsOn": [
+        "build-kubyterlab-img-12g",
+        "freeze-kubyterlab-img-12g"
+      ],
+      "type": "shell",
+      "command": [
+        "docker login;",
+        "docker tag kubyterlab-img-12g:${config:kubyterlab-img-12g.version} ${config:docker.hub.namespace}/kubyterlab-img-12g:${config:kubyterlab-img-12g.version};",
+        "docker push ${config:docker.hub.namespace}/kubyterlab-img-12g:${config:kubyterlab-img-12g.version};"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
     }
   ],
   "inputs": [
