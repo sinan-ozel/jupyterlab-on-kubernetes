@@ -352,7 +352,7 @@
       "command": [
         "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-img/notebooks:/jupyterlab/notebooks --name kubyterlab-img kubyterlab-img:${config:kubyterlab-img.version};",
         "docker exec -it kubyterlab-img bash -c 'mkdir -p /tmp; pip freeze > /tmp/freeze.txt';",
-        "mkdir -p ./kubyterlab-img/kubyterlablab-img/freeze;",
+        "mkdir -p ./kubyterlab-img/kubyterlab-img/freeze;",
         "docker cp kubyterlab-img:/tmp/freeze.txt ./kubyterlab-img/kubyterlab-img/freeze/${config:kubyterlab-img.version}.txt;",
         "docker stop kubyterlab-img"
       ],
