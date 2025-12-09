@@ -8,10 +8,12 @@
 
 ## 🎯 Overview
 
-This repository provides two production-ready JupyterLab environments designed for the modern ML workflow:
+This repository provides four production-ready JupyterLab environments designed for the modern ML workflow:
 
 1. **[Kubyterlab-DS](kubyterlab-ds/README.md)** - Data Science & RAG Development
 2. **[Kubyterlab-LLM](kubyterlab-llm/README.md)** - GPU-Accelerated LLM Development
+3. **[Kubyterlab-IMG](kubyterlab-img/kubyterlab-img/README.md)** - Base Image Generation Environment
+4. **[Kubyterlab-IMG-12G](kubyterlab-img/kubyterlab-img-12g/README.md)** - Pre-loaded Stable Diffusion Models
 
 Both environments follow the **"develop locally, deploy globally"** philosophy:
 - 💻 **Local Development**: Run complete stacks with `docker-compose` for rapid prototyping
@@ -66,6 +68,46 @@ docker run -d --gpus all -p 8888:8888 sinanozel/kubyterlab-llm:25.11
 ```
 
 [📖 Full Documentation](kubyterlab-llm/README.md) | [🐳 Docker Hub](https://hub.docker.com/r/sinanozel/kubyterlab-llm)
+
+---
+
+### 🎨 [Kubyterlab-IMG](kubyterlab-img/kubyterlab-img/README.md) - Base Image Generation Environment
+
+**Perfect for**: Custom AI image generation setups, foundation for building specialized containers with your own models.
+
+**Key Features**:
+- 🎮 **CUDA-enabled** base environment for GPU acceleration
+- 🤗 Diffusers pipeline for Stable Diffusion
+- 🔧 Flexible foundation - bring your own models
+- 📝 Sample notebooks for common workflows
+
+**Quick Start**:
+```bash
+docker pull sinanozel/kubyterlab-img:25.11
+```
+
+[📖 Full Documentation](kubyterlab-img/kubyterlab-img/README.md) | [🐳 Docker Hub](https://hub.docker.com/r/sinanozel/kubyterlab-img)
+
+---
+
+### 🖼️ [Kubyterlab-IMG-12G](kubyterlab-img/kubyterlab-img-12g/README.md) - Pre-loaded Stable Diffusion Models
+
+**Perfect for**: Immediate AI image generation, text-to-image workflows, image inpainting tasks without model downloads.
+
+**Key Features**:
+- 🚀 **Pre-installed Models**: CompVis Stable Diffusion v1.4 & Fluently v3 Inpainting
+- ⚡ **Ready-to-Use**: No model download required - start generating immediately
+- 🎯 **12GB Models**: High-quality image generation capabilities
+- 📚 **Sample Notebooks**: Complete examples for both text-to-image and inpainting
+- 🏷️ **Proper Attribution**: Model citations embedded in container labels
+
+**Quick Start**:
+```bash
+docker pull sinanozel/kubyterlab-img-12g:25.11
+docker run --gpus all -p 8888:8888 sinanozel/kubyterlab-img-12g:25.11
+```
+
+[📖 Full Documentation](kubyterlab-img/kubyterlab-img-12g/README.md) | [🐳 Docker Hub](https://hub.docker.com/r/sinanozel/kubyterlab-img-12g)
 
 ---
 
