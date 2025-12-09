@@ -28,36 +28,36 @@ USER $NB_UID
 
 # Install Python packages with pinned versions for reproducibility
 RUN pip install --no-cache-dir \
-    numpy==2.1.3 \
-    pandas==2.2.3 \
-    matplotlib==3.9.2 \
+    numpy==2.3.5 \
+    pandas==2.3.3 \
+    matplotlib==3.10.7 \
     seaborn==0.13.2 \
-    scikit-learn==1.5.2 \
+    scikit-learn==1.7.2 \
     nbdime==4.0.2 \
-    redis==6.1.0 \
+    redis==7.1.0 \
     redis-memory==0.3.2 \
-    qdrant-client==1.12.1 \
-    chromadb==0.5.23 \
-    lancedb==0.17.0 \
-    lxml==5.3.0 \
+    qdrant-client==1.16.1 \
+    chromadb==1.3.5 \
+    lancedb==0.25.3 \
+    lxml==6.0.2 \
     openpyxl==3.1.5 \
     tqdm==4.67.1 \
-    beautifulsoup4==4.12.3 \
-    requests==2.32.3 \
-    urllib3==2.3.0 \
-    charset-normalizer==3.4.0 \
-    jsonschema==4.23.0 \
-    jsonschema-specifications==2024.10.1 \
-    json5==0.10.0 \
-    PyYAML==6.0.2 \
-    pytz==2024.2 \
+    beautifulsoup4==4.14.3 \
+    requests==2.32.5 \
+    urllib3==2.6.1 \
+    charset-normalizer==3.4.4 \
+    jsonschema==4.25.1 \
+    jsonschema-specifications==2025.9.1 \
+    json5==0.12.1 \
+    PyYAML==6.0.3 \
+    pytz==2025.2 \
     fqdn==1.5.1 \
-    webcolors==24.11.1 \
+    webcolors==25.10.0 \
     pandocfilters==1.5.1 \
     defusedxml==0.7.1 \
     pillow==12.0.0 \
     pillow-heif==1.1.1 \
-    litellm==1.79.1
+    litellm==1.80.9
 
 # Configure git and nbdime for Jupyter
 RUN nbdime config-git --enable --global
