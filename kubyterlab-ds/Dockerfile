@@ -26,37 +26,40 @@ RUN apt-get update && apt-get install -y \
 # Switch back to jovyan user
 USER $NB_UID
 
-# Install Python packages with pinned versions for reproducibility
+# Install mature, stable packages (slower update cycles)
+RUN pip install --no-cache-dir \
+    scikit-learn==1.7.2 \
+    lxml==6.0.2 \
+    openpyxl==3.1.5 \
+    beautifulsoup4==4.14.3 \
+    requests==2.32.5 \
+    urllib3==2.6.1 \
+    charset-normalizer==3.4.4 \
+    PyYAML==6.0.3 \
+    fqdn==1.5.1 \
+    pandocfilters==1.5.1 \
+    defusedxml==0.7.1 \
+    pillow==12.0.0 \
+    pillow-heif==1.1.1 \
+    nbdime==4.0.2 \
+    tqdm==4.67.1
+
+# Install frequently updated packages (active development)
 RUN pip install --no-cache-dir \
     numpy==2.3.5 \
     pandas==2.3.3 \
     matplotlib==3.10.7 \
     seaborn==0.13.2 \
-    scikit-learn==1.7.2 \
-    nbdime==4.0.2 \
     redis==7.1.0 \
-    redis-memory==0.3.2 \
     qdrant-client==1.16.1 \
     chromadb==1.3.5 \
     lancedb==0.25.3 \
-    lxml==6.0.2 \
-    openpyxl==3.1.5 \
-    tqdm==4.67.1 \
-    beautifulsoup4==4.14.3 \
-    requests==2.32.5 \
-    urllib3==2.6.1 \
-    charset-normalizer==3.4.4 \
     jsonschema==4.25.1 \
     jsonschema-specifications==2025.9.1 \
     json5==0.12.1 \
-    PyYAML==6.0.3 \
     pytz==2025.2 \
-    fqdn==1.5.1 \
     webcolors==25.10.0 \
-    pandocfilters==1.5.1 \
-    defusedxml==0.7.1 \
-    pillow==12.0.0 \
-    pillow-heif==1.1.1 \
+    redis-memory==0.3.2 \
     litellm==1.80.9
 
 # Configure git and nbdime for Jupyter

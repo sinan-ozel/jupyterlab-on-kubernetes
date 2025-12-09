@@ -61,6 +61,8 @@ services:
       - ./notebooks:/home/jovyan/work
       - ~/.jupyter:/home/jovyan/.jupyter
       - ~/.ssh:/home/jovyan/.ssh:ro
+      # For persistent JupyterLab settings (Dark Mode, extensions, etc.)
+      - ./data/jupyterlab:/home/jovyan/.local/share/jupyter/lab
     environment:
       - GRANT_SUDO=yes
     networks:

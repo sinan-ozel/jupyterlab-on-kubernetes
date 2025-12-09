@@ -47,6 +47,13 @@ docker pull sinanozel/kubyterlab-img:25.11
 
 # Run with GPU support
 docker run --gpus all -p 8888:8888 -v $(pwd):/jupyterlab/notebooks sinanozel/kubyterlab-img:25.11
+
+# With persistent JupyterLab configuration (Dark Mode, etc.)
+docker run --gpus all -p 8888:8888 \
+  -v $(pwd)/notebooks:/jupyterlab/notebooks \
+  -v $(pwd)/data/jupyter:/home/jovyan/.jupyter \
+  -v $(pwd)/data/jupyterlab:/home/jovyan/.local/share/jupyter/lab \
+  sinanozel/kubyterlab-img:25.11
 ```
 
 ### With Docker Compose
@@ -59,6 +66,9 @@ services:
       - "8888:8888"
     volumes:
       - ./notebooks:/jupyterlab/notebooks
+      # For persistent JupyterLab settings (Dark Mode, extensions, etc.)
+      - ./data/jupyter:/home/jovyan/.jupyter
+      - ./data/jupyterlab:/home/jovyan/.local/share/jupyter/lab
     deploy:
       resources:
         reservations:
