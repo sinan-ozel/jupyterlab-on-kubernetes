@@ -1,5 +1,16 @@
 FROM nvidia/cuda:12.8.0-cudnn-devel-ubuntu24.04
 
+# Set labels for the image
+LABEL org.opencontainers.image.title="kubyterlab-llm"
+LABEL org.opencontainers.image.description="JupyterLab environment for LLM development with CUDA support"
+LABEL org.opencontainers.image.version="25.11"
+LABEL org.opencontainers.image.authors="Sinan Ozel"
+LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-llm"
+LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-llm"
+LABEL org.opencontainers.image.vendor="Sinan Ozel"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.base.name="nvidia/cuda:12.8.0-cudnn-devel-ubuntu24.04"
+
 ARG TESSERACT_VERSION="5.5.1"
 ARG TESSERACT_URL="https://api.github.com/repos/tesseract-ocr/tesseract/tarball/${TESSERACT_VERSION}"
 

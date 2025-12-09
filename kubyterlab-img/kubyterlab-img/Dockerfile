@@ -1,5 +1,16 @@
 FROM nvidia/cuda:12.5.1-base-ubuntu22.04
 
+# Set labels for the image
+LABEL org.opencontainers.image.title="kubyterlab-img"
+LABEL org.opencontainers.image.description="JupyterLab base image for AI image generation with CUDA support"
+LABEL org.opencontainers.image.version="25.11"
+LABEL org.opencontainers.image.authors="Sinan Ozel"
+LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img/kubyterlab-img"
+LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img/kubyterlab-img"
+LABEL org.opencontainers.image.vendor="Sinan Ozel"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.base.name="nvidia/cuda:12.5.1-base-ubuntu22.04"
+
 RUN apt update
 RUN apt install -y curl
 RUN apt install -y nodejs
@@ -24,6 +35,10 @@ RUN pip3 install xformers==0.0.32.post2
 RUN pip3 install tqdm==4.67.1
 RUN pip3 install torchvision==0.23.0
 RUN pip3 install bitsandbytes==0.48.1
+RUN pip3 install numpy==2.1.3
+RUN pip3 install pandas==2.2.3
+RUN pip3 install matplotlib==3.9.2
+RUN pip3 install seaborn==0.13.2
 
 EXPOSE 8888
 WORKDIR /jupyterlab

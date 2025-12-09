@@ -1,6 +1,17 @@
 # Use the official Jupyter base image
 FROM jupyter/base-notebook:latest
 
+# Set labels for the image
+LABEL org.opencontainers.image.title="kubyterlab-ds"
+LABEL org.opencontainers.image.description="JupyterLab environment for data science with Redis, Qdrant, ChromaDB, and LanceDB"
+LABEL org.opencontainers.image.version="25.11"
+LABEL org.opencontainers.image.authors="Sinan Ozel"
+LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-ds"
+LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-ds"
+LABEL org.opencontainers.image.vendor="Sinan Ozel"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.base.name="jupyter/base-notebook:latest"
+
 # Switch to root to install packages
 USER root
 

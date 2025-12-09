@@ -40,12 +40,17 @@ USER 1000
 ENV HOME=/home/jovyan
 
 # Install additional packages needed for Stable Diffusion
-RUN pip install --no-cache-dir \
-    diffusers \
-    transformers \
-    accelerate \
-    safetensors \
-    xformers
+# Note: These packages are inherited from the base image
+# RUN pip install --no-cache-dir \
+#     diffusers \
+#     transformers \
+#     accelerate \
+#     safetensors \
+#     xformers \
+#     numpy==2.1.3 \
+#     pandas==2.2.3 \
+#     matplotlib==3.9.2 \
+#     seaborn==0.13.2
 
 # Set environment variable for HuggingFace cache
 ENV HF_HOME=/jupyterlab/hf
