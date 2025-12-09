@@ -33,11 +33,11 @@ RUN pip install git+https://github.com/huggingface/diffusers.git@b4e6dc3037e75e2
 RUN pip3 install accelerate==1.10.1
 RUN pip3 install xformers==0.0.32.post2
 RUN pip3 install tqdm==4.67.1
-RUN pip3 install torchvision==0.23.0
-RUN pip3 install bitsandbytes==0.48.1
-RUN pip3 install numpy==2.1.3
-RUN pip3 install pandas==2.2.3
-RUN pip3 install matplotlib==3.9.2
+RUN pip3 install torchvision==0.24.1
+RUN pip3 install bitsandbytes==0.48.2
+RUN pip3 install numpy==2.3.5
+RUN pip3 install pandas==2.3.3
+RUN pip3 install matplotlib==3.10.7
 RUN pip3 install seaborn==0.13.2
 
 EXPOSE 8888

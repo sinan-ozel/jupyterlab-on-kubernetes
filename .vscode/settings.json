@@ -9,10 +9,10 @@
         "version": "25.12"
     },
     "kubyterlab-img":{
-        "version": "25.11"
+        "version": "25.12"
     },
     "kubyterlab-img-12g":{
-        "version": "25.11"
+        "version": "25.12"
     },
     "docker": {
         "hub": {
