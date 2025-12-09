@@ -186,9 +186,7 @@ jupyter lab --ip=0.0.0.0 --port=8888 \
 
 ### Tested GPUs
 - ✅ NVIDIA RTX 3090/4090
-- ✅ NVIDIA A100/H100
 - ✅ NVIDIA T4
-- ✅ NVIDIA V100
 
 ## 📦 Installed Frameworks
 
@@ -370,7 +368,7 @@ qa_chain = RetrievalQA.from_chain_type(
 result = qa_chain.run("What is the main topic of these documents?")
 print(result)
 ```
-
+ 
 ### 🗄️ LanceDB Vector Search
 
 ```python
