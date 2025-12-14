@@ -1,0 +1,6 @@
+- [ ] Add Helm Charts
+- [ ] Add the Darcula theme
+- [ ] Look into jupyterlab-ai
+- [ ] Add notedown
+- [ ] Add jut
+- [ ] Add jupytext
