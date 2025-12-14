@@ -23,7 +23,8 @@ services:
       - HUB_PORT=${HUB_PORT:-8000}
       # Or override with full URL
       - OAUTH_CALLBACK_URL=${OAUTH_CALLBACK_URL:-}
-    command: ["jupyterhub", "--config", "/etc/jupyterhub/jupyterhub_config.py"]
+    # Uses the new startup script that creates users first
+    # command: ["/usr/local/bin/start-jupyterhub.sh"]  # This is now the default CMD
 
   redis:
     image: redis:7.4.1-alpine

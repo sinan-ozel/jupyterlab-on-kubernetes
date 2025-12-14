@@ -54,7 +54,9 @@ You need to create a GitHub OAuth App (takes 2 minutes) - see setup instructions
 - **GitHub OAuth Pre-configured** - Ready for GitHub authentication with environment variables
 - **User Management** - Admin interface, named servers, resource control
 - **JupyterLab 4.5.0** - Modern notebook interface for each user
-- **Kubernetes Ready** - Flexible FQDN configuration for production deployments### Data Science Stack
+- **Kubernetes Ready** - Flexible FQDN configuration for production deployments
+
+### Data Science Stack
 - **NumPy 2.3.5** & **Pandas 2.3.3** - Core data manipulation
 - **Matplotlib 3.10.7** & **Seaborn 0.13.2** - Advanced visualization
 - **Scikit-learn 1.7.2** - Machine learning algorithms
@@ -68,6 +70,7 @@ You need to create a GitHub OAuth App (takes 2 minutes) - see setup instructions
 ### Development Tools
 - **Git integration** - Built-in version control
 - **nbdime** - Jupyter notebook diffing and merging
+- **Real-time Collaboration** - Multiple users can edit the same notebook simultaneously
 - **Multiple spawner support** - Local, Docker, Kubernetes
 
 ## Quick Start
@@ -117,6 +120,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
+      # User management - REQUIRED for user authentication
+      - ./userlist.txt:/etc/jupyterhub/userlist.txt
       # User notebooks and data
       - ./data/notebooks:/home/jovyan/work
       # JupyterHub database and user state
@@ -167,6 +172,7 @@ docker compose up -d
    ```bash
    # Copy example and edit with your GitHub credentials
    cp .env.example .env
+   # Edit .env file with your GitHub OAuth credentials
    # Set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET
    ```
 
@@ -177,6 +183,24 @@ docker compose up -d
    - Start your JupyterLab server!
 
 ## Configuration
+
+### User Management
+
+**Add/Remove Users**: Edit `userlist.txt` with GitHub usernames (one per line) and restart the container:
+
+```bash
+# Add users to userlist.txt
+echo "new-github-username" >> userlist.txt
+
+# Restart to create the new user
+docker restart jupyterhub-server
+```
+
+**Important Notes**:
+- Only users in `userlist.txt` can successfully log in
+- Users are created as Linux system accounts at startup
+- Removing a user from the list doesn't delete their home directory
+- Each user gets their own isolated environment at `/home/username/`
 
 ### GitHub OAuth (Pre-configured)
 
@@ -335,9 +359,17 @@ c.JupyterHub.port = 443
 ## Troubleshooting
 
 ### Users Can't Start Servers
-- Check spawner logs: `docker logs jupyterhub-server`
-- Verify resource limits in config
-- Ensure sufficient system resources
+- **Check if user exists in userlist.txt**: Ensure GitHub username is listed
+- **Verify user was created**: `docker exec jupyterhub-server id username`
+- **Check spawner logs**: `docker logs jupyterhub-server`
+- **Verify resource limits** in config
+- **Ensure sufficient system resources**
+
+### "User not found" Errors
+- **Add user to userlist.txt**: Echo username to the file
+- **Restart container**: `docker restart jupyterhub-server`
+- **Check container logs**: Look for "Creating user: username"
+- **Verify mount**: Ensure `userlist.txt` is properly mounted
 
 ### Database Connection Issues
 - Verify Redis/Qdrant containers are running

@@ -4,3 +4,4 @@
 - [ ] Add notedown
 - [ ] Add jut
 - [ ] Add jupytext
+- [ ] Look into anywidget to expose things or rsync notebooks
