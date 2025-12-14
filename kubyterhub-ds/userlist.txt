@@ -1,0 +1,9 @@
+# Add usernames one per line
+# Lines starting with # are comments and will be ignored
+
+# Example users (replace with your GitHub usernames)
+sinan-ozel
+
+# Add more GitHub usernames here as needed
+# username1
+# username2

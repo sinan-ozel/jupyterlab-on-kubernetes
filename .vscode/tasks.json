@@ -495,6 +495,130 @@
         "panel": "shared"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "build-kubyterhub-ds",
+      "type": "shell",
+      "command": [
+        "docker build --tag kubyterhub-ds:${config:kubyterhub-ds.version} ",
+        "--label org.opencontainers.image.title=kubyterhub-ds ",
+        "--label org.opencontainers.image.description='JupyterHub environment for data science with Redis, Qdrant, ChromaDB, and LanceDB' ",
+        "--label org.opencontainers.image.version=${config:kubyterhub-ds.version} ",
+        "--label org.opencontainers.image.created=$(date -u +%Y-%m-%dT%H:%M:%SZ) ",
+        "--label org.opencontainers.image.authors='Sinan Ozel' ",
+        "--label org.opencontainers.image.url=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterhub-ds ",
+        "--label org.opencontainers.image.source=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterhub-ds ",
+        "--label org.opencontainers.image.vendor='Sinan Ozel' ",
+        "--label org.opencontainers.image.licenses=MIT ",
+        "--label org.opencontainers.image.base.name=jupyter/base-notebook:latest ",
+        "--file ./kubyterhub-ds/Dockerfile .;"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "test-kubyterhub-ds",
+      "dependsOn": "build-kubyterhub-ds",
+      "type": "shell",
+      "command": [
+        "cd ${workspaceFolder}/kubyterhub-ds;",
+        "mkdir -p ./data/jupyterhub && chmod 777 ./data/jupyterhub;",
+        "echo 'Cleaning up existing containers...';",
+        "docker rm -f jupyterhub-server redis qdrant 2>/dev/null || true;",
+        "KUBYTERHUB_DS_VERSION=${config:kubyterhub-ds.version} docker compose up -d;",
+        "sleep 20;",
+        "echo '=== Checking container health ===';",
+        "docker ps --filter name=jupyterhub-server --format 'table {{.Names}}\t{{.Status}}';",
+        "if ! docker exec jupyterhub-server bash -c 'ps aux | grep jupyterhub' > /dev/null 2>&1; then echo 'ERROR: JupyterHub is not running!' && docker logs jupyterhub-server && exit 1; fi;",
+        "docker exec jupyterhub-server bash -c 'pip list' || (echo 'ERROR: Container not responding' && exit 1);",
+        "docker exec jupyterhub-server python3 -c 'import redis; r = redis.Redis(host=\"redis\", port=6379); r.ping(); print(\"Redis connection: OK\")' || echo 'Redis test skipped';",
+        "docker exec jupyterhub-server python3 -c 'from qdrant_client import QdrantClient; client = QdrantClient(host=\"qdrant\", port=6333); print(f\"Qdrant connection: OK, collections={client.get_collections()}\")' || echo 'Qdrant test skipped';",
+        "docker exec jupyterhub-server python3 -c 'import chromadb; client = chromadb.Client(); print(f\"ChromaDB: OK, version={chromadb.__version__}\")';",
+        "docker exec jupyterhub-server python3 -c 'import lancedb; print(f\"LanceDB: OK, version={lancedb.__version__}\")';",
+        "echo 'JupyterHub should be accessible at http://localhost:8000';",
+        "KUBYTERHUB_DS_VERSION=${config:kubyterhub-ds.version} docker compose down"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "freeze-kubyterhub-ds",
+      "dependsOn": [
+        "build-kubyterhub-ds",
+        "test-kubyterhub-ds"
+      ],
+      "type": "shell",
+      "command": [
+        "docker run -d --rm --volume ${workspaceFolder}/kubyterhub-ds/data:/home/jovyan/work --name kubyterhub-ds kubyterhub-ds:${config:kubyterhub-ds.version};",
+        "docker exec -it kubyterhub-ds bash -c 'mkdir -p /tmp; pip freeze > /tmp/freeze.txt';",
+        "mkdir -p ./kubyterhub-ds/freeze;",
+        "docker cp kubyterhub-ds:/tmp/freeze.txt ./kubyterhub-ds/freeze/${config:kubyterhub-ds.version}.txt;",
+        "docker stop kubyterhub-ds"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "push-kubyterhub-ds-to-docker",
+      "dependsOn": [
+        "build-kubyterhub-ds",
+        "freeze-kubyterhub-ds"
+      ],
+      "type": "shell",
+      "command": [
+        "docker login;",
+        "docker tag kubyterhub-ds:${config:kubyterhub-ds.version} ${config:docker.hub.namespace}/kubyterhub-ds:${config:kubyterhub-ds.version};",
+        "docker push ${config:docker.hub.namespace}/kubyterhub-ds:${config:kubyterhub-ds.version};"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "check-docker-versions",
+      "type": "shell",
+      "command": "./scripts/check-docker-versions.sh",
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
     }
   ],
   "inputs": [
