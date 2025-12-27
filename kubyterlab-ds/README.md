@@ -38,11 +38,280 @@ This approach follows the "develop locally, deploy globally" philosophy, ensurin
 
 ## 🚀 Quick Start
 
+```bash
+docker run -p 8888:8888 -v ~/jupyterlab/notebooks:/home/jovyan/work -v ~/jupyterlab/data:/home/jovyan/.jupyter sinanozel/kubyterlab-ds:25.11
+```
+
+This starts without any of the services. To start with the services, see below.
+
 ### Prerequisites
 
-- Docker Engine 20.10+
-- Docker Compose 2.0+
-- 8GB RAM minimum
+- Docker
+
+## 🖥️ Setup on Any Computer
+
+### ✅ Pre-Setup Checklist
+
+**Before you start, verify:**
+
+1. **Docker is installed and running**
+   ```bash
+   docker --version
+   docker ps
+   ```
+
+2. **Docker Compose is available**
+   ```bash
+   # Try Docker Compose V2 first (recommended)
+   docker compose version
+
+   # Or Docker Compose V1 (legacy)
+   docker-compose --version
+   ```
+
+3. **Sufficient system resources**
+   - **RAM**: At least 8GB available (containers use ~6GB total)
+   - **Disk**: At least 10GB free space for images and data
+   - **CPU**: 2+ cores recommended
+
+4. **Port availability**
+   ```bash
+   # Check if required ports are free
+   netstat -tulpn | grep -E ':(8888|6379|6333|11434|11435)'
+
+   # Or on Windows
+   netstat -an | findstr -E ":(8888|6379|6333|11434|11435)"
+   ```
+
+### 🚀 Quick Setup (Any Platform)
+
+1. **Create project directory**
+   ```bash
+   mkdir kubyterlab-ds-env
+   cd kubyterlab-ds-env
+   ```
+
+2. **Download the docker-compose.yaml**
+   ```bash
+   curl -o docker-compose.yaml https://raw.githubusercontent.com/sinan-ozel/jupyterlab-on-kubernetes/main/kubyterlab-ds/docker-compose.yaml
+   ```
+
+3. **Create data directories**
+   ```bash
+   # Linux/macOS/WSL
+   mkdir -p notebooks data/{jupyter,redis,qdrant}
+
+   # Windows PowerShell
+   mkdir -Force notebooks, data\jupyter, data\redis, data\qdrant
+   ```
+
+4. **Set proper permissions (Linux/macOS/WSL only)**
+   ```bash
+   # Make sure Jupyter can write to notebooks directory
+   sudo chown -R 1000:100 notebooks/
+   sudo chmod -R 755 notebooks/
+
+   # Or if you prefer less restrictive permissions
+   chmod -R 777 data/ notebooks/
+   ```
+
+5. **Start the services**
+   ```bash
+   # For Docker Compose V2 (recommended)
+   KUBYTERLAB_DS_VERSION=25.12 docker compose up -d
+
+   # For Docker Compose V1 (legacy)
+   KUBYTERLAB_DS_VERSION=25.12 docker-compose up -d
+   ```
+
+6. **Get the access token**
+   ```bash
+   docker exec jupyter-notebook jupyter server list
+   ```
+
+7. **Access JupyterLab**
+   - **Local/WSL**: http://localhost:8888/?token=YOUR_TOKEN
+   - **Remote**: http://YOUR_SERVER_IP:8888/?token=YOUR_TOKEN
+
+### 🛠️ Platform-Specific Instructions
+
+#### 🐧 **Linux**
+```bash
+# Standard setup
+git clone https://github.com/sinan-ozel/jupyterlab-on-kubernetes.git
+cd jupyterlab-on-kubernetes/kubyterlab-ds
+sudo chown -R 1000:100 notebooks/
+KUBYTERLAB_DS_VERSION=25.12 docker compose up -d
+```
+
+#### 🪟 **Windows (WSL2)**
+```bash
+# In WSL2 terminal
+git clone https://github.com/sinan-ozel/jupyterlab-on-kubernetes.git
+cd jupyterlab-on-kubernetes/kubyterlab-ds
+sudo chown -R 1000:100 notebooks/
+KUBYTERLAB_DS_VERSION=25.12 docker compose up -d
+
+# Access from Windows browser: http://localhost:8888/?token=YOUR_TOKEN
+```
+
+#### 🪟 **Windows (Native Docker Desktop)**
+```powershell
+# In PowerShell
+git clone https://github.com/sinan-ozel/jupyterlab-on-kubernetes.git
+cd jupyterlab-on-kubernetes\kubyterlab-ds
+$env:KUBYTERLAB_DS_VERSION="25.12"
+docker compose up -d
+```
+
+#### 🍎 **macOS**
+```bash
+# Standard setup
+git clone https://github.com/sinan-ozel/jupyterlab-on-kubernetes.git
+cd jupyterlab-on-kubernetes/kubyterlab-ds
+sudo chown -R 1000:100 notebooks/
+KUBYTERLAB_DS_VERSION=25.12 docker compose up -d
+```
+
+### 🚨 Troubleshooting Common Issues
+
+#### **❌ Permission Denied: Untitled.ipynb**
+```bash
+# Fix notebook creation permissions
+sudo chown -R 1000:100 notebooks/
+sudo chmod -R 755 notebooks/
+
+# Or more permissive (less secure)
+sudo chmod -R 777 notebooks/ data/
+
+# Verify inside container
+docker exec jupyter-notebook touch /home/jovyan/work/test.txt
+docker exec jupyter-notebook ls -la /home/jovyan/work/
+```
+
+#### **❌ Port Already in Use (8888, 6379, etc.)**
+```bash
+# Find what's using the port
+sudo netstat -tulpn | grep :8888
+# or
+sudo lsof -i :8888
+
+# Stop conflicting containers
+docker ps | grep 8888
+docker stop CONTAINER_NAME
+
+# Or use different ports in docker-compose.yaml
+ports:
+  - "8889:8888"  # Use port 8889 instead
+```
+
+#### **❌ Docker Compose Command Not Found**
+```bash
+# Install Docker Compose V2
+sudo apt update && sudo apt install docker-compose-plugin
+
+# Or install V1
+sudo apt install docker-compose
+
+# Or use Docker Desktop (includes both)
+```
+
+#### **❌ Container Exits Immediately**
+```bash
+# Check container logs
+docker compose logs jupyter
+docker compose logs redis
+docker compose logs qdrant
+
+# Common fixes
+docker system prune  # Clean up old containers
+docker compose down && docker compose up -d
+```
+
+#### **❌ Out of Memory/Disk Space**
+```bash
+# Check Docker resource usage
+docker system df
+
+# Clean up unused resources
+docker system prune -a
+
+# Adjust container memory limits in docker-compose.yaml
+mem_limit: 4g  # Reduce from 8g
+```
+
+#### **❌ Cannot Connect to Services (Redis/Qdrant)**
+```bash
+# Verify all services are running
+docker compose ps
+
+# Check network connectivity
+docker exec jupyter-notebook ping redis
+docker exec jupyter-notebook ping qdrant
+
+# Test Redis connection
+docker exec jupyter-notebook redis-cli -h redis ping
+
+# Test Qdrant API
+curl http://localhost:6333/collections
+```
+
+#### **🪟 Windows-Specific Issues**
+
+**WSL2 Port Access from Windows:**
+```bash
+# Get WSL IP address
+hostname -I
+
+# Access via: http://WSL_IP:8888/?token=YOUR_TOKEN
+# Or enable port forwarding (automatic in newer Windows)
+```
+
+**Windows Defender/Firewall:**
+- Allow Docker Desktop through Windows Defender
+- Allow ports 8888, 6379, 6333 through firewall
+
+**Path Issues:**
+```powershell
+# Use full Windows paths in docker-compose.yaml
+volumes:
+  - C:\Users\YourName\kubyterlab-ds\notebooks:/home/jovyan/work
+```
+
+### ✅ Verification Steps
+
+1. **All containers running**
+   ```bash
+   docker compose ps
+   # Should show all services as "Up"
+   ```
+
+2. **JupyterLab accessible**
+   ```bash
+   curl -I http://localhost:8888
+   # Should return HTTP 200 or 405
+   ```
+
+3. **Services responding**
+   ```bash
+   # Redis
+   docker exec jupyter-notebook redis-cli -h redis ping
+
+   # Qdrant
+   curl http://localhost:6333/collections
+
+   # Embedding service
+   curl http://localhost:11434/api/tags
+
+   # LLM service
+   curl http://localhost:11435/api/tags
+   ```
+
+4. **File creation works**
+   ```bash
+   docker exec jupyter-notebook touch /home/jovyan/work/test.ipynb
+   docker exec jupyter-notebook ls -la /home/jovyan/work/
+   ```
 
 ### 1. Create Docker Compose File
 
@@ -53,16 +322,14 @@ version: '3.8'
 
 services:
   jupyter:
-    image: sinanozel/kubyterlab-ds:25.11
+    image: sinanozel/kubyterlab-ds:25.12
     container_name: jupyter-notebook
     ports:
       - "8888:8888"
     volumes:
       - ./notebooks:/home/jovyan/work
-      - ~/.jupyter:/home/jovyan/.jupyter
+      - ./data/jupyter:/home/jovyan/.jupyter
       - ~/.ssh:/home/jovyan/.ssh:ro
-      # For persistent JupyterLab settings (Dark Mode, extensions, etc.)
-      - ./data/jupyterlab:/home/jovyan/.local/share/jupyter/lab
     environment:
       - GRANT_SUDO=yes
     networks:
