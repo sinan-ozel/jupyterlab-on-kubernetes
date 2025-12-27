@@ -215,9 +215,11 @@ See individual READMEs for Kubernetes manifests and Helm charts.
 Each version includes frozen dependency lists for reproducibility:
 
 **Kubyterlab-DS**:
+- [25.12 freeze file](kubyterlab-ds/freeze/25.12.txt)
 - [25.11 freeze file](kubyterlab-ds/freeze/25.11.txt)
 
 **Kubyterlab-LLM**:
+- [26.01 freeze file](kubyterlab-llm/freeze/26.01.txt)
 - [25.11 freeze file](kubyterlab-llm/freeze/25.11.txt)
 - [25.10 freeze file](kubyterlab-llm/freeze/25.10.txt)
 - [25.09 freeze file](kubyterlab-llm/freeze/25.09.txt)

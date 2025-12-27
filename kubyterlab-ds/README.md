@@ -1,6 +1,6 @@
 # 🧪 KubyterLab-DS - Data Science JupyterLab Environment
 
-> 🚀 A production-ready data science environment with JupyterLab, Redis, Qdrant vector database, and embedded LLM services.
+> 🚀 A production-ready data science environment with JupyterLab, Redis, PostgreSQL, Qdrant vector database, and embedded LLM services.
 
 ## 🎯 Purpose
 
@@ -33,16 +33,34 @@ This approach follows the "develop locally, deploy globally" philosophy, ensurin
 - 🎯 **Qdrant** - High-performance vector database for semantic search
 - 🧠 **ChromaDB** - Lightweight embedded vector database
 - 🗄️ **LanceDB** - Apache Arrow-based vector database
+- 🐘 **PostgreSQL** - Production-grade relational database
 - 🤖 **Ollama Embedding Service** - Text embedding generation (all-minilm-33m)
 - 💬 **Ollama LLM Service** - Language model inference (gemma3-270m)
 
 ## 🚀 Quick Start
 
 ```bash
+mkdir -p ~/jupyterlab/{notebooks,data}
 docker run -p 8888:8888 -v ~/jupyterlab/notebooks:/home/jovyan/work -v ~/jupyterlab/data:/home/jovyan/.jupyter sinanozel/kubyterlab-ds:25.11
 ```
-
 This starts without any of the services. To start with the services, see below.
+
+### If having issues with permissions
+
+```bash
+# Create directories
+mkdir -p ~/jupyterlab/{notebooks,data}
+
+# Set proper permissions (Linux/macOS/WSL only)
+sudo chown -R 1000:100 ~/jupyterlab/
+sudo chmod -R 755 ~/jupyterlab/
+
+# Run container
+docker run -p 8888:8888 \
+  -v ~/jupyterlab/notebooks:/home/jovyan/work \
+  -v ~/jupyterlab/data:/home/jovyan/.jupyter \
+  sinanozel/kubyterlab-ds:25.11
+```
 
 ### Prerequisites
 
@@ -99,7 +117,7 @@ This starts without any of the services. To start with the services, see below.
 3. **Create data directories**
    ```bash
    # Linux/macOS/WSL
-   mkdir -p notebooks data/{jupyter,redis,qdrant}
+   mkdir -p notebooks data/{jupyter,redis,qdrant,postgres}
 
    # Windows PowerShell
    mkdir -Force notebooks, data\jupyter, data\redis, data\qdrant
@@ -240,17 +258,21 @@ docker system prune -a
 mem_limit: 4g  # Reduce from 8g
 ```
 
-#### **❌ Cannot Connect to Services (Redis/Qdrant)**
+#### **❌ Cannot Connect to Services (Redis/PostgreSQL/Qdrant)**
 ```bash
 # Verify all services are running
 docker compose ps
 
 # Check network connectivity
 docker exec jupyter-notebook ping redis
+docker exec jupyter-notebook ping postgres
 docker exec jupyter-notebook ping qdrant
 
 # Test Redis connection
 docker exec jupyter-notebook redis-cli -h redis ping
+
+# Test PostgreSQL connection
+docker exec jupyter-notebook psql -h postgres -U jupyter -d kubyterlab -c "SELECT 1;"
 
 # Test Qdrant API
 curl http://localhost:6333/collections
@@ -296,6 +318,9 @@ volumes:
    ```bash
    # Redis
    docker exec jupyter-notebook redis-cli -h redis ping
+
+   # PostgreSQL
+   docker exec jupyter-notebook psql -h postgres -U jupyter -d kubyterlab -c "SELECT version();"
 
    # Qdrant
    curl http://localhost:6333/collections
@@ -414,12 +439,23 @@ Full-featured notebook environment with pre-installed packages:
 - **Data Science**: NumPy, Pandas, Matplotlib, Seaborn, Scikit-learn
 - **Web Scraping**: BeautifulSoup4, Requests, LXML
 - **Data Formats**: OpenPyXL, PyYAML, JSON5
-- **Databases**: Redis client, Qdrant client, ChromaDB, LanceDB
+- **Databases**: Redis client, PostgreSQL client (psycopg2), Qdrant client, ChromaDB, LanceDB
 - **Utilities**: tqdm, pytz, defusedxml
 
 ### 🔴 Redis (Port 6379)
 
 Fast in-memory key-value store with persistence enabled.
+
+### 🐘 PostgreSQL (Port 5432)
+
+Production-grade relational database with persistent storage.
+
+**Connection Details:**
+- Host: `postgres`
+- Port: `5432`
+- Database: `kubyterlab`
+- Username: `jupyter`
+- Password: `jupyter_password`
 
 ### 🎯 Qdrant (Ports 6333, 6334)
 
@@ -454,6 +490,46 @@ r.setex('session:abc123', 3600, 'user_data')
 # Lists
 r.lpush('tasks', 'task1', 'task2', 'task3')
 tasks = r.lrange('tasks', 0, -1)
+```
+
+### 🐘 PostgreSQL Example
+
+```python
+import psycopg2
+import pandas as pd
+
+# Connect to PostgreSQL
+conn = psycopg2.connect(
+    host='postgres',
+    port=5432,
+    database='kubyterlab',
+    user='jupyter',
+    password='jupyter_password'
+)
+
+# Create a table
+cur = conn.cursor()
+cur.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100),
+        email VARCHAR(100),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+''')
+
+# Insert data
+cur.execute("INSERT INTO users (name, email) VALUES (%s, %s)",
+           ("John Doe", "john@example.com"))
+conn.commit()
+
+# Query with pandas
+df = pd.read_sql_query("SELECT * FROM users", conn)
+print(df)
+
+# Close connection
+cur.close()
+conn.close()
 ```
 
 ### 🎯 Qdrant Vector Search

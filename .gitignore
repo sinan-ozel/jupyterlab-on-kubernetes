@@ -10,4 +10,5 @@
 **/plan.out
 **/.DS_Store
 **/notebooks/.ipynb_checkpoints
+**/notebooks/
 **/data

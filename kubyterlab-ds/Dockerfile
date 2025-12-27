@@ -1,10 +1,10 @@
-# Use the official Jupyter base image
-FROM jupyter/base-notebook:latest
+# Use the official Jupyter base image from Quay.io
+FROM quay.io/jupyter/base-notebook:2025-12-22
 
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterlab-ds"
 LABEL org.opencontainers.image.description="JupyterLab environment for data science with Redis, Qdrant, ChromaDB, and LanceDB"
-LABEL org.opencontainers.image.version="25.11"
+LABEL org.opencontainers.image.version="26.01"
 LABEL org.opencontainers.image.authors="Sinan Ozel"
 LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-ds"
 LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-ds"
@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     git \
     wget \
     curl \
+    postgresql-client \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -28,6 +29,7 @@ USER $NB_UID
 
 # Install mature, stable packages (slower update cycles)
 RUN pip install --no-cache-dir \
+    ipywidgets==8.1.8 \
     scikit-learn==1.7.2 \
     lxml==6.0.2 \
     openpyxl==3.1.5 \
@@ -42,7 +44,13 @@ RUN pip install --no-cache-dir \
     pillow==12.0.0 \
     pillow-heif==1.1.1 \
     nbdime==4.0.2 \
-    tqdm==4.67.1
+    tqdm[notebook]==4.67.1 \
+    jupyterlab-lsp==5.1.0 \
+    jupyterlab-git==0.51.3 \
+    jupyter-toc==1.1.2 \
+    jupyter-resource-usage==1.2.0 \
+    sidecar==0.8.0 \
+    python-lsp-server[all]==1.13.0
 
 # Install frequently updated packages (active development)
 RUN pip install --no-cache-dir \
@@ -54,12 +62,14 @@ RUN pip install --no-cache-dir \
     qdrant-client==1.16.1 \
     chromadb==1.3.5 \
     lancedb==0.25.3 \
+    psycopg2-binary==2.9.10 \
     jsonschema==4.25.1 \
     jsonschema-specifications==2025.9.1 \
     json5==0.12.1 \
     pytz==2025.2 \
     webcolors==25.10.0 \
-    redis-memory==0.3.2 \
+    redis-memory==0.3.4 \
+    jupyter_ai==2.31.7 \
     litellm==1.80.9
 
 # Configure git and nbdime for Jupyter
