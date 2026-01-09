@@ -163,6 +163,7 @@ These models are powerful tools for creative work. Please use them responsibly:
 - Avoid generating harmful or inappropriate content
 - Follow the CreativeML Open RAIL-M license terms
 - Consider the ethical implications of AI-generated content
+- Please make it clear to others that you used AI. People can tell if they look closely anyway, so even if you misrepresent your own contribution, it will be eventually obvious.
 
 ---
 
