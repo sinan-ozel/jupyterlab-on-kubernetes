@@ -570,7 +570,7 @@
         "--label org.opencontainers.image.source=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterhub-ds ",
         "--label org.opencontainers.image.vendor='Sinan Ozel' ",
         "--label org.opencontainers.image.licenses=MIT ",
-        "--label org.opencontainers.image.base.name=jupyter/base-notebook:latest ",
+        "--label org.opencontainers.image.base.name=jupyter/base-notebook:x86_64-ubuntu-22.04",
         "--file ./kubyterhub-ds/Dockerfile .;"
       ],
       "group": "build",
