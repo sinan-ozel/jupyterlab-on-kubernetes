@@ -12,3 +12,4 @@
 **/notebooks/.ipynb_checkpoints
 **/notebooks/
 **/data
+.vscode/settings.json
