@@ -3,7 +3,7 @@ FROM nvidia/cuda:12.8.0-cudnn-devel-ubuntu24.04
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterlab-llm"
 LABEL org.opencontainers.image.description="JupyterLab environment for LLM development with CUDA support and OCR tools"
-LABEL org.opencontainers.image.version="25.12"
+LABEL org.opencontainers.image.version="26.01"
 LABEL org.opencontainers.image.authors="Sinan Ozel"
 LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-llm"
 LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-llm"
@@ -150,12 +150,24 @@ RUN pip3 install olmocr==0.4.4 --break-system-packages
 RUN pip3 install easyocr==1.7.2 --break-system-packages
 RUN pip3 install layoutparser[layoutmodel,ocr]==0.3.4 --break-system-packages
 RUN pip3 install pdf2image==1.16.3 --break-system-packages
+RUN pip3 install paddlepaddle==2.6.2 --break-system-packages
 RUN pip3 install paddlepaddle-gpu==2.6.2 --break-system-packages
-RUN pip3 install paddleocr==3.3.1 --break-system-packages
+RUN pip3 install paddleocr==2.10.0 --break-system-packages
+
+RUN python3 - <<EOF
+from paddleocr import PaddleOCR
+ocr = PaddleOCR(use_textline_orientation=True, lang="en")
+print("Models downloaded and cached.")
+EOF
 
 RUN pip3 install litellm==1.79.1 --break-system-packages
 RUN pip3 install pillow==12.0.0 --break-system-packages
 RUN pip3 install pillow-heif==1.1.1 --break-system-packages
+
+# Create Jupyter directories with proper permissions
+RUN mkdir -p /home/jovyan/.jupyter/lab && \
+    mkdir -p /home/jovyan/.local/share/jupyter && \
+    chmod -R 755 /home/jovyan/.jupyter /home/jovyan/.local
 
 # Set bash as default shell for JupyterLab terminal
 ENV SHELL=/bin/bash

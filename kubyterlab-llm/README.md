@@ -96,7 +96,7 @@ This approach follows the "develop locally, deploy globally" philosophy, ensurin
 ### 📄 OCR & Document Processing
 - 🔤 **Tesseract 5.5.1** - Industry-standard OCR (100+ languages)
 - 👁️ **EasyOCR 1.7.2** - Deep learning OCR
-- 🐼 **PaddleOCR 3.3.1** - Multi-lingual OCR with PaddlePaddle GPU backend
+- 🐼 **PaddleOCR 2.10.0** - Multi-lingual OCR with PaddlePaddle GPU backend
 - 📱 **OLMOCR 0.4.4** - Advanced document OCR
 - 🥭 **MangoCR 0.1.4** - Document understanding
 - 📐 **LayoutParser 0.3.4** - Document layout analysis
@@ -154,7 +154,7 @@ docker run -d \
   --name jupyterlab-llm \
   -p 8888:8888 \
   -v $(pwd)/notebooks:/jupyterlab/notebooks \
-  sinanozel/kubyterlab-llm:25.11
+  sinanozel/kubyterlab-llm:26.01
 
 # Get access token
 docker exec jupyterlab-llm jupyter server list
@@ -368,7 +368,7 @@ qa_chain = RetrievalQA.from_chain_type(
 result = qa_chain.run("What is the main topic of these documents?")
 print(result)
 ```
- 
+
 ### 🗄️ LanceDB Vector Search
 
 ```python
