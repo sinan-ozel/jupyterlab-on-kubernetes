@@ -1,16 +1,16 @@
 # Use the official Jupyter base image
-FROM jupyter/base-notebook:latest
+FROM jupyter/base-notebook:x86_64-ubuntu-22.04
 
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterhub-ds"
 LABEL org.opencontainers.image.description="JupyterHub environment for data science with Redis, Qdrant, ChromaDB, and LanceDB"
-LABEL org.opencontainers.image.version="25.12"
+LABEL org.opencontainers.image.version="26.01"
 LABEL org.opencontainers.image.authors="Sinan Ozel"
 LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterhub-ds"
 LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterhub-ds"
 LABEL org.opencontainers.image.vendor="Sinan Ozel"
 LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.base.name="jupyter/base-notebook:latest"
+LABEL org.opencontainers.image.base.name="jupyter/base-notebook:x86_64-ubuntu-22.04"
 
 # Switch to root to install packages
 USER root
@@ -21,12 +21,31 @@ RUN apt-get update && apt-get install -y \
     wget \
     curl \
     nodejs \
+    sudo \
     npm \
+    python3-venv \
+    vim \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Configure sudo for jovyan user (passwordless)
+RUN echo "jovyan ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/jovyan \
+    && chmod 0440 /etc/sudoers.d/jovyan
+
+# Set bash as the default shell for jovyan user
+RUN chsh -s /bin/bash jovyan
+
 # Switch back to jovyan user
 USER $NB_UID
+
+# Install uv (Python package installer) as jovyan user
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Ensure user-installed scripts are on PATH for subsequent RUNs
+ENV PATH=/home/jovyan/.cargo/bin:/home/jovyan/.local/bin:$PATH
+
+# Set bash as default shell for JupyterLab terminal
+ENV SHELL=/bin/bash
 
 # Install JupyterHub and related packages
 RUN pip install --no-cache-dir \
@@ -34,6 +53,8 @@ RUN pip install --no-cache-dir \
     jupyterlab==4.5.0 \
     dockerspawner==12.1.0 \
     oauthenticator==17.3.0 \
+    ipykernel==7.1.0 \
+    jupyterlab-code-formatter==3.0.2 \
     jupyterhub-nativeauthenticator==1.3.0 \
     jupyterhub-ldapauthenticator==2.0.2
 
@@ -78,7 +99,8 @@ RUN pip install --no-cache-dir \
     pytz==2025.2 \
     webcolors==25.10.0 \
     redis-memory==0.3.2 \
-    litellm==1.80.9
+    litellm==1.80.9 \
+    langchain-openai==0.3.35
 
 # Configure git and nbdime for Jupyter
 RUN nbdime config-git --enable --global

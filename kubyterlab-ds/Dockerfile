@@ -4,7 +4,7 @@ FROM quay.io/jupyter/base-notebook:2025-12-22
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterlab-ds"
 LABEL org.opencontainers.image.description="JupyterLab environment for data science with Redis, Qdrant, ChromaDB, and LanceDB"
-LABEL org.opencontainers.image.version="26.01"
+LABEL org.opencontainers.image.version="26.02"
 LABEL org.opencontainers.image.authors="Sinan Ozel"
 LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-ds"
 LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-ds"
@@ -21,15 +21,36 @@ RUN apt-get update && apt-get install -y \
     wget \
     curl \
     postgresql-client \
+    sudo \
+    vim \
+    python3-venv \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Configure sudo for jovyan user (passwordless)
+RUN echo "jovyan ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/jovyan \
+    && chmod 0440 /etc/sudoers.d/jovyan
+
+# Set bash as the default shell for jovyan user
+RUN chsh -s /bin/bash jovyan
 
 # Switch back to jovyan user
 USER $NB_UID
 
+# Install uv (Python package installer) as jovyan user
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Ensure user-installed scripts are on PATH for subsequent RUNs
+ENV PATH=/home/jovyan/.cargo/bin:/home/jovyan/.local/bin:$PATH
+
+# Set bash as default shell for JupyterLab terminal
+ENV SHELL=/bin/bash
+
 # Install mature, stable packages (slower update cycles)
 RUN pip install --no-cache-dir \
     ipywidgets==8.1.8 \
+    ipykernel==7.1.0 \
+    jupyterlab-code-formatter==3.0.2 \
     scikit-learn==1.7.2 \
     lxml==6.0.2 \
     openpyxl==3.1.5 \
@@ -54,9 +75,9 @@ RUN pip install --no-cache-dir \
 
 # Install frequently updated packages (active development)
 RUN pip install --no-cache-dir \
-    numpy==2.3.5 \
+    numpy==2.4.1 \
     pandas==2.3.3 \
-    matplotlib==3.10.7 \
+    matplotlib==3.10.8 \
     seaborn==0.13.2 \
     redis==7.1.0 \
     qdrant-client==1.16.1 \
@@ -70,7 +91,8 @@ RUN pip install --no-cache-dir \
     webcolors==25.10.0 \
     redis-memory==0.3.4 \
     jupyter_ai==2.31.7 \
-    litellm==1.80.9
+    litellm==1.80.9 \
+    langchain-openai==0.3.35
 
 # Configure git and nbdime for Jupyter
 RUN nbdime config-git --enable --global
