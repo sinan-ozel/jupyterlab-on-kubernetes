@@ -130,6 +130,7 @@ RUN pip3 install langchain==0.3.27 --break-system-packages
 RUN pip3 install langchain-community==0.3.30 --break-system-packages
 RUN pip3 install langchain-experimental==0.3.4 --break-system-packages
 RUN pip3 install langchain-huggingface==0.3.1 --break-system-packages
+RUN pip3 install langchain-openai==0.3.35 --break-system-packages
 
 RUN pip3 install dspy==3.0.3 --break-system-packages
 
@@ -153,6 +154,7 @@ RUN pip3 install pdf2image==1.16.3 --break-system-packages
 RUN pip3 install paddlepaddle==2.6.2 --break-system-packages
 RUN pip3 install paddlepaddle-gpu==2.6.2 --break-system-packages
 RUN pip3 install paddleocr==2.10.0 --break-system-packages
+RUN pip3 install protobuf==6.33.5 --break-system-packages
 
 RUN python3 - <<EOF
 from paddleocr import PaddleOCR

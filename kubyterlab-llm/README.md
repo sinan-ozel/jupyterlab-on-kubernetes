@@ -463,7 +463,20 @@ docker-compose logs -f
 
 ## 📚 Version History
 
-### Version 25.11 (Current)
+### Version 26.01 (Current)
+
+
+- PaddleOCR's model is predownloaded and included in the image. Tested.
+
+
+### Version 25.12
+- I actually downgraded paddle to ensure compatiblity and GPU use. Tested.
+- I added poplar-utils to convert PDF to PNG files.
+
+
+
+
+### Version 25.11
 
 **Status**: ✅ Production Ready
 
