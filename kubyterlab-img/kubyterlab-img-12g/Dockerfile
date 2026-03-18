@@ -1,10 +1,10 @@
 # Use the base kubyterlab-img image
-FROM sinanozel/kubyterlab-img:25.11
+FROM sinanozel/kubyterlab-img:25.12
 
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterlab-img-12g"
 LABEL org.opencontainers.image.description="JupyterLab image with pre-installed Stable Diffusion models (12GB variant)"
-LABEL org.opencontainers.image.version="25.11"
+LABEL org.opencontainers.image.version="25.12"
 LABEL org.opencontainers.image.authors="Sinan Ozel"
 LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img/kubyterlab-img-12g"
 LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img/kubyterlab-img-12g"
@@ -39,18 +39,8 @@ USER 1000
 # Set HOME environment variable for jovyan user
 ENV HOME=/home/jovyan
 
-# Install additional packages needed for Stable Diffusion
-# Note: These packages are inherited from the base image
-# RUN pip install --no-cache-dir \
-#     diffusers \
-#     transformers \
-#     accelerate \
-#     safetensors \
-#     xformers \
-#     numpy==2.1.3 \
-#     pandas==2.2.3 \
-#     matplotlib==3.9.2 \
-#     seaborn==0.13.2
+# Set bash as default shell for JupyterLab terminal
+ENV SHELL=/bin/bash
 
 # Set environment variable for HuggingFace cache
 ENV HF_HOME=/jupyterlab/hf

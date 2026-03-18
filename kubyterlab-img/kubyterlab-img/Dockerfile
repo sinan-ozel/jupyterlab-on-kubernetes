@@ -1,5 +1,8 @@
 FROM nvidia/cuda:12.5.1-base-ubuntu22.04
 
+# Set default shell to bash
+SHELL ["/bin/bash", "-c"]
+
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterlab-img"
 LABEL org.opencontainers.image.description="JupyterLab base image for AI image generation with CUDA support"
@@ -24,19 +27,22 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv (Python package installer)
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-
 # Create jovyan user with passwordless sudo
 RUN useradd -m -s /bin/bash -N -u 1000 jovyan && \
     echo "jovyan ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/jovyan && \
     chmod 0440 /etc/sudoers.d/jovyan
 
-# Ensure user-installed scripts are on PATH for subsequent RUNs
-ENV PATH=/home/jovyan/.local/bin:$PATH
-
 # Switch to jovyan user for remaining operations
 USER jovyan
+
+# Install uv (Python package installer) as jovyan user
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Ensure user-installed scripts are on PATH for subsequent RUNs
+ENV PATH=/home/jovyan/.cargo/bin:/home/jovyan/.local/bin:$PATH
+
+# Set bash as default shell for JupyterLab terminal
+ENV SHELL=/bin/bash
 
 # Install JupyterLab and core notebook packages
 RUN pip install --no-cache-dir \
@@ -72,7 +78,8 @@ RUN pip install --no-cache-dir \
     pillow==12.0.0 \
     pillow-heif==1.1.1 \
     matplotlib==3.10.8 \
-    seaborn==0.13.2
+    seaborn==0.13.2 \
+    langchain-openai==0.3.35
 
 EXPOSE 8888
 WORKDIR /jupyterlab
