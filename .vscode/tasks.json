@@ -251,7 +251,9 @@
       },
       {
         "label": "test-kubyterlab-llm",
-        "dependsOn": "build",
+        "dependsOn": [
+          "build-kubyterlab-llm",
+        ],
         "type": "shell",
         "command": [
           "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-llm/notebooks:/jupyterlab/notebooks --gpus=all --name kubyterlab-llm kubyterlab-llm:${config:kubyterlab-llm.version};",
@@ -259,6 +261,10 @@
           "docker exec -it kubyterlab-llm bash -c 'nvidia-smi --version';",
           "docker exec -it kubyterlab-llm bash -c 'nvidia-smi';",
           "docker exec -it kubyterlab-llm python3 -c 'import torch; assert torch.cuda.is_available()';",
+          "docker exec -it kubyterlab-llm python3 -c 'import paddle; assert paddle.is_compiled_with_cuda()';",
+          "docker exec -it kubyterlab-llm bash -c 'test -d /home/jovyan/.paddleocr/whl/det/en/en_PP-OCRv3_det_infer && echo \"PaddleOCR detection model: OK\" || (echo \"Detection model missing\" && exit 1)';",
+          "docker exec -it kubyterlab-llm bash -c 'test -d /home/jovyan/.paddleocr/whl/rec/en/en_PP-OCRv4_rec_infer && echo \"PaddleOCR recognition model: OK\" || (echo \"Recognition model missing\" && exit 1)';",
+          "docker exec -it kubyterlab-llm bash -c 'test -d /home/jovyan/.paddleocr/whl/cls/ch_ppocr_mobile_v2.0_cls_infer && echo \"PaddleOCR classifier model: OK\" || (echo \"Classifier model missing\" && exit 1)';",
           "docker stop kubyterlab-llm",
         ],
         "group": {
@@ -275,7 +281,10 @@
       },
       {
         "label": "freeze-kubyterlab-llm",
-        "dependsOn": "build",
+        "dependsOn": [
+          "build-kubyterlab-llm",
+          "test-kubyterlab-llm",
+        ],
         "type": "shell",
         "command": [
           "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-llm/notebooks:/jupyterlab/notebooks --name kubyterlab-llm kubyterlab-llm:${config:kubyterlab-llm.version};",
@@ -299,6 +308,7 @@
         "label": "push-kubyterlab-llm-to-docker",
         "dependsOn": [
           "build-kubyterlab-llm",
+          "test-kubyterlab-llm",
           "freeze-kubyterlab-llm",
         ],
         "type": "shell",
@@ -323,6 +333,7 @@
         "label": "push-kubyterlab-llm-to-aws",
         "dependsOn": [
           "build-kubyterlab-llm",
+          "test-kubyterlab-llm",
           "freeze-kubyterlab-llm",
         ],
         "type": "shell",
