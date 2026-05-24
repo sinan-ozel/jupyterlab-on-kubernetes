@@ -1,74 +1,126 @@
-# KubyterLab-IMG
+# KubyterLab-IMG-12G
 
-A CUDA-enabled JupyterLab Docker image optimized for AI image generation and computer vision tasks. This base image provides the foundation for building custom AI image generation environments.
+A JupyterLab Docker image with pre-installed Stable Diffusion models for AI image generation, inpainting, and image manipulation tasks. This 12GB variant includes eight models across multiple architectures, ready for immediate use.
 
-[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-sinanozel%2Fkubyterlab--img-blue?logo=docker)](https://hub.docker.com/r/sinanozel/kubyterlab-img)
-[![Docker Pulls](https://img.shields.io/docker/pulls/sinanozel/kubyterlab-img)](https://hub.docker.com/r/sinanozel/kubyterlab-img)
-[![Docker Image Size](https://img.shields.io/docker/image-size/sinanozel/kubyterlab-img/25.11)](https://hub.docker.com/r/sinanozel/kubyterlab-img)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-sinanozel%2Fkubyterlab--img--12g-blue?logo=docker)](https://hub.docker.com/r/sinanozel/kubyterlab-img-12g)
+[![Docker Pulls](https://img.shields.io/docker/pulls/sinanozel/kubyterlab-img-12g)](https://hub.docker.com/r/sinanozel/kubyterlab-img-12g)
+[![Docker Image Size](https://img.shields.io/docker/image-size/sinanozel/kubyterlab-img-12g/26.04)](https://hub.docker.com/r/sinanozel/kubyterlab-img-12g)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ## 🚀 Features
 
-- **GPU Acceleration**: NVIDIA CUDA 12.5.1 with full GPU support
-- **Modern ML Stack**: PyTorch 2.8.0, TensorFlow 2.20.0, and TensorRT
-- **Diffusers Ready**: Latest HuggingFace Diffusers for Stable Diffusion pipelines
-- **Optimized Performance**: xFormers and BitsAndBytes for efficient model inference
-- **Flexible Foundation**: Perfect base for building custom AI image generation containers
+- **Pre-installed Models**: Eight models across SD 1.5 and SDXL architectures — no downloads required
+- **GPU Acceleration**: CUDA-enabled with optimized fp16 inference
+- **Ready-to-Use**: Start generating immediately from included sample notebooks
+- **Multiple Tasks**: Text-to-image generation, inpainting, and image-to-image workflows
 
-## 📦 Included Libraries
+## 📦 Included Models
 
-### Core ML Frameworks
-- **PyTorch 2.8.0** - Deep learning framework with CUDA support
-- **TensorFlow 2.20.0** - Google's ML platform with CUDA acceleration
-- **TensorRT** - NVIDIA's inference optimization library
+### SD 1.5 Architecture
+*~2GB VRAM for weights. Recommended resolution: 512×512 to 768×768. Max safe resolution: 1024×1024.*
 
-### AI Image Generation
-- **Diffusers** (latest from GitHub) - HuggingFace's diffusion model library
-- **Transformers 4.57.1** - State-of-the-art NLP and vision models
-- **Accelerate 1.10.1** - Distributed training and inference
-- **xFormers 0.0.32.post2** - Memory-efficient transformer implementations
-- **BitsAndBytes 0.48.1** - 8-bit and 4-bit quantization
+#### 1. CompVis Stable Diffusion v1.4
+- **Source**: [CompVis/stable-diffusion-v1-4](https://huggingface.co/CompVis/stable-diffusion-v1-4)
+- **Use Case**: Text-to-image generation
+- **Location**: `/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4`
+- **Citation**:
+  ```
+  @InProceedings{Rombach_2022_CVPR,
+      author    = {Rombach, Robin and Blattmann, Andreas and Lorenz, Dominik and Esser, Patrick and Ommer, Björn},
+      title     = {High-Resolution Image Synthesis With Latent Diffusion Models},
+      booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+      month     = {June},
+      year      = {2022},
+      pages     = {10684-10695}
+  }
+  ```
 
-### Computer Vision
-- **TorchVision 0.23.0** - Computer vision datasets and models
-- **TQDM 4.67.1** - Progress bars for training loops
+#### 2. Fluently v3 Inpainting
+- **Source**: [fluently/Fluently-v3-inpainting](https://huggingface.co/fluently/Fluently-v3-inpainting)
+- **Use Case**: Image inpainting and editing
+- **Location**: `/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting`
+- **License**: CreativeML Open RAIL-M
 
-### JupyterLab Environment
-- **JupyterLab 4.4.9** - Modern notebook interface
-- **IPyWidgets 8.1.7** - Interactive widgets for notebooks
-- **Jupyter Contrib NBExtensions 0.7.0** - Additional notebook extensions
+#### 3. Fluently v4 Inpainting
+- **Source**: [fluently/Fluently-v4-inpainting](https://huggingface.co/fluently/Fluently-v4-inpainting)
+- **Use Case**: Image inpainting and editing (improved v3)
+- **Location**: `/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting`
+- **License**: fluently-license
+
+#### 4. DreamShaper 8 Inpainting
+- **Source**: [Lykon/dreamshaper-8-inpainting](https://huggingface.co/Lykon/dreamshaper-8-inpainting)
+- **Use Case**: Artistic and stylized inpainting
+- **Location**: `/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting`
+
+#### 5. Realistic Vision v6
+- **Source**: [SG161222/Realistic_Vision_V6.0_B1_noVAE](https://huggingface.co/SG161222/Realistic_Vision_V6.0_B1_noVAE)
+- **Use Case**: Photorealistic image generation
+- **Location**: `/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE`
+
+### SDXL Architecture
+*~7–8GB VRAM for weights. Recommended resolution: 1024×1024. Always load with `torch_dtype=torch.float16` and `variant="fp16"`.*
+
+#### 6. DreamShaper XL v2 Turbo
+- **Source**: [Lykon/dreamshaper-xl-v2-turbo](https://huggingface.co/Lykon/dreamshaper-xl-v2-turbo)
+- **Use Case**: High-quality artistic generation at 1024px
+- **Location**: `/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo`
+
+#### 7. Stable Diffusion XL Base 1.0
+- **Source**: [stabilityai/stable-diffusion-xl-base-1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0)
+- **Use Case**: High-quality text-to-image generation at 1024px
+- **Location**: `/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0`
+
+## 🖥️ VRAM and Resolution Guidelines
+
+Always resize source images before passing them to the pipeline. The pipeline is not designed to handle arbitrary input sizes gracefully.
+
+| Architecture | Model VRAM | Init Image | Output | Notes |
+|---|---|---|---|---|
+| SD 1.5 | ~2GB | up to 1024×1024 | up to 1024×1024 | Sweet spot is 512–768px. Quality degrades above 768px. |
+| SDXL | ~8GB | 1024×1024 | 1024×1024 | Native training resolution. Stay here. |
+
+**General rules:**
+- Init image resolution should match output resolution. Mismatching causes internal rescaling and wastes both VRAM and quality.
+- Always resize source images *before* passing to the pipeline, not inside it.
+- Use batch size 1 at all times on 12GB VRAM.
+- If you get a CUDA OOM error, halve the resolution before trying anything else.
+
+```python
+from PIL import Image
+
+def prepare_image(path, size=1024):
+    img = Image.open(path)
+    img.thumbnail((size, size), Image.LANCZOS)
+    return img
+```
 
 ## 🛠️ Usage
 
 ### Quick Start
+
 ```bash
-# Pull the image
-docker pull sinanozel/kubyterlab-img:25.11
-
-# Run with GPU support
-docker run --gpus all -p 8888:8888 -v $(pwd):/jupyterlab/notebooks sinanozel/kubyterlab-img:25.11
-
-# With persistent JupyterLab configuration (Dark Mode, etc.)
+# With your own notebooks
 docker run --gpus all -p 8888:8888 \
   -v $(pwd)/notebooks:/jupyterlab/notebooks \
-  -v $(pwd)/data/jupyter:/home/jovyan/.jupyter \
-  -v $(pwd)/data/jupyterlab:/home/jovyan/.local/share/jupyter/lab \
-  sinanozel/kubyterlab-img:25.11
+  sinanozel/kubyterlab-img-12g:26.04
+
+# Ephemeral — explore example notebooks only
+docker run --gpus all -p 8888:8888 sinanozel/kubyterlab-img-12g:26.04
 ```
 
+> ⚠️ **Important**: Without mounting a volume, any changes will be lost when the container stops.
+
 ### With Docker Compose
+
 ```yaml
 version: '3.8'
 services:
   jupyter:
-    image: sinanozel/kubyterlab-img:25.11
+    image: sinanozel/kubyterlab-img-12g:26.04
     ports:
       - "8888:8888"
     volumes:
       - ./notebooks:/jupyterlab/notebooks
-      # For persistent JupyterLab settings (Dark Mode, extensions, etc.)
-      - ./data/jupyter:/home/jovyan/.jupyter
-      - ./data/jupyterlab:/home/jovyan/.local/share/jupyter/lab
     deploy:
       resources:
         reservations:
@@ -78,93 +130,194 @@ services:
               capabilities: [gpu]
 ```
 
-## 🎯 Use Cases
+## 📊 Sample Code
 
-### Perfect For:
-- **Custom AI Image Generation**: Build specialized containers with your own models
-- **Stable Diffusion Development**: Develop and test diffusion model pipelines
-- **Computer Vision Research**: CV model training and inference
-- **Multi-Modal AI**: Projects combining text, image, and other modalities
-- **Foundation for Specialized Images**: Base for creating domain-specific AI containers
+### SD 1.5 — Text-to-Image Generation (CompVis SD v1.4)
 
-### Example Workflows:
 ```python
 from diffusers import StableDiffusionPipeline
 import torch
 
-# Load your own Stable Diffusion model
 pipe = StableDiffusionPipeline.from_pretrained(
-    "your-model-path",
+    "CompVis/stable-diffusion-v1-4",
     torch_dtype=torch.float16,
     safety_checker=None
-)
-pipe = pipe.to('cuda')
+).to("cuda")
 
-# Generate images
-image = pipe("a beautiful landscape").images[0]
-image.save("generated_image.png")
+image = pipe(
+    "a fantasy landscape with mountains and rivers",
+    width=512,
+    height=512
+).images[0]
+image.save("generated_landscape.png")
 ```
+
+### SD 1.5 — Photorealistic Generation (Realistic Vision v6)
+
+```python
+from diffusers import StableDiffusionPipeline
+import torch
+
+pipe = StableDiffusionPipeline.from_pretrained(
+    "SG161222/Realistic_Vision_V6.0_B1_noVAE",
+    torch_dtype=torch.float16,
+    safety_checker=None
+).to("cuda")
+
+image = pipe(
+    "portrait of a person in natural light, photorealistic, 8k",
+    negative_prompt="low quality, blurry, cartoon, painting",
+    width=768,
+    height=768,
+    num_inference_steps=30,
+).images[0]
+image.save("portrait.png")
+```
+
+### SD 1.5 — Inpainting (Fluently v3 or v4)
+
+```python
+from diffusers import StableDiffusionInpaintPipeline
+from PIL import Image
+import torch
+
+# Use v3 or v4 — same interface
+pipe = StableDiffusionInpaintPipeline.from_pretrained(
+    "fluently/Fluently-v4-inpainting",
+    torch_dtype=torch.float16,
+    safety_checker=None
+).to("cuda")
+
+base_image = Image.open("your_image.png").resize((512, 512))
+mask = Image.open("your_mask.png").resize((512, 512))  # white = area to inpaint
+
+result = pipe(
+    prompt="a beautiful garden with flowers",
+    negative_prompt="low quality, blurry",
+    image=base_image,
+    mask_image=mask,
+    num_inference_steps=30,
+).images[0]
+result.save("inpainted.png")
+```
+
+### SD 1.5 — Artistic Inpainting (DreamShaper 8)
+
+```python
+from diffusers import StableDiffusionInpaintPipeline
+from PIL import Image
+import torch
+
+pipe = StableDiffusionInpaintPipeline.from_pretrained(
+    "Lykon/dreamshaper-8-inpainting",
+    torch_dtype=torch.float16,
+    safety_checker=None
+).to("cuda")
+
+base_image = Image.open("your_image.png").resize((768, 768))
+mask = Image.open("your_mask.png").resize((768, 768))
+
+result = pipe(
+    prompt="oil painting of a mountain landscape, dramatic lighting, artstation",
+    negative_prompt="low quality, blurry, photographic",
+    image=base_image,
+    mask_image=mask,
+    num_inference_steps=30,
+).images[0]
+result.save("artistic_inpaint.png")
+```
+
+### SDXL — Text-to-Image Generation (SDXL Base 1.0)
+
+```python
+from diffusers import StableDiffusionXLPipeline
+import torch
+
+pipe = StableDiffusionXLPipeline.from_pretrained(
+    "stabilityai/stable-diffusion-xl-base-1.0",
+    torch_dtype=torch.float16,
+    variant="fp16"
+).to("cuda")
+
+image = pipe(
+    "a fantasy landscape with mountains and rivers, highly detailed, 4k",
+    negative_prompt="low quality, blurry",
+    width=1024,
+    height=1024,
+    num_inference_steps=30,
+).images[0]
+image.save("sdxl_landscape.png")
+```
+
+### SDXL — Artistic Generation (DreamShaper XL)
+
+```python
+from diffusers import StableDiffusionXLPipeline
+import torch
+
+pipe = StableDiffusionXLPipeline.from_pretrained(
+    "Lykon/dreamshaper-xl-v2-turbo",
+    torch_dtype=torch.float16,
+    variant="fp16"
+).to("cuda")
+
+image = pipe(
+    "cinematic portrait, dramatic lighting, ultra detailed",
+    negative_prompt="low quality, blurry, bad anatomy",
+    width=1024,
+    height=1024,
+    num_inference_steps=8,   # turbo model — fewer steps needed
+    guidance_scale=2.0,      # turbo model — lower CFG
+).images[0]
+image.save("dreamshaper_xl.png")
+```
+
+## 📝 Included Notebooks
+
+1. **`stable-diffusion-v1-4-demo.ipynb`**: Text-to-image generation with CompVis SD v1.4
+2. **`fluently-v3-inpainting-demo.ipynb`**: Inpainting workflows with Fluently v3
 
 ## 🔧 System Requirements
 
-- **GPU**: NVIDIA GPU with CUDA 12.x support
-- **Memory**: Minimum 8GB GPU VRAM (16GB+ recommended for larger models)
-- **Docker**: Docker with GPU support (nvidia-docker2)
-- **System RAM**: 16GB+ recommended
+- **GPU**: NVIDIA GPU with CUDA support
+- **VRAM**: 12GB recommended (SD 1.5 models work on 6GB+; SDXL requires 10GB+)
+- **Docker**: Docker with GPU support (nvidia-container-toolkit)
 
 ## 🏗️ Build Information
 
-- **Base Image**: `nvidia/cuda:12.5.1-base-ubuntu22.04`
-- **Python Version**: 3.11
-- **CUDA Version**: 12.5.1
-- **Ubuntu Version**: 22.04 LTS
-
-## 📊 Variants
-
-This is the base image for the KubyterLab-IMG family:
-
-- **[kubyterlab-img](./README.md)** (this image) - Base foundation with core libraries
-- **[kubyterlab-img-12g](../kubyterlab-img-12g/README.md)** - Pre-loaded with Stable Diffusion models (12GB)
-- **kubyterlab-img-32g** - Larger model variant (coming soon)
-
-## 🚀 Extending This Image
-
-Use this as a base for your custom AI image generation containers:
-
-```dockerfile
-FROM sinanozel/kubyterlab-img:25.11
-
-# Copy your models
-COPY ./models /jupyterlab/models
-
-# Install additional dependencies
-RUN pip install your-custom-packages
-
-# Copy custom notebooks
-COPY ./notebooks /jupyterlab/notebooks
-```
-
-## 🔄 Version Management
-
-Current version includes frozen dependencies for reproducibility:
-- [25.11 freeze file](freeze/25.11.txt)
+- **Base Image**: `sinanozel/kubyterlab-img:26.04`
+- **CUDA**: 12.9.2
+- **Python**: 3.12
+- **Key Dependencies**: diffusers, transformers, accelerate, safetensors, xformers, torch 2.8.0
 
 ## 📄 License
 
-This container is licensed under MIT License.
+This container is licensed under MIT. Individual model licenses apply:
+
+| Model | License |
+|---|---|
+| CompVis Stable Diffusion v1.4 | CreativeML Open RAIL-M |
+| Fluently v3 Inpainting | CreativeML Open RAIL-M |
+| Fluently v4 Inpainting | fluently-license |
+| DreamShaper 8 Inpainting | see model card |
+| Realistic Vision v6 | see model card |
+| DreamShaper XL v2 Turbo | see model card |
+| Stable Diffusion XL Base 1.0 | CreativeML Open RAIL++-M |
+
+Please review individual model licenses before commercial use.
 
 ## 🤝 Contributing
 
 This image is part of the [jupyterlab-on-kubernetes](https://github.com/sinan-ozel/jupyterlab-on-kubernetes) project. Contributions welcome!
 
-## 🙏 Acknowledgments
+## ⚠️ Responsible AI Usage
 
-Built on top of:
-- [NVIDIA CUDA](https://developer.nvidia.com/cuda-toolkit)
-- [PyTorch](https://pytorch.org/)
-- [TensorFlow](https://tensorflow.org/)
-- [HuggingFace Diffusers](https://github.com/huggingface/diffusers)
-- [Jupyter](https://jupyter.org/)
+These models are powerful tools for creative work. Please use them responsibly:
+- Respect copyright and intellectual property
+- Avoid generating harmful or inappropriate content
+- Follow the individual model license terms
+- Consider the ethical implications of AI-generated content
+- Please make it clear to others that you used AI. People can tell if they look closely anyway, so even if you misrepresent your own contribution, it will eventually be obvious.
 
 ---
 

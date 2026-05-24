@@ -1,0 +1,28 @@
+{
+    "aws": {
+        "region": "ca-central-1"
+    },
+    "kubyterlab-ds":{
+        "version": "25.12"
+    },
+    "kubyterlab-llm":{
+        "version": "25.12"
+    },
+    "kubyterlab-img":{
+        "version": "26.04"
+    },
+    "kubyterlab-img-12g":{
+        "version": "26.04"
+    },
+    "kubyterhub-ds":{
+        "version": "25.12"
+    },
+    "docker": {
+        "hub": {
+            "namespace": "sinanozel",
+        }
+    },
+    "iac": {
+        "repo": "https://github.com/sinan-ozel/iac-private"
+    }
+}
