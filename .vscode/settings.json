@@ -9,10 +9,10 @@
         "version": "25.12"
     },
     "kubyterlab-img":{
-        "version": "26.04"
+        "version": "26.05"
     },
     "kubyterlab-img-12g":{
-        "version": "26.04"
+        "version": "26.05"
     },
     "kubyterhub-ds":{
         "version": "25.12"

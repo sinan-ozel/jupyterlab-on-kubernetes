@@ -3,7 +3,7 @@ FROM nvidia/cuda:12.9.2-base-ubuntu24.04
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterlab-img"
 LABEL org.opencontainers.image.description="JupyterLab base image for AI image generation with CUDA support"
-LABEL org.opencontainers.image.version="26.04"
+LABEL org.opencontainers.image.version="26.05"
 LABEL org.opencontainers.image.authors="Sinan Ozel"
 LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img/kubyterlab-img"
 LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img/kubyterlab-img"
@@ -31,7 +31,8 @@ RUN pip3 install ipywidgets==8.1.8
 RUN pip3 install jupyter_contrib_nbextensions==0.7.0
 RUN jupyter labextension enable @jupyterlab/toc
 
-RUN pip3 install torch==2.8.0
+# Always check xformer and torchvision compatiblity
+RUN pip3 install torch==2.10.0
 RUN pip3 install tensorflow[and-cuda]==2.20.0
 RUN pip3 install tensorrt
 # RUN pip3 install git+https://github.com/huggingface/transformers
@@ -41,13 +42,13 @@ RUN pip3 install transformers==4.57.1
 RUN pip3 install diffusers==0.38.0
 RUN pip3 install accelerate==1.10.1
 RUN pip3 install safetensors==0.7.0
-RUN pip3 install xformers==0.0.32.post2
+RUN pip3 install xformers==0.0.35
 RUN pip3 install tqdm==4.67.1
-RUN pip3 install torchvision==0.24.1
+RUN pip3 install torchvision==0.25.0
 RUN pip3 install bitsandbytes==0.48.2
-RUN pip3 install numpy==2.3.5
-RUN pip3 install pandas==2.3.3
-RUN pip3 install matplotlib==3.10.7
+RUN pip3 install numpy==2.4.6
+RUN pip3 install pandas==3.0.3
+RUN pip3 install matplotlib==3.10.9
 RUN pip3 install seaborn==0.13.2
 RUN pip3 install insightface==1.0.1
 RUN pip3 install opencv-python-headless

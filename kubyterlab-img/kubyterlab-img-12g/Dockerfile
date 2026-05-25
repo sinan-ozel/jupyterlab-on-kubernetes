@@ -1,5 +1,5 @@
 # Use the base kubyterlab-img image
-FROM sinanozel/kubyterlab-img:26.04
+FROM sinanozel/kubyterlab-img:26.05
 
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterlab-img-12g"

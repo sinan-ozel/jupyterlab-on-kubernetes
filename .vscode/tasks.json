@@ -493,7 +493,6 @@
     },
     {
       "label": "test-kubyterlab-img-12g",
-      "dependsOn": "build-kubyterlab-img-12g",
       "type": "shell",
       "command": [
         "docker run -d --rm --gpus=all --name kubyterlab-img-12g kubyterlab-img-12g:${config:kubyterlab-img-12g.version} && sleep 5;",
@@ -519,7 +518,6 @@
     },
     {
       "label": "freeze-kubyterlab-img-12g",
-      "dependsOn": "build-kubyterlab-img-12g",
       "type": "shell",
       "command": [
         "docker run -d --rm --name kubyterlab-img-12g kubyterlab-img-12g:${config:kubyterlab-img-12g.version};",
@@ -546,7 +544,7 @@
     {
       "label": "push-kubyterlab-img-12g-to-docker",
       "dependsOn": [
-        "build-kubyterlab-img-12g",
+        "test-kubyterlab-img-12g",
         "freeze-kubyterlab-img-12g"
       ],
       "type": "shell",
