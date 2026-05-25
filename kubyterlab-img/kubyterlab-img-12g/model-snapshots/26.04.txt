@@ -1,0 +1,76 @@
+HuggingFace Hub Model Structure:
+/jupyterlab/hf/hub
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/blobs
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/refs
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/snapshots
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/snapshots/133a221b8aa7292a167afc5127cb63fb5005638b
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/blobs
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/refs
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/snapshots
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/snapshots/a09e9d0bb9849aaf46c8fc59dfa604796da15a39
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/blobs
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/refs
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/snapshots
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/snapshots/f70ad5bce436c640d23fc02cd0a6ccc787280b6e
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/blobs
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/refs
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/snapshots
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/snapshots/9a857a696b9aabbf509073e0aa55ec8200b6ef7d
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/blobs
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/refs
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/snapshots
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/snapshots/9983a35adbd27ba2a56b392e46b237535af176a8
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/blobs
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/models--fluently--Fluently-v4-inpainting
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/refs
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/snapshots
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/snapshots/16e6b73e3ff97ccbb6f70c504817d64bcd4d601c
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/blobs
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/refs
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/snapshots
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/snapshots/462165984030d82259a11f4367a4eed129e94a7b
+
+Model Snapshots:
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/snapshots
+total 12
+drwxrwxrwx  3 root root 4096 May 24 00:45 .
+drwxr-xr-x  5 root root 4096 May 24 00:22 ..
+drwxrwxrwx 10 root root 4096 May 24 00:45 462165984030d82259a11f4367a4eed129e94a7b
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 May 23 23:05 .
+drwxr-xr-x 5 root root 4096 May 23 23:05 ..
+drwxrwxrwx 9 root root 4096 May 23 23:05 f70ad5bce436c640d23fc02cd0a6ccc787280b6e
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 May 23 20:08 .
+drwxr-xr-x 5 root root 4096 May 23 20:06 ..
+drwxrwxrwx 8 root root 4096 May 23 20:08 9a857a696b9aabbf509073e0aa55ec8200b6ef7d
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 May 23 19:39 .
+drwxr-xr-x 5 root root 4096 May 23 19:37 ..
+drwxrwxrwx 8 root root 4096 May 23 19:39 a09e9d0bb9849aaf46c8fc59dfa604796da15a39
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/snapshots
+total 16
+drwxrwxrwx 3 root root 4096 May 23 04:25 .
+drwxr-xr-x 6 root root 4096 May 23 04:29 ..
+drwxrwxrwx 7 root root 4096 May 23 04:25 16e6b73e3ff97ccbb6f70c504817d64bcd4d601c
+-rwxrwxrwx 1 root root  572 May 23 12:07 model_index.json
+/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 Oct 15  2025 .
+drwxr-xr-x 5 root root 4096 Oct 15  2025 ..
+drwxrwxrwx 7 root root 4096 Oct 15  2025 9983a35adbd27ba2a56b392e46b237535af176a8
+/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 Jan 14 17:33 .
+drwxr-xr-x 5 root root 4096 Jan 14 17:33 ..
+drwxrwxrwx 9 root root 4096 Jan 14 17:33 133a221b8aa7292a167afc5127cb63fb5005638b
