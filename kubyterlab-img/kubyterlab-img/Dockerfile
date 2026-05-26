@@ -26,6 +26,8 @@ RUN apt-get update --fix-missing \
 
 RUN pip3 config set global.break-system-packages true
 
+RUN pip3 install setuptools==82.0.1
+
 RUN pip3 install jupyterlab==4.5.7
 RUN pip3 install ipywidgets==8.1.8
 RUN pip3 install jupyter_contrib_nbextensions==0.7.0
@@ -35,23 +37,28 @@ RUN jupyter labextension enable @jupyterlab/toc
 RUN pip3 install torch==2.10.0
 RUN pip3 install tensorflow[and-cuda]==2.20.0
 RUN pip3 install tensorrt
+
+RUN pip3 install torchvision==0.25.0
+
+RUN pip3 install \
+    diffusers==0.38.0 \
+    accelerate==1.10.1 \
+    safetensors==0.8.0rc0 \
+    transformers==4.57.1 \
+    opencv-python-headless==4.13.0.92 \
+    xformers==0.0.35
+
 # RUN pip3 install git+https://github.com/huggingface/transformers
-RUN pip3 install transformers==4.57.1
 # RUN pip3 install diffusers[torch]==0.35.2
 # RUN pip install git+https://github.com/huggingface/diffusers.git@b4e6dc3037e75e2dc16466b914b1be597b06be9a
-RUN pip3 install diffusers==0.38.0
-RUN pip3 install accelerate==1.10.1
-RUN pip3 install safetensors==0.7.0
-RUN pip3 install xformers==0.0.35
+
 RUN pip3 install tqdm==4.67.1
-RUN pip3 install torchvision==0.25.0
 RUN pip3 install bitsandbytes==0.48.2
 RUN pip3 install numpy==2.4.6
 RUN pip3 install pandas==3.0.3
 RUN pip3 install matplotlib==3.10.9
 RUN pip3 install seaborn==0.13.2
 RUN pip3 install insightface==1.0.1
-RUN pip3 install opencv-python-headless
 
 EXPOSE 8888
 WORKDIR /jupyterlab

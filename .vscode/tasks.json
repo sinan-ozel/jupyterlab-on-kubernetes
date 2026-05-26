@@ -397,16 +397,16 @@
     },
     {
       "label": "test-kubyterlab-img",
-      "dependsOn": "build-kubyterlab-img",
       "type": "shell",
       "command": [
-        "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-img/notebooks:/jupyterlab/notebooks --gpus=all --name kubyterlab-img kubyterlab-img:${config:kubyterlab-img.version};",
-        "docker exec -it kubyterlab-img bash -c 'nvcc --version';",
-        "docker exec -it kubyterlab-img bash -c 'nvidia-smi --version';",
-        "docker exec -it kubyterlab-img bash -c 'nvidia-smi';",
-        "docker exec -it kubyterlab-img python3 -c 'import torch; assert torch.cuda.is_available(); print(\"CUDA is available and working!\")';",
-        "docker exec kubyterlab-img python3 -c 'import numpy as np; print(\"NumPy version:\", np.__version__); import pandas as pd; print(\"Pandas version:\", pd.__version__); import matplotlib; print(\"Matplotlib version:\", matplotlib.__version__); import seaborn as sns; print(\"Seaborn version:\", sns.__version__); print(\"All data science libraries loaded successfully!\")';",
-        "docker stop kubyterlab-img"
+        "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-img/notebooks:/jupyterlab/notebooks --gpus=all --name kubyterlab-img kubyterlab-img:${config:kubyterlab-img.version} &&",
+        "sleep 5 &&",
+        "docker exec kubyterlab-img bash -c 'nvidia-smi --version' &&",
+        "docker exec kubyterlab-img bash -c 'nvidia-smi' &&",
+        "docker exec kubyterlab-img python3 -c 'import torch; assert torch.cuda.is_available(), \"CUDA not available!\"; print(\"✅ CUDA is available and working!\")' &&",
+        "docker exec kubyterlab-img python3 -c 'import diffusers; assert len([x for x in dir(diffusers) if \"Pipeline\" in x]) > 0, \"diffusers has no pipelines — metadata broken!\"; print(\"✅ diffusers pipelines available:\", [x for x in dir(diffusers) if \"Pipeline\" in x])' &&",
+        "docker exec kubyterlab-img python3 -c 'import numpy as np; print(\"NumPy version:\", np.__version__); import pandas as pd; print(\"Pandas version:\", pd.__version__); import matplotlib; print(\"Matplotlib version:\", matplotlib.__version__); import seaborn as sns; print(\"Seaborn version:\", sns.__version__); print(\"✅ All data science libraries loaded successfully!\")'",
+        "; docker stop kubyterlab-img"
       ],
       "group": {
         "kind": "test",
@@ -422,7 +422,7 @@
     },
     {
       "label": "freeze-kubyterlab-img",
-      "dependsOn": ["build-kubyterlab-img", "test-kubyterlab-img"],
+      "dependsOn": ["test-kubyterlab-img"],
       "type": "shell",
       "command": [
         "docker run -d --rm --volume ${workspaceFolder}/kubyterlab-img/notebooks:/jupyterlab/notebooks --name kubyterlab-img kubyterlab-img:${config:kubyterlab-img.version};",
@@ -446,7 +446,6 @@
     {
       "label": "push-kubyterlab-img-to-docker",
       "dependsOn": [
-        "build-kubyterlab-img",
         "test-kubyterlab-img",
         "freeze-kubyterlab-img"
       ],
@@ -498,10 +497,28 @@
         "docker run -d --rm --gpus=all --name kubyterlab-img-12g kubyterlab-img-12g:${config:kubyterlab-img-12g.version} && sleep 5;",
         "echo '=== Testing CUDA availability ===';",
         "docker exec kubyterlab-img-12g python3 -c \"import torch; print('CUDA available:', torch.cuda.is_available()); print('GPU count:', torch.cuda.device_count())\";",
+
         "echo '=== Testing CompVis Stable Diffusion v1.4 ===';",
-        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import StableDiffusionPipeline; print('Loading CompVis Stable Diffusion v1.4...'); model_path = '/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/snapshots/133a221b8aa7292a167afc5127cb63fb5005638b'; pipe = StableDiffusionPipeline.from_pretrained(model_path, torch_dtype=torch.float16, safety_checker=None); pipe = pipe.to('cuda'); print('✅ CompVis model loaded successfully!'); image = pipe('three cute cats playing', width=512, height=512, num_inference_steps=5).images[0]; image.save('/tmp/test_cats.png'); print('✅ Image generated and saved!')\";",
-        "echo '=== Testing Fluently v3 inpainting ===';",
-        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import StableDiffusionInpaintPipeline; print('Loading Fluently v3 inpainting model...'); model_path = '/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/snapshots/9983a35adbd27ba2a56b392e46b237535af176a8'; pipe = StableDiffusionInpaintPipeline.from_pretrained(model_path, torch_dtype=torch.float16, safety_checker=None); pipe = pipe.to('cuda'); print('✅ Fluently v3 inpainting model loaded successfully!'); print('Model device:', pipe.device)\";",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForText2Image; print('Loading CompVis Stable Diffusion v1.4...'); model_path = '/jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4/snapshots/133a221b8aa7292a167afc5127cb63fb5005638b'; pipe = AutoPipelineForText2Image.from_pretrained(model_path, torch_dtype=torch.float16, safety_checker=None); pipe = pipe.to('cuda'); print('✅ CompVis model loaded successfully!'); image = pipe('three cute cats playing', width=512, height=512, num_inference_steps=5).images[0]; image.save('/tmp/test_compvis.png'); print('✅ Image generated and saved!')\";",
+
+        "echo '=== Testing Fluently v3 Inpainting ===';",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForInpainting; print('Loading Fluently v3 inpainting...'); model_path = '/jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting/snapshots/9983a35adbd27ba2a56b392e46b237535af176a8'; pipe = AutoPipelineForInpainting.from_pretrained(model_path, torch_dtype=torch.float16, safety_checker=None); pipe = pipe.to('cuda'); print('✅ Fluently v3 loaded successfully!'); print('Model device:', pipe.device)\";",
+
+        "echo '=== Testing Fluently v4 Inpainting ===';",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForInpainting; print('Loading Fluently v4 inpainting...'); model_path = '/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/snapshots/16e6b73e3ff97ccbb6f70c504817d64bcd4d601c'; pipe = AutoPipelineForInpainting.from_pretrained(model_path, torch_dtype=torch.float16, safety_checker=None); pipe = pipe.to('cuda'); print('✅ Fluently v4 loaded successfully!'); print('Model device:', pipe.device)\";",
+
+        "echo '=== Testing Lykon Dreamshaper 8 Inpainting ===';",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForInpainting; print('Loading Dreamshaper 8 inpainting...'); model_path = '/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/snapshots/a09e9d0bb9849aaf46c8fc59dfa604796da15a39'; pipe = AutoPipelineForInpainting.from_pretrained(model_path, torch_dtype=torch.float16, safety_checker=None); pipe = pipe.to('cuda'); print('✅ Dreamshaper 8 loaded successfully!'); print('Model device:', pipe.device)\";",
+
+        "echo '=== Testing SG161222 Realistic Vision V6 ===';",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForText2Image; print('Loading Realistic Vision V6...'); model_path = '/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/snapshots/9a857a696b9aabbf509073e0aa55ec8200b6ef7d'; pipe = AutoPipelineForText2Image.from_pretrained(model_path, torch_dtype=torch.float16, safety_checker=None); pipe = pipe.to('cuda'); print('✅ Realistic Vision V6 loaded successfully!'); image = pipe('a professional portrait photo', width=512, height=512, num_inference_steps=5).images[0]; image.save('/tmp/test_realisticvision.png'); print('✅ Image generated and saved!')\";",
+
+        "echo '=== Testing Lykon Dreamshaper XL v2 Turbo ===';",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForText2Image; print('Loading Dreamshaper XL v2 Turbo...'); model_path = '/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/snapshots/f70ad5bce436c640d23fc02cd0a6ccc787280b6e'; pipe = AutoPipelineForText2Image.from_pretrained(model_path, torch_dtype=torch.float16); pipe = pipe.to('cuda'); print('✅ Dreamshaper XL loaded successfully!'); image = pipe('three cute cats playing', width=1024, height=1024, num_inference_steps=5).images[0]; image.save('/tmp/test_dreamshaperxl.png'); print('✅ Image generated and saved!')\";",
+
+        "echo '=== Testing Stable Diffusion XL Base 1.0 ===';",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForText2Image; print('Loading Stable Diffusion XL Base 1.0...'); model_path = '/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/snapshots/462165984030d82259a11f4367a4eed129e94a7b'; pipe = AutoPipelineForText2Image.from_pretrained(model_path, torch_dtype=torch.float16); pipe = pipe.to('cuda'); print('✅ SDXL Base loaded successfully!'); image = pipe('three cute cats playing', width=1024, height=1024, num_inference_steps=5).images[0]; image.save('/tmp/test_sdxl.png'); print('✅ Image generated and saved!')\";",
+
         "docker stop kubyterlab-img-12g"
       ],
       "group": {
