@@ -3,6 +3,9 @@
 > Production-ready JupyterLab environments for data science and LLM development. Deploy locally with Docker Compose or scale to Kubernetes clusters across any cloud provider.
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Docker Pulls JupyterLab LLM](https://img.shields.io/docker/pulls/sinanozel/kubyterlab-llm?label=docker%20pulls%20kubyterlab-llm)](https://hub.docker.com/r/sinanozel/kubyterlab-llm)
+[![Docker Pulls JupyterLab Image](https://img.shields.io/docker/pulls/sinanozel/kubyterlab-img?label=docker%20pulls%20kubyterlab-img)](https://hub.docker.com/r/sinanozel/kubyterlab-img)
+[![Docker Pulls JupyterLab Image with <12GB VRAM Models](https://img.shields.io/docker/pulls/sinanozel/kubyterlab-img-12g?label=docker%20pulls%20kubyterlab-img-12g)](https://hub.docker.com/r/sinanozel/kubyterlab-img-12g)
 [![Docker](https://img.shields.io/badge/Docker-Required-2496ED?logo=docker)](https://www.docker.com/)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Ready-326CE5?logo=kubernetes)](https://kubernetes.io/)
 
