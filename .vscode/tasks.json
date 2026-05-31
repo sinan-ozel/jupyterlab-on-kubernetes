@@ -583,6 +583,200 @@
       "problemMatcher": []
     },
     {
+      "label": "build-kubyterlab-vid",
+      "type": "shell",
+      "command": [
+        "docker build --tag kubyterlab-vid:${config:kubyterlab-vid.version} ",
+        "--label org.opencontainers.image.title=kubyterlab-vid ",
+        "--label org.opencontainers.image.description='JupyterLab base image for AI video generation with CUDA support' ",
+        "--label org.opencontainers.image.version=${config:kubyterlab-vid.version} ",
+        "--label org.opencontainers.image.created=$(date -u +%Y-%m-%dT%H:%M:%SZ) ",
+        "--label org.opencontainers.image.authors='Sinan Ozel' ",
+        "--label org.opencontainers.image.url=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-vid/kubyterlab-vid ",
+        "--label org.opencontainers.image.source=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-vid/kubyterlab-vid ",
+        "--label org.opencontainers.image.vendor='Sinan Ozel' ",
+        "--label org.opencontainers.image.licenses=MIT ",
+        "--label org.opencontainers.image.base.name=nvidia/cuda:12.9.2-base-ubuntu24.04 ",
+        "--file ./kubyterlab-vid/kubyterlab-vid/Dockerfile .;"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "test-kubyterlab-vid",
+      "type": "shell",
+      "command": [
+        "docker run -d --rm --gpus=all --name kubyterlab-vid kubyterlab-vid:${config:kubyterlab-vid.version} && sleep 5 &&",
+        "docker exec kubyterlab-vid bash -c 'nvidia-smi --version' &&",
+        "docker exec kubyterlab-vid bash -c 'nvidia-smi' &&",
+        "docker exec kubyterlab-vid python3 -c 'import torch; assert torch.cuda.is_available(), \"CUDA not available!\"; print(\"✅ CUDA is available and working!\")' &&",
+        "docker exec kubyterlab-vid python3 -c 'import diffusers; video_pipelines = [x for x in dir(diffusers) if \"Video\" in x or \"AnimateDiff\" in x]; assert len(video_pipelines) > 0, \"No video pipelines found in diffusers!\"; print(\"✅ diffusers video pipelines:\", video_pipelines)' &&",
+        "docker exec kubyterlab-vid python3 -c 'import transformers; v = tuple(int(x) for x in transformers.__version__.split(\".\")[:3]); assert (4,47,2) <= v < (4,52,0), f\"transformers {transformers.__version__} does not meet >=4.47.2,<4.52.0\"; print(f\"✅ transformers {transformers.__version__} meets version constraint\")' &&",
+        "docker exec kubyterlab-vid python3 -c 'import numpy as np; print(\"NumPy version:\", np.__version__); import pandas as pd; print(\"Pandas version:\", pd.__version__); import matplotlib; print(\"Matplotlib version:\", matplotlib.__version__); print(\"✅ All data science libraries loaded successfully!\")'",
+        "; docker stop kubyterlab-vid"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "freeze-kubyterlab-vid",
+      "dependsOn": ["test-kubyterlab-vid"],
+      "type": "shell",
+      "command": [
+        "docker run -d --rm --name kubyterlab-vid kubyterlab-vid:${config:kubyterlab-vid.version};",
+        "docker exec kubyterlab-vid bash -c 'mkdir -p /tmp; pip freeze > /tmp/freeze.txt';",
+        "mkdir -p ./kubyterlab-vid/kubyterlab-vid/freeze;",
+        "docker cp kubyterlab-vid:/tmp/freeze.txt ./kubyterlab-vid/kubyterlab-vid/freeze/${config:kubyterlab-vid.version}.txt;",
+        "docker stop kubyterlab-vid"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "push-kubyterlab-vid-to-docker",
+      "dependsOn": [
+        "test-kubyterlab-vid",
+        "freeze-kubyterlab-vid"
+      ],
+      "type": "shell",
+      "command": [
+        "docker login;",
+        "docker tag kubyterlab-vid:${config:kubyterlab-vid.version} ${config:docker.hub.namespace}/kubyterlab-vid:${config:kubyterlab-vid.version};",
+        "docker push ${config:docker.hub.namespace}/kubyterlab-vid:${config:kubyterlab-vid.version};"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "build-kubyterlab-vid-12g",
+      "type": "shell",
+      "command": [
+        "docker build --tag kubyterlab-vid-12g:${config:kubyterlab-vid-12g.version} ",
+        "--label org.opencontainers.image.title=kubyterlab-vid-12g ",
+        "--label org.opencontainers.image.description='JupyterLab image for AI video generation with pre-installed models (12GB variant)' ",
+        "--label org.opencontainers.image.version=${config:kubyterlab-vid-12g.version} ",
+        "--label org.opencontainers.image.created=$(date -u +%Y-%m-%dT%H:%M:%SZ) ",
+        "--label org.opencontainers.image.authors='Sinan Ozel' ",
+        "--label org.opencontainers.image.url=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-vid/kubyterlab-vid-12g ",
+        "--label org.opencontainers.image.source=https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-vid/kubyterlab-vid-12g ",
+        "--label org.opencontainers.image.vendor='Sinan Ozel' ",
+        "--label org.opencontainers.image.licenses=MIT ",
+        "--label org.opencontainers.image.base.name=sinanozel/kubyterlab-vid:${config:kubyterlab-vid.version} ",
+        "--file ${workspaceFolder}/kubyterlab-vid/kubyterlab-vid-12g/Dockerfile /"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "test-kubyterlab-vid-12g",
+      "type": "shell",
+      "command": [
+        "docker run -d --rm --gpus=all --name kubyterlab-vid-12g kubyterlab-vid-12g:${config:kubyterlab-vid-12g.version} && sleep 5 &&",
+        "echo '=== Testing CUDA availability ===' &&",
+        "docker exec kubyterlab-vid-12g python3 -c \"import torch; print('CUDA available:', torch.cuda.is_available()); print('GPU count:', torch.cuda.device_count())\" &&",
+        "echo '=== Testing diffusers video pipelines ===' &&",
+        "docker exec kubyterlab-vid-12g python3 -c \"import diffusers; video_pipelines = [x for x in dir(diffusers) if 'Video' in x or 'AnimateDiff' in x]; assert len(video_pipelines) > 0; print('✅ diffusers video pipelines:', video_pipelines)\" &&",
+        "echo '=== Testing transformers version constraint ===' &&",
+        "docker exec kubyterlab-vid-12g python3 -c \"import transformers; v = tuple(int(x) for x in transformers.__version__.split('.')[:3]); assert (4,47,2) <= v < (4,52,0), f'transformers {transformers.__version__} does not meet >=4.47.2,<4.52.0'; print(f'✅ transformers {transformers.__version__} meets version constraint')\" &&",
+        "echo '=== Testing HuggingFace cache directory ===' &&",
+        "docker exec kubyterlab-vid-12g bash -c 'test -d /jupyterlab/hf/hub && echo \"✅ HF hub directory exists\" || (echo \"ERROR: HF hub directory missing\" && exit 1)'",
+        "; docker stop kubyterlab-vid-12g"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "freeze-kubyterlab-vid-12g",
+      "type": "shell",
+      "command": [
+        "docker run -d --rm --name kubyterlab-vid-12g kubyterlab-vid-12g:${config:kubyterlab-vid-12g.version};",
+        "docker exec kubyterlab-vid-12g bash -c 'mkdir -p /tmp; pip freeze > /tmp/freeze.txt';",
+        "docker exec kubyterlab-vid-12g bash -c 'echo \"HuggingFace Hub Model Structure:\" > /tmp/model_snapshots.txt && find /jupyterlab/hf/hub -maxdepth 3 -type d | sort >> /tmp/model_snapshots.txt && echo \"\" >> /tmp/model_snapshots.txt && echo \"Model Snapshots:\" >> /tmp/model_snapshots.txt && find /jupyterlab/hf/hub -name \"snapshots\" -type d -exec sh -c \"echo {} && ls -la {}\" \\; >> /tmp/model_snapshots.txt';",
+        "mkdir -p ./kubyterlab-vid/kubyterlab-vid-12g/freeze;",
+        "mkdir -p ./kubyterlab-vid/kubyterlab-vid-12g/model-snapshots;",
+        "docker cp kubyterlab-vid-12g:/tmp/freeze.txt ./kubyterlab-vid/kubyterlab-vid-12g/freeze/${config:kubyterlab-vid-12g.version}.txt;",
+        "docker cp kubyterlab-vid-12g:/tmp/model_snapshots.txt ./kubyterlab-vid/kubyterlab-vid-12g/model-snapshots/${config:kubyterlab-vid-12g.version}.txt;",
+        "docker stop kubyterlab-vid-12g"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "push-kubyterlab-vid-12g-to-docker",
+      "dependsOn": [
+        // "test-kubyterlab-vid-12g",
+        "freeze-kubyterlab-vid-12g"
+      ],
+      "type": "shell",
+      "command": [
+        "docker login;",
+        "docker tag kubyterlab-vid-12g:${config:kubyterlab-vid-12g.version} ${config:docker.hub.namespace}/kubyterlab-vid-12g:${config:kubyterlab-vid-12g.version};",
+        "docker push ${config:docker.hub.namespace}/kubyterlab-vid-12g:${config:kubyterlab-vid-12g.version};"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "build-kubyterhub-ds",
       "type": "shell",
       "command": [
@@ -753,6 +947,7 @@
 				"${workspaceFolder}/kubyterlab-img/kubyterlab-img/Dockerfile",
 				"${workspaceFolder}/kubyterlab-img/kubyterlab-img-12g/Dockerfile",
 				"${workspaceFolder}/kubyterlab-vid/kubyterlab-vid/Dockerfile",
+				"${workspaceFolder}/kubyterlab-vid/kubyterlab-vid-12g/Dockerfile",
 				"${workspaceFolder}/kubyterhub-ds/Dockerfile"
 			]
 		}

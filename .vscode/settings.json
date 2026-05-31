@@ -14,6 +14,12 @@
     "kubyterlab-img-12g":{
         "version": "26.05"
     },
+    "kubyterlab-vid":{
+        "version": "26.05"
+    },
+    "kubyterlab-vid-12g":{
+        "version": "26.05"
+    },
     "kubyterhub-ds":{
         "version": "25.12"
     },
