@@ -561,7 +561,7 @@
     {
       "label": "push-kubyterlab-img-12g-to-docker",
       "dependsOn": [
-        "test-kubyterlab-img-12g",
+        // "test-kubyterlab-img-12g",
         "freeze-kubyterlab-img-12g"
       ],
       "type": "shell",
