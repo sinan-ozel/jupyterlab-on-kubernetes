@@ -60,6 +60,16 @@ RUN pip3 install matplotlib==3.10.9
 RUN pip3 install seaborn==0.13.2
 RUN pip3 install insightface==1.0.1
 
+
+RUN pip3 install \
+    einops==0.8.2 \
+    onnxruntime-gpu==1.26.0 \
+    controlnet-aux==0.0.10
+
+RUN git clone https://github.com/instantX-research/InstantID.git /jupyterlab/InstantID
+
 EXPOSE 8888
 WORKDIR /jupyterlab
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--ServerApp.root_dir='/jupyterlab/notebooks'", "--allow-root"]
+# CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--ServerApp.root_dir='/jupyterlab/notebooks'", "--allow-root"]
+CMD PYTHONPATH=/jupyterlab/InstantID:$PYTHONPATH jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --ServerApp.root_dir='/jupyterlab/notebooks' --allow-root
+
