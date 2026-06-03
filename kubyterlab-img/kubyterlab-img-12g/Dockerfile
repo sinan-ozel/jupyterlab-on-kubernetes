@@ -42,6 +42,16 @@ COPY  /mnt/f/HuggingFaceCache/hub/models--Lykon--dreamshaper-xl-v2-turbo \
      /jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo
 COPY  /mnt/f/HuggingFaceCache/hub/models--stabilityai--stable-diffusion-xl-base-1.0 \
      /jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0
+COPY  /mnt/f/HuggingFaceCache/hub/models--diffusers--stable-diffusion-xl-1.0-inpainting-0.1 \
+     /jupyterlab/hf/hub/models--diffusers--stable-diffusion-xl-1.0-inpainting-0.1
+COPY  /mnt/f/HuggingFaceCache/hub/models--destitech--controlnet-inpaint-dreamer-sdxl \
+     /jupyterlab/hf/hub/models--destitech--controlnet-inpaint-dreamer-sdxl
+COPY  /mnt/f/HuggingFaceCache/hub/models--wangqixun--YamerMIX_v8 \
+     /jupyterlab/hf/hub/models--wangqixun--YamerMIX_v8
+COPY  /mnt/f/ManualDownloads/models/antelopev2 \
+     /jupyterlab/models/antelopev2
+COPY  /mnt/f/ManualDownloads/models/InstantID \
+     /jupyterlab/models/InstantID
 
 # Set environment variables
 ENV HF_HOME=/jupyterlab/hf

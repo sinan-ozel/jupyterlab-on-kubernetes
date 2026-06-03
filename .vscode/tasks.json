@@ -517,7 +517,10 @@
         "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForText2Image; print('Loading Dreamshaper XL v2 Turbo...'); model_path = '/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/snapshots/f70ad5bce436c640d23fc02cd0a6ccc787280b6e'; pipe = AutoPipelineForText2Image.from_pretrained(model_path, torch_dtype=torch.float16, variant='fp16'); pipe = pipe.to('cuda'); print('✅ Dreamshaper XL loaded successfully!'); image = pipe('three cute cats playing', width=1024, height=1024, num_inference_steps=5).images[0]; image.save('/tmp/test_dreamshaperxl.png'); print('✅ Image generated and saved!')\" &&",
 
         "echo '=== Testing Stable Diffusion XL Base 1.0 ===' &&",
-        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForText2Image; print('Loading Stable Diffusion XL Base 1.0...'); model_path = '/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/snapshots/462165984030d82259a11f4367a4eed129e94a7b'; pipe = AutoPipelineForText2Image.from_pretrained(model_path, torch_dtype=torch.float16, variant='fp16'); pipe = pipe.to('cuda'); print('✅ SDXL Base loaded successfully!'); image = pipe('three cute cats playing', width=1024, height=1024, num_inference_steps=5).images[0]; image.save('/tmp/test_sdxl.png'); print('✅ Image generated and saved!')\"",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForText2Image; print('Loading Stable Diffusion XL Base 1.0...'); model_path = '/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/snapshots/462165984030d82259a11f4367a4eed129e94a7b'; pipe = AutoPipelineForText2Image.from_pretrained(model_path, torch_dtype=torch.float16, variant='fp16'); pipe = pipe.to('cuda'); print('✅ SDXL Base loaded successfully!'); image = pipe('three cute cats playing', width=1024, height=1024, num_inference_steps=5).images[0]; image.save('/tmp/test_sdxl.png'); print('✅ Image generated and saved!')\" &&",
+
+        "echo '=== Testing Stable Diffusion XL Inpainting ===' &&",
+        "docker exec kubyterlab-img-12g python3 -c \"import torch; from diffusers import AutoPipelineForInpainting; print('Loading Testing Stable Diffusion XL Inpainting...'); model_path = '/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/snapshots/a09e9d0bb9849aaf46c8fc59dfa604796da15a39'; pipe = AutoPipelineForInpainting.from_pretrained(model_path, torch_dtype=torch.float16, safety_checker=None); pipe = pipe.to('cuda'); print('✅ Dreamshaper 8 loaded successfully!'); print('Model device:', pipe.device)\" &&",
 
         "; docker stop kubyterlab-img-12g"
       ],
@@ -561,7 +564,7 @@
     {
       "label": "push-kubyterlab-img-12g-to-docker",
       "dependsOn": [
-        // "test-kubyterlab-img-12g",
+        "test-kubyterlab-img-12g",
         "freeze-kubyterlab-img-12g"
       ],
       "type": "shell",
