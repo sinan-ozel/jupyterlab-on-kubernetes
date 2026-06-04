@@ -1,10 +1,11 @@
-# KubiterHub DS - Multi-User Data Science Environment
+# KubyterHub DS - Multi-User Data Science Environment
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/sinanozel/kubyterhub-ds)
 ![Docker Image Size](https://img.shields.io/docker/image-size/sinanozel/kubyterhub-ds/25.12)
 ![Docker Image Version](https://img.shields.io/docker/v/sinanozel/kubyterhub-ds/25.12)
 
-A production-ready JupyterHub environment for multi-user data science workflows with integrated Redis, Qdrant vector database, ChromaDB, and LanceDB support.
+A production-ready JupyterHub environment for multi-user data science workflows with tested Redis, Qdrant vector database, ChromaDB, and LanceDB support.
+Versions are pinned.
 
 ## 👥 User Management
 
@@ -72,6 +73,14 @@ You need to create a GitHub OAuth App (takes 2 minutes) - see setup instructions
 - **nbdime** - Jupyter notebook diffing and merging
 - **Real-time Collaboration** - Multiple users can edit the same notebook simultaneously
 - **Multiple spawner support** - Local, Docker, Kubernetes
+
+## Version Compatibility
+
+The table below tracks which component versions have been tested together for each image tag.
+
+| Image Tag | JupyterHub | JupyterLab | NumPy | Pandas | Scikit-learn | Redis client | Redis server | Qdrant client | Qdrant server | ChromaDB | LanceDB | Base Image |
+|-----------|------------|------------|-------|--------|--------------|--------------|--------------|---------------|---------------|----------|---------|------------|
+| `25.12` | 5.4.3 | 4.5.0 | 2.3.5 | 2.3.3 | 1.7.2 | 7.1.0 | 7.4.1-alpine | 1.16.1 | v1.16.1 | 1.3.5 | 0.25.3 | jupyter/base-notebook:x86_64-ubuntu-22.04 |
 
 ## Quick Start
 
