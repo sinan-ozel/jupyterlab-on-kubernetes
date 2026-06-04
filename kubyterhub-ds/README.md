@@ -4,7 +4,7 @@
 ![Docker Image Size](https://img.shields.io/docker/image-size/sinanozel/kubyterhub-ds/25.12)
 ![Docker Image Version](https://img.shields.io/docker/v/sinanozel/kubyterhub-ds/25.12)
 
-🚀 **Production-ready** multi-user JupyterHub for data science teams — batteries included.
+🚀 **Production-ready** multi-user JupyterHub for data science teams — Docker image goes through automated testing.
 🗄️ Comes with **Redis**, **Qdrant**, **ChromaDB**, and **LanceDB** — all version-pinned and tested together.
 📋 Server versions tracked in the [compatibility table](#version-compatibility) below; client versions are pinned in the image.
 🔑 **GitHub OAuth** out of the box — no passwords, no friction.
