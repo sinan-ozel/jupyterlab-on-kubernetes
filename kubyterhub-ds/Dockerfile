@@ -4,7 +4,7 @@ FROM jupyter/base-notebook:x86_64-ubuntu-22.04
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterhub-ds"
 LABEL org.opencontainers.image.description="JupyterHub environment for data science with Redis, Qdrant, ChromaDB, and LanceDB"
-LABEL org.opencontainers.image.version="26.01"
+LABEL org.opencontainers.image.version="26.05"
 LABEL org.opencontainers.image.authors="Sinan Ozel"
 LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterhub-ds"
 LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterhub-ds"
@@ -67,7 +67,6 @@ RUN npm install -g configurable-http-proxy@4.6.1
 
 # Install mature, stable packages (slower update cycles)
 RUN pip install --no-cache-dir \
-    scikit-learn==1.7.2 \
     lxml==6.0.2 \
     openpyxl==3.1.5 \
     beautifulsoup4==4.14.3 \
@@ -81,25 +80,31 @@ RUN pip install --no-cache-dir \
     pillow==12.0.0 \
     pillow-heif==1.1.1 \
     nbdime==4.0.2 \
-    tqdm==4.67.1
+    tqdm==4.67.1 \
+    ipywidgets==8.1.8
 
 # Install frequently updated packages (active development)
 RUN pip install --no-cache-dir \
-    numpy==2.3.5 \
-    pandas==2.3.3 \
-    matplotlib==3.10.7 \
+    scikit-learn==1.9.0 \
+    numpy==2.4.6 \
+    pandas==3.0.3 \
+    matplotlib==3.10.9 \
     seaborn==0.13.2 \
     redis==7.1.0 \
-    qdrant-client==1.16.1 \
-    chromadb==1.3.5 \
-    lancedb==0.25.3 \
+    qdrant-client==1.18.0 \
+    chromadb==1.5.9 \
+    lancedb==0.33.0 \
     jsonschema==4.25.1 \
     jsonschema-specifications==2025.9.1 \
     json5==0.12.1 \
     pytz==2025.2 \
     webcolors==25.10.0 \
-    redis-memory==0.3.2 \
+    synced-memory==0.1.3 \
+    trino==0.337.0 \
+    jupysql==0.11.1 \
     litellm==1.80.9 \
+    psycopg2-binary==2.9.10 \
+    python-lsp-server==1.14.0 \
     langchain-openai==0.3.35
 
 # Configure git and nbdime for Jupyter
