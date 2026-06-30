@@ -1,8 +1,8 @@
 # KubyterHub DS - Multi-User Data Science Environment
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/sinanozel/kubyterhub-ds)
-![Docker Image Size](https://img.shields.io/docker/image-size/sinanozel/kubyterhub-ds/25.12)
-![Docker Image Version](https://img.shields.io/docker/v/sinanozel/kubyterhub-ds/25.12)
+![Docker Image Size](https://img.shields.io/docker/image-size/sinanozel/kubyterhub-ds/26.05)
+![Docker Image Version](https://img.shields.io/docker/v/sinanozel/kubyterhub-ds/26.05)
 
 🚀 **Production-ready** multi-user JupyterHub for data science teams — Docker image goes through automated testing.
 🗄️ Comes with **Redis**, **Qdrant**, **ChromaDB**, and **LanceDB** — all version-pinned and tested together.
