@@ -1,5 +1,5 @@
 # Use the base kubyterlab-img image
-FROM sinanozel/kubyterlab-img:26.06
+FROM sinanozel/kubyterlab-img:26.07
 
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterlab-img-12g"
@@ -28,14 +28,14 @@ LABEL model.stabilityai.sdxl-base-1.0.source="https://huggingface.co/stabilityai
 RUN mkdir -p /jupyterlab/hf/hub
 
 # Copy model files from host
-COPY  /mnt/f/HuggingFaceCache/hub/models--CompVis--stable-diffusion-v1-4 \
-     /jupyterlab/hf/hub/models--CompVis--stable-diffusion-v1-4
-COPY  /mnt/f/HuggingFaceCache/hub/models--fluently--Fluently-v3-inpainting \
-     /jupyterlab/hf/hub/models--fluently--Fluently-v3-inpainting
 COPY  /mnt/f/HuggingFaceCache/hub/models--fluently--Fluently-v4-inpainting \
      /jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting
 COPY  /mnt/f/HuggingFaceCache/hub/models--Lykon--dreamshaper-8-inpainting \
      /jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting
+COPY  /mnt/f/HuggingFaceCache/hub/models--jayn7--Z-Image-Turbo-GGUF \
+     /jupyterlab/hf/hub/models--jayn7--Z-Image-Turbo-GGUF
+COPY  /mnt/f/HuggingFaceCache/hub/models--Tongyi-MAI--Z-Image-Turbo \
+     /jupyterlab/hf/hub/models--Tongyi-MAI--Z-Image-Turbo
 COPY  /mnt/f/HuggingFaceCache/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE \
      /jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE
 COPY  /mnt/f/HuggingFaceCache/hub/models--Lykon--dreamshaper-xl-v2-turbo \

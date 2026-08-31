@@ -3,7 +3,7 @@ FROM nvidia/cuda:12.9.2-base-ubuntu24.04
 # Set labels for the image
 LABEL org.opencontainers.image.title="kubyterlab-img"
 LABEL org.opencontainers.image.description="JupyterLab base image for AI image generation with CUDA support"
-LABEL org.opencontainers.image.version="26.05"
+LABEL org.opencontainers.image.version="26.07"
 LABEL org.opencontainers.image.authors="Sinan Ozel"
 LABEL org.opencontainers.image.url="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img/kubyterlab-img"
 LABEL org.opencontainers.image.source="https://github.com/sinan-ozel/jupyterlab-on-kubernetes/tree/main/kubyterlab-img/kubyterlab-img"
@@ -48,17 +48,14 @@ RUN pip3 install \
     opencv-python-headless==4.13.0.92 \
     xformers==0.0.35
 
-# RUN pip3 install git+https://github.com/huggingface/transformers
-# RUN pip3 install diffusers[torch]==0.35.2
-# RUN pip install git+https://github.com/huggingface/diffusers.git@b4e6dc3037e75e2dc16466b914b1be597b06be9a
-
 RUN pip3 install tqdm==4.67.1
-RUN pip3 install bitsandbytes==0.48.2
-RUN pip3 install numpy==2.4.6
-RUN pip3 install pandas==3.0.3
-RUN pip3 install matplotlib==3.10.9
+RUN pip3 install bitsandbytes==0.50.2
+RUN pip3 install numpy==2.5.2
+RUN pip3 install pandas==3.0.5
+RUN pip3 install matplotlib==3.11.1
 RUN pip3 install seaborn==0.13.2
 RUN pip3 install insightface==1.0.1
+RUN pip3 install gguf==0.19.0
 
 
 RUN pip3 install \

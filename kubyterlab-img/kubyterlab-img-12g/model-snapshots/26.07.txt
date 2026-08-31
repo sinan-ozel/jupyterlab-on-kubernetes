@@ -1,0 +1,107 @@
+HuggingFace Hub Model Structure:
+/jupyterlab/hf/hub
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/blobs
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/refs
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/snapshots
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/snapshots/a09e9d0bb9849aaf46c8fc59dfa604796da15a39
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/blobs
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/refs
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/snapshots
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/snapshots/f70ad5bce436c640d23fc02cd0a6ccc787280b6e
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/blobs
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/refs
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/snapshots
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/snapshots/9a857a696b9aabbf509073e0aa55ec8200b6ef7d
+/jupyterlab/hf/hub/models--Tongyi-MAI--Z-Image-Turbo
+/jupyterlab/hf/hub/models--Tongyi-MAI--Z-Image-Turbo/blobs
+/jupyterlab/hf/hub/models--Tongyi-MAI--Z-Image-Turbo/refs
+/jupyterlab/hf/hub/models--Tongyi-MAI--Z-Image-Turbo/snapshots
+/jupyterlab/hf/hub/models--Tongyi-MAI--Z-Image-Turbo/snapshots/f332072aa78be7aecdf3ee76d5c247082da564a6
+/jupyterlab/hf/hub/models--destitech--controlnet-inpaint-dreamer-sdxl
+/jupyterlab/hf/hub/models--destitech--controlnet-inpaint-dreamer-sdxl/.no_exist
+/jupyterlab/hf/hub/models--destitech--controlnet-inpaint-dreamer-sdxl/.no_exist/e37388101f7f551a0ed5a621c0d7da434f0e0124
+/jupyterlab/hf/hub/models--destitech--controlnet-inpaint-dreamer-sdxl/blobs
+/jupyterlab/hf/hub/models--destitech--controlnet-inpaint-dreamer-sdxl/refs
+/jupyterlab/hf/hub/models--destitech--controlnet-inpaint-dreamer-sdxl/snapshots
+/jupyterlab/hf/hub/models--destitech--controlnet-inpaint-dreamer-sdxl/snapshots/e37388101f7f551a0ed5a621c0d7da434f0e0124
+/jupyterlab/hf/hub/models--diffusers--stable-diffusion-xl-1.0-inpainting-0.1
+/jupyterlab/hf/hub/models--diffusers--stable-diffusion-xl-1.0-inpainting-0.1/blobs
+/jupyterlab/hf/hub/models--diffusers--stable-diffusion-xl-1.0-inpainting-0.1/refs
+/jupyterlab/hf/hub/models--diffusers--stable-diffusion-xl-1.0-inpainting-0.1/snapshots
+/jupyterlab/hf/hub/models--diffusers--stable-diffusion-xl-1.0-inpainting-0.1/snapshots/115134f363124c53c7d878647567d04daf26e41e
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/blobs
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/refs
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/snapshots
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/snapshots/16e6b73e3ff97ccbb6f70c504817d64bcd4d601c
+/jupyterlab/hf/hub/models--jayn7--Z-Image-Turbo-GGUF
+/jupyterlab/hf/hub/models--jayn7--Z-Image-Turbo-GGUF/blobs
+/jupyterlab/hf/hub/models--jayn7--Z-Image-Turbo-GGUF/refs
+/jupyterlab/hf/hub/models--jayn7--Z-Image-Turbo-GGUF/snapshots
+/jupyterlab/hf/hub/models--jayn7--Z-Image-Turbo-GGUF/snapshots/6e2dff8e3abd78051c1211fb5833a03818a2f3cc
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/blobs
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/refs
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/snapshots
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/snapshots/462165984030d82259a11f4367a4eed129e94a7b
+/jupyterlab/hf/hub/models--wangqixun--YamerMIX_v8
+/jupyterlab/hf/hub/models--wangqixun--YamerMIX_v8/blobs
+/jupyterlab/hf/hub/models--wangqixun--YamerMIX_v8/refs
+/jupyterlab/hf/hub/models--wangqixun--YamerMIX_v8/snapshots
+/jupyterlab/hf/hub/models--wangqixun--YamerMIX_v8/snapshots/e5039087dbec04980f6ba279afc93575ce39ddb5
+
+Model Snapshots:
+/jupyterlab/hf/hub/models--wangqixun--YamerMIX_v8/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 Jun  2 01:32 .
+drwxr-xr-x 5 root root 4096 Jun  2 01:21 ..
+drwxrwxrwx 9 root root 4096 Jun  2 01:32 e5039087dbec04980f6ba279afc93575ce39ddb5
+/jupyterlab/hf/hub/models--destitech--controlnet-inpaint-dreamer-sdxl/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 Jun  2 17:50 .
+drwxr-xr-x 6 root root 4096 Jun  2 17:49 ..
+drwxrwxrwx 2 root root 4096 Jun  2 17:50 e37388101f7f551a0ed5a621c0d7da434f0e0124
+/jupyterlab/hf/hub/models--diffusers--stable-diffusion-xl-1.0-inpainting-0.1/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 May 29 18:16 .
+drwxr-xr-x 5 root root 4096 May 29 18:12 ..
+drwxrwxrwx 9 root root 4096 May 29 18:16 115134f363124c53c7d878647567d04daf26e41e
+/jupyterlab/hf/hub/models--stabilityai--stable-diffusion-xl-base-1.0/snapshots
+total 12
+drwxrwxrwx  3 root root 4096 May 24 00:45 .
+drwxr-xr-x  5 root root 4096 May 24 00:22 ..
+drwxrwxrwx 10 root root 4096 May 24 00:45 462165984030d82259a11f4367a4eed129e94a7b
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-xl-v2-turbo/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 May 23 23:05 .
+drwxr-xr-x 5 root root 4096 May 23 23:05 ..
+drwxrwxrwx 9 root root 4096 May 23 23:05 f70ad5bce436c640d23fc02cd0a6ccc787280b6e
+/jupyterlab/hf/hub/models--SG161222--Realistic_Vision_V6.0_B1_noVAE/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 May 23 20:08 .
+drwxr-xr-x 5 root root 4096 May 23 20:06 ..
+drwxrwxrwx 8 root root 4096 May 23 20:08 9a857a696b9aabbf509073e0aa55ec8200b6ef7d
+/jupyterlab/hf/hub/models--Tongyi-MAI--Z-Image-Turbo/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 Aug 23 21:28 .
+drwxr-xr-x 5 root root 4096 Aug 23 21:28 ..
+drwxrwxrwx 7 root root 4096 Aug 23 21:28 f332072aa78be7aecdf3ee76d5c247082da564a6
+/jupyterlab/hf/hub/models--jayn7--Z-Image-Turbo-GGUF/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 Aug 23 21:15 .
+drwxr-xr-x 5 root root 4096 Aug 23 21:15 ..
+drwxrwxrwx 2 root root 4096 Aug 23 21:15 6e2dff8e3abd78051c1211fb5833a03818a2f3cc
+/jupyterlab/hf/hub/models--Lykon--dreamshaper-8-inpainting/snapshots
+total 12
+drwxrwxrwx 3 root root 4096 May 23 19:39 .
+drwxr-xr-x 5 root root 4096 May 23 19:37 ..
+drwxrwxrwx 8 root root 4096 May 23 19:39 a09e9d0bb9849aaf46c8fc59dfa604796da15a39
+/jupyterlab/hf/hub/models--fluently--Fluently-v4-inpainting/snapshots
+total 16
+drwxrwxrwx 3 root root 4096 May 23 04:25 .
+drwxr-xr-x 5 root root 4096 May 23 04:29 ..
+drwxrwxrwx 7 root root 4096 May 23 04:25 16e6b73e3ff97ccbb6f70c504817d64bcd4d601c
+-rwxrwxrwx 1 root root  572 May 23 12:07 model_index.json
